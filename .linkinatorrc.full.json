@@ -1,0 +1,6 @@
+{
+  "recurse": true,
+  "silent": true,
+  "retry": true,
+  "skip": ["^mailto:", "^tel:"]
+}

@@ -1,0 +1,39 @@
+{
+  "site.title": "Vladímir Rodríguez — Developer & Researcher",
+  "site.description": "Personal portfolio of Vladímir Rodríguez, developer and researcher with a PhD in Computer Science.",
+
+  "nav.about": "About",
+  "nav.research": "Research",
+  "nav.projects": "Projects",
+  "nav.experience": "Experience",
+  "nav.contact": "Contact",
+
+  "hero.greeting": "Hi, I'm",
+  "hero.name": "Vladímir Rodríguez",
+  "hero.tagline": "Developer · Researcher · PhD in Computer Science",
+  "hero.bio": "I build software and conduct research at the intersection of systems, algorithms, and applied AI.",
+  "hero.cta.cv": "Download CV",
+  "hero.cta.contact": "Get in touch",
+
+  "about.title": "About Me",
+  "about.body": "TODO: write your bio here.",
+  "about.interests.title": "Research Interests",
+
+  "research.title": "Research",
+  "research.publications.title": "Selected Publications",
+
+  "projects.title": "Projects",
+  "projects.demo": "Demo",
+  "projects.code": "Code",
+
+  "experience.title": "Experience",
+
+  "contact.title": "Contact",
+  "contact.email.label": "Email",
+  "contact.links.github": "GitHub",
+  "contact.links.linkedin": "LinkedIn",
+  "contact.links.scholar": "Google Scholar",
+  "contact.links.orcid": "ORCID",
+
+  "footer.copyright": "© {year} Vladímir Rodríguez. All rights reserved."
+}

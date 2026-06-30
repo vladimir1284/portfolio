@@ -1,0 +1,68 @@
+name: verify
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly external-link sweep (Sun 06:00 UTC) — catches dead outbound URLs
+    # that the per-PR internal gate intentionally skips.
+    - cron: "0 6 * * 0"
+
+# One in-flight run per ref; new pushes cancel the previous run.
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Blocking gate: lint + format check + astro check + build + INTERNAL link crawl.
+  # Deterministic — safe to mark as a required check.
+  verify:
+    name: lint · types · build · internal links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 # satisfies package.json engines >=22.12.0
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm verify
+
+  # Non-blocking: also validates EXTERNAL links. External sites time out / rate-limit,
+  # so this must NOT gate merges — it surfaces dead outbound URLs as a soft signal.
+  # Runs on PRs (advisory) and on the weekly schedule.
+  external-links:
+    name: external links (non-blocking)
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - run: pnpm verify:links:full

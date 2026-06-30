@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Example Publication Title",
+    "authors": ["Rodríguez, V.", "Co-author, A."],
+    "venue": "Journal / Conference Name",
+    "year": 2024,
+    "doi": "",
+    "pdf": "",
+    "abstract": {
+      "en": "Short abstract in English.",
+      "es": "Resumen corto en español."
+    }
+  }
+]

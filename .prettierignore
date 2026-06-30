@@ -1,0 +1,11 @@
+# build output / generated
+dist/
+.astro/
+node_modules/
+
+# lockfiles & static assets (don't reformat)
+pnpm-lock.yaml
+public/
+
+# minified
+*.min.*

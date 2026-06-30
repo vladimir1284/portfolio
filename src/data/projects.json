@@ -1,0 +1,15 @@
+[
+  {
+    "title": { "en": "Example Project", "es": "Proyecto de ejemplo" },
+    "description": {
+      "en": "Short description of the project.",
+      "es": "Descripción corta del proyecto."
+    },
+    "year": 2024,
+    "stack": ["Python", "TypeScript"],
+    "links": {
+      "demo": "",
+      "code": "https://github.com/vladimir1284/"
+    }
+  }
+]

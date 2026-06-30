@@ -1,0 +1,5 @@
+{
+  "recurse": true,
+  "silent": true,
+  "skip": ["^https?://(?!localhost)", "^mailto:", "^tel:"]
+}

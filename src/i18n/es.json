@@ -1,0 +1,39 @@
+{
+  "site.title": "Vladímir Rodríguez — Desarrollador e Investigador",
+  "site.description": "Portafolio personal de Vladímir Rodríguez, desarrollador e investigador con doctorado en Ciencias de la Computación.",
+
+  "nav.about": "Sobre mí",
+  "nav.research": "Investigación",
+  "nav.projects": "Proyectos",
+  "nav.experience": "Experiencia",
+  "nav.contact": "Contacto",
+
+  "hero.greeting": "Hola, soy",
+  "hero.name": "Vladímir Rodríguez",
+  "hero.tagline": "Desarrollador · Investigador · Doctor en Ciencias de la Computación",
+  "hero.bio": "Construyo software e investigo en la intersección de sistemas, algoritmos e IA aplicada.",
+  "hero.cta.cv": "Descargar CV",
+  "hero.cta.contact": "Contáctame",
+
+  "about.title": "Sobre mí",
+  "about.body": "TODO: escribe tu biografía aquí.",
+  "about.interests.title": "Intereses de investigación",
+
+  "research.title": "Investigación",
+  "research.publications.title": "Publicaciones seleccionadas",
+
+  "projects.title": "Proyectos",
+  "projects.demo": "Demo",
+  "projects.code": "Código",
+
+  "experience.title": "Experiencia",
+
+  "contact.title": "Contacto",
+  "contact.email.label": "Correo",
+  "contact.links.github": "GitHub",
+  "contact.links.linkedin": "LinkedIn",
+  "contact.links.scholar": "Google Scholar",
+  "contact.links.orcid": "ORCID",
+
+  "footer.copyright": "© {year} Vladímir Rodríguez. Todos los derechos reservados."
+}
