@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "optimize:images": "python3 scripts/optimize_images.py",
+    "papers:thumbs": "python3 scripts/paper_thumbs.py",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
