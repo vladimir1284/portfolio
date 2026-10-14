@@ -34,6 +34,7 @@ import pathlib
 import secrets
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -49,6 +50,9 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) portfolio-reindex"
 # Not the pages.dev hostname: functions/_middleware.ts 301s it to here, and
 # urllib would follow that redirect as a GET, which /api/reindex does not route.
 DEFAULT_ORIGIN = "https://vladimir.ladetec.com"
+# How long to keep asking while the custom domain is still on the old deployment.
+REINDEX_ATTEMPTS = 10
+REINDEX_BACKOFF = 15
 
 
 def env(name: str) -> str:
@@ -121,17 +125,34 @@ def deploy(project: str) -> None:
 
 
 def reindex(origin: str, secret: str) -> dict:
+    """POST the corpus through the site, waiting for the new deployment.
+
+    Wrangler reports the deployment complete before the custom domain is
+    serving it, so the first call can land on the deployment that was already
+    there — which has no secret and answers 404 `closed`. Measured: that is
+    exactly the failure this step showed with a deployment that had, in fact,
+    succeeded. A 404 is therefore retried; anything else is a real refusal.
+    """
     request = urllib.request.Request(
         f"{origin}/api/reindex",
         data=b"",
         headers={"Authorization": f"Bearer {secret}", "User-Agent": UA},
         method="POST",
     )
-    try:
-        with urllib.request.urlopen(request, timeout=300) as response:
-            return json.load(response)
-    except urllib.error.HTTPError as err:
-        sys.exit(f"/api/reindex answered {err.code}: {err.read()[:300]!r}")
+    for attempt in range(1, REINDEX_ATTEMPTS + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=300) as response:
+                return json.load(response)
+        except urllib.error.HTTPError as err:
+            body = err.read()[:300]
+            if err.code != 404 or attempt == REINDEX_ATTEMPTS:
+                sys.exit(f"/api/reindex answered {err.code}: {body!r}")
+            print(
+                f"   still the old deployment ({attempt}/{REINDEX_ATTEMPTS}) — "
+                f"waiting {REINDEX_BACKOFF}s"
+            )
+            time.sleep(REINDEX_BACKOFF)
+    raise AssertionError("unreachable")
 
 
 def main() -> int:
