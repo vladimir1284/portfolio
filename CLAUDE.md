@@ -169,8 +169,12 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 
 ### Blocking before deploy
 
-- **DNS for `vladimir.ladetec.com`** is not pointing anywhere yet. `astro.config.mjs` already declares it as `site`, so canonical, hreflang, `og:url` and the sitemap are all built against it.
-- **One publication ships without a link** — _Software para el procesamiento de los ensayos de la máquina sincrónica_ (Ingeniería Energética XXX(1), 2009). Neither Crossref, Dialnet nor Redalyc indexes it. Self-host it like the ERAD paper: drop the PDF in `public/papers/` and point the entry's `pdf` field at `/papers/<file>.pdf`. `scripts/build_cv.py` absolutises such paths against `site` from `astro.config.mjs`, so a site-relative link still works inside the CV PDF. Flagged in `PREGUNTAS.md`.
+- **`vladimir.ladetec.com` is not attached yet.** The site is live on
+  `vladimir-portfolio.pages.dev`; `astro.config.mjs` declares the custom domain as
+  `site`, so canonical, hreflang, `og:url` and the sitemap already point at a
+  hostname that does not resolve. The `ladetec.com` zone is in the same Cloudflare
+  account as the project, so attaching it is one call and Cloudflare writes the
+  record itself — it is pending authorisation, not blocked on infrastructure.
 
 ### Standing rules
 
@@ -218,18 +222,25 @@ with a `::notice` instead of failing: a push should not go red over a setup step
 that is known to be pending. The `secrets` context is not readable from a
 job-level `if`, which is why the gate is a step and not a condition on the job.
 
-First-time setup, which needs a browser for the OAuth and so cannot be done by
-an agent:
+Both secrets are set, the project exists, and CI has published to it — the first
+production deployment is `0db825f`. The setup below is recorded for a rebuild, not
+because it is pending.
+
+An **account-owned** API token is rejected by `GET /user/tokens/verify` with
+`Invalid API Token` even when it is valid; verify it against
+`/accounts/<id>/pages/projects` instead. `wrangler login` needs a browser and so
+cannot be driven by an agent, but it is not required: one API token covers both the
+CI secret and any local wrangler call.
 
 ```bash
-pnpm dlx wrangler login
-pnpm dlx wrangler whoami                      # prints the account ID
-pnpm dlx wrangler pages project create vladimir-portfolio --production-branch master
-pnpm build && pnpm dlx wrangler pages deploy dist --project-name vladimir-portfolio
+# with CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID exported
+wrangler pages project create vladimir-portfolio --production-branch master
+pnpm build && wrangler pages deploy dist --project-name vladimir-portfolio
 ```
 
 The custom domain `vladimir.ladetec.com` can only be attached from Pages if the
-`ladetec.com` zone lives in the same Cloudflare account.
+`ladetec.com` zone lives in the same Cloudflare account. It does — six other Pages
+projects already serve subdomains of it.
 
 **Wrangler is deliberately not a dependency.** It pulls ~500 packages and a
 `workerd` binary; CI uses `cloudflare/wrangler-action`, which brings its own, and
@@ -252,8 +263,10 @@ The policy allows `fonts.googleapis.com` (stylesheet) and `fonts.gstatic.com`
 (font files), and nothing else off-origin. **`connect-src` is `'self'`** — the
 Phase 5 RAG endpoint will need its origin added there before any fetch works.
 
-Untested against a live origin so far: Pages has never served this site. Check
-the browser console for CSP violations on the first deploy.
+Verified against the live origin: `vladimir-portfolio.pages.dev` serves the
+policy, and the sha256 hashes in it match the inline scripts in the HTML Pages
+actually returns, so the theme-flash script runs rather than being silently
+blocked. Re-check the browser console after any change to an inline script.
 
 `packageManager` in `package.json` pins pnpm, and the workflow's
 `pnpm/action-setup` steps read it rather than hardcoding a version — CI and the
