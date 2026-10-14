@@ -204,11 +204,20 @@ Run locally before pushing. CI enforces it on every push/PR.
 | 5    | `pnpm build`        | Broken pages, bad imports, missing assets.           |
 | 6    | `pnpm verify:links` | Broken internal links (needs `dist/` already built). |
 
-`pnpm verify:full` additionally validates external links. Its config skips
-`researchgate.net` (403s every bot) and caps concurrency at 4 — Dialnet drops
-parallel requests and reports them as `[0]`. `vladimir.ladetec.com` used to be
-skipped too, because it did not resolve; it does now, so the site's own canonical
-and hreflang targets are checked like any other link.
+`pnpm verify:full` additionally validates external links and caps concurrency at
+4 — Dialnet drops parallel requests and reports them as `[0]`. Its config skips
+two hosts, both measured rather than assumed:
+
+- `researchgate.net` — 403s every bot.
+- `repositorioinstitucional.buap.mx` — the thesis record. Measured 2026-10-14:
+  the item page does return 200, but takes over 45 s with a browser user agent
+  and never answers at all with curl's default one, and the repository root
+  answers 502. The link is kept because it is the official record and there is
+  no alternative; if BUAP's repository stays this slow, that is worth revisiting.
+
+`vladimir.ladetec.com` used to be skipped too, because it did not resolve; it
+does now, so the site's own canonical and hreflang targets are checked like any
+other link.
 
 ---
 

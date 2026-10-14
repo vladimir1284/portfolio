@@ -2,7 +2,12 @@
   "recurse": true,
   "silent": true,
   "retry": true,
-  "skip": ["^mailto:", "^tel:", "^https://www\\.researchgate\\.net/"],
+  "skip": [
+    "^mailto:",
+    "^tel:",
+    "^https://www\\.researchgate\\.net/",
+    "^https://repositorioinstitucional\\.buap\\.mx/"
+  ],
   "concurrency": 4,
   "timeout": 30000
 }
