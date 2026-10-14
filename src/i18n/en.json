@@ -15,7 +15,7 @@
   "hero.greeting": "Electrical engineer · PhD in Computer Science",
   "hero.name": "Vladímir Rodríguez Diez",
   "hero.tagline": "I design the hardware, write the algorithm, and run it in production.",
-  "hero.bio": "Eighteen years of engineering across three layers that rarely meet in one person: <strong>FPGA and instrumentation</strong>, <strong>algorithms for problems that are expensive to compute</strong>, and <strong>the distributed systems that deliver the result</strong>. Professor of Electrical Engineering since 2008, weather-radar software since 2012, and development lead for remote teams of up to ten since 2022.",
+  "hero.bio": "Eighteen years of engineering across three layers that rarely meet in one person: <strong>FPGA and instrumentation</strong>, <strong>algorithms for problems that are expensive to compute</strong>, and <strong>the distributed systems that deliver the result</strong>. Professor of Electrical Engineering since 2008, weather-radar software since 2012, and development lead for remote teams since 2022.",
   "hero.cta.cv": "Download CV",
   "hero.cta.contact": "Get in touch",
   "hero.cta.system": "See the system",
