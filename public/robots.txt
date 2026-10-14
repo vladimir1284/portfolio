@@ -1,0 +1,9 @@
+# Cloudflare serves a managed robots.txt when the origin has none, and that one
+# is entirely comments — no Sitemap line, so nothing points a crawler at the
+# sitemap. This file exists to carry that line.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://vladimir.ladetec.com/sitemap-index.xml

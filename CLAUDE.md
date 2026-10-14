@@ -69,6 +69,7 @@ scripts/build_cv.py           # src/data/*.json → public/cv{,.es}.pdf (`pnpm b
 scripts/build_headers.py      # dist/_headers for Cloudflare Pages — CSP hashes (see §9)
 scripts/build_corpus.py       # src/data + src/i18n → rag/corpus.json (`pnpm corpus`)
 scripts/reindex_vectors.py    # rebuild rag/vectors.json through the deployed site (§11)
+functions/_middleware.ts      # 301s the pages.dev hostname to the custom domain (§9)
 functions/api/                # Pages Functions — /api/ask, /api/reindex (see §11)
 rag/                          # generated corpus + vector index (see rag/README.md)
 wrangler.toml                 # Pages config — output dir and the `AI` binding
@@ -175,15 +176,6 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 
 ## 7. Known Stubs & Gotchas
 
-### Blocking before deploy
-
-- **`vladimir.ladetec.com` is not attached yet.** The site is live on
-  `vladimir-portfolio.pages.dev`; `astro.config.mjs` declares the custom domain as
-  `site`, so canonical, hreflang, `og:url` and the sitemap already point at a
-  hostname that does not resolve. The `ladetec.com` zone is in the same Cloudflare
-  account as the project, so attaching it is one call and Cloudflare writes the
-  record itself — it is pending authorisation, not blocked on infrastructure.
-
 ### Standing rules
 
 - **Every figure needs a method.** No metric ships unless it can be defended in an interview. `~/Documents/cv.md` is LLM-generated and is **not** a content source.
@@ -213,8 +205,10 @@ Run locally before pushing. CI enforces it on every push/PR.
 | 6    | `pnpm verify:links` | Broken internal links (needs `dist/` already built). |
 
 `pnpm verify:full` additionally validates external links. Its config skips
-`vladimir.ladetec.com` (not resolving yet) and `researchgate.net` (403s every bot),
-and caps concurrency at 4 — Dialnet drops parallel requests and reports them as `[0]`.
+`researchgate.net` (403s every bot) and caps concurrency at 4 — Dialnet drops
+parallel requests and reports them as `[0]`. `vladimir.ladetec.com` used to be
+skipped too, because it did not resolve; it does now, so the site's own canonical
+and hreflang targets are checked like any other link.
 
 ---
 
@@ -247,9 +241,36 @@ wrangler pages project create vladimir-portfolio --production-branch master
 pnpm build && wrangler pages deploy dist --project-name vladimir-portfolio
 ```
 
-The custom domain `vladimir.ladetec.com` can only be attached from Pages if the
-`ladetec.com` zone lives in the same Cloudflare account. It does — six other Pages
-projects already serve subdomains of it.
+### The custom domain
+
+`vladimir.ladetec.com` is attached and serving, and `astro.config.mjs` declares it
+as `site`, so canonical, hreflang, `og:url` and the sitemap all point at it.
+
+Attaching it from Pages works because the `ladetec.com` zone lives in the same
+Cloudflare account — six other Pages projects already serve subdomains of it. The
+API call that attaches a domain does **not** write the DNS record, though, and the
+deploy token has no DNS permission by design, so the `CNAME` to
+`vladimir-portfolio.pages.dev` was created by hand in the dashboard. Leave the
+token as `Cloudflare Pages: Edit` — it lives in GitHub Actions.
+
+`vladimir-portfolio.pages.dev` still answers, and `functions/_middleware.ts`
+redirects it to the custom domain with a 301 so only one hostname is canonical.
+Pages' `_redirects` file cannot do this: it matches paths, not hostnames. The
+match is the project hostname exactly, which leaves per-deployment hostnames
+(`<hash>.vladimir-portfolio.pages.dev`) reachable for inspecting one deployment;
+Cloudflare already serves those with `x-robots-tag: noindex`.
+
+Root middleware runs for static assets as well as for `/api/*`, so every request
+is now a Functions invocation — 100 000 a day on the free plan. Verified on a
+throwaway project before it shipped: `_headers` is still applied to what `next()`
+returns, so the CSP is not lost.
+
+One thing the orange cloud adds: Cloudflare injects its own inline challenge
+script (`window.__CF$cv$params`) into proxied HTML. It carries a per-request ray
+id, so no static hash can ever match it and the CSP blocks it. Nothing on the
+page depends on it — all four of the site's own inline scripts match their
+hashes — but it is why the console shows one CSP violation on a proxied origin
+and none on `.pages.dev`.
 
 **Wrangler is deliberately not a dependency.** It pulls ~500 packages and a
 `workerd` binary; CI uses `cloudflare/wrangler-action`, which brings its own, and
@@ -309,8 +330,8 @@ from the passages it found.
 
 **It is a Pages Function and not a separate Worker on purpose.** Same origin
 means the CSP stays `connect-src 'self'`, there is no CORS, and no second
-hostname has to be attached — the custom domain is the one thing still
-blocked. It deploys with the site, from the same `wrangler pages deploy`.
+hostname has to be attached or kept in sync with the custom domain. It deploys
+with the site, from the same `wrangler pages deploy`.
 
 **The rule, which is the whole feature:** an answer carries a citation and a
 link, or it is not shown. `/api/ask` rejects a model response with no citation
