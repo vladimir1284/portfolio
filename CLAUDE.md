@@ -25,7 +25,7 @@ pnpm dev          # dev server → http://localhost:4321
 pnpm build        # production build → ./dist/
 pnpm preview      # serve built ./dist/ locally
 pnpm astro ...    # CLI, e.g. `pnpm astro check`
-pnpm optimize:images [paths] [--max <px>] [--delete]   # convert raster assets to WebP (see §9)
+pnpm optimize:images [paths] [--max <px>] [--delete]   # convert raster assets to WebP (see §10)
 pnpm build:cv     # regenerate public/cv.pdf and public/cv.es.pdf from src/data/
 
 # Quality gate — run before committing/pushing
@@ -62,7 +62,7 @@ src/
 │   └── types.ts              # shapes for the JSON files
 └── styles/global.css         # Tailwind import + design tokens + custom classes
 public/                       # static assets (favicon, avatar, radar still as .webp, cv.pdf)
-scripts/optimize_images.py    # JPG/PNG → WebP converter (see §9)
+scripts/optimize_images.py    # JPG/PNG → WebP converter (see §10)
 scripts/build_cv.py           # src/data/*.json → public/cv{,.es}.pdf (`pnpm build:cv`)
 _material/                    # gitignored working material (CV, thesis, reference code)
 ```
@@ -204,7 +204,40 @@ and caps concurrency at 4 — Dialnet drops parallel requests and reports them a
 
 ---
 
-## 9. Image Optimization
+## 9. Deployment
+
+Static output to **Cloudflare Pages**, published by the `deploy` job in
+`.github/workflows/verify.yml`. That job hangs off `needs: verify`, so the tree
+that ships is the tree the gate passed, and it only fires on a push to `master`.
+
+It needs two repository secrets — `CLOUDFLARE_API_TOKEN` (scope: `Cloudflare
+Pages: Edit`) and `CLOUDFLARE_ACCOUNT_ID` — and a Pages project named
+`vladimir-portfolio`. First-time setup, which needs a browser for the OAuth and
+so cannot be done by an agent:
+
+```bash
+pnpm dlx wrangler login
+pnpm dlx wrangler whoami                      # prints the account ID
+pnpm dlx wrangler pages project create vladimir-portfolio --production-branch master
+pnpm build && pnpm dlx wrangler pages deploy dist --project-name vladimir-portfolio
+```
+
+The custom domain `vladimir.ladetec.com` can only be attached from Pages if the
+`ladetec.com` zone lives in the same Cloudflare account.
+
+**Wrangler is deliberately not a dependency.** It pulls ~500 packages and a
+`workerd` binary; CI uses `cloudflare/wrangler-action`, which brings its own, and
+the setup above is a one-off. Run it with `pnpm dlx`, not `pnpm add`.
+
+`packageManager` in `package.json` pins pnpm, and the workflow's
+`pnpm/action-setup` steps read it rather than hardcoding a version — CI and the
+working copy must run the same package manager. `pnpm.onlyBuiltDependencies`
+lists `esbuild` and `sharp`, the two dependencies that legitimately need an
+install script; pnpm 10+ errors out instead of ignoring them silently.
+
+---
+
+## 10. Image Optimization
 
 Raster assets in `public/` ship as **WebP**. Converter: `scripts/optimize_images.py` (Python 3 + Pillow).
 
