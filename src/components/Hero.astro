@@ -1,10 +1,14 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import Facts from "./Facts.astro";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
 const VIEWER_URL = "https://webviewer.ladetec.com/";
+
+const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
 ---
 
 <section id="top" class="shell pt-32 pb-20 md:pt-40 md:pb-28">
@@ -19,6 +23,22 @@ const VIEWER_URL = "https://webviewer.ladetec.com/";
   </p>
 
   <div class="prose-col mt-6 text-muted" set:html={t("hero.bio")} />
+
+  <!--
+    The three layers named once, as labels. The bio argues them in prose; this
+    row is for the reader who will not read the prose. One accent for all three
+    ticks — colour-coding them would spend three signals on three things that
+    are not in opposition (DESIGN.md §1).
+  -->
+  <ul class="mt-7 flex flex-wrap gap-2">
+    {
+      layerKeys.map((k) => (
+        <li class="chip">
+          <span>{t(k)}</span>
+        </li>
+      ))
+    }
+  </ul>
 
   <div class="mt-9 flex flex-wrap items-center gap-3">
     <a
@@ -38,12 +58,14 @@ const VIEWER_URL = "https://webviewer.ladetec.com/";
     </a>
   </div>
 
+  <Facts />
+
   <!--
     Radar panel. The portfolio must never depend on an external service to render:
     the still frame below is a build-time asset, and the live viewer is a link out,
     not an iframe. See DESIGN.md §7 and the plan's Fase 2b.
   -->
-  <figure class="panel mt-14 overflow-hidden">
+  <figure class="panel mt-12 overflow-hidden">
     <div class="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5">
       <span class="label flex items-center gap-2">
         <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>

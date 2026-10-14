@@ -16,7 +16,7 @@ Concretely:
 
 - Near-black ground, one phosphor accent, generous negative space.
 - **Every number is monospaced.** Dates, versions, counts, measurements, stack
-  tags, equations. Prose is Inter; data is JetBrains Mono. This single rule does
+  tags, equations. Prose is Inter; data is IBM Plex Mono. This single rule does
   most of the visual work.
 - Rules and hairlines over boxes and shadows. Instruments have etched panels,
   not floating cards.
@@ -79,10 +79,10 @@ No other exception exists.
 
 Both families are already loaded in `src/layouts/Layout.astro`.
 
-| Role                                                              | Family             | Weights               |
-| :---------------------------------------------------------------- | :----------------- | :-------------------- |
-| Prose, headings, UI labels                                        | **Inter**          | 400 / 500 / 600 / 700 |
-| All numerals, stack tags, code, equations, section indices, dates | **JetBrains Mono** | 400 / 500             |
+| Role                                                              | Family            | Weights               |
+| :---------------------------------------------------------------- | :---------------- | :-------------------- |
+| Prose, headings, UI labels                                        | **Inter**         | 400 / 500 / 600 / 700 |
+| All numerals, stack tags, code, equations, section indices, dates | **IBM Plex Mono** | 400 / 500             |
 
 Scale (fluid, `clamp()` between mobile and desktop):
 
@@ -107,6 +107,25 @@ Measure: cap prose at **68ch**. Never full-bleed body text.
 - Sections are separated by a 1px `--color-border` rule, not by background shifts.
 - Breakpoints: Tailwind defaults. Design mobile-first; every interactive piece
   must work at 360px wide with no horizontal page scroll.
+
+### Measured figures and the fact band
+
+A figure set large is a claim, so **`.figure-n` never appears without a
+`.figure-method` line under it** saying how it was arrived at (CLAUDE.md §7).
+`~300` keeps its tilde; an estimate that hides being an estimate is worse than
+no figure at all.
+
+The band under the hero (`Facts.astro`) is an **etched grid** — a 1px gap over
+a border-coloured ground, cells painted in the page ground — not six floating
+cards (§1). Half of its figures are counted from `publications.json` at build
+time instead of typed in, so the band cannot drift from the sections below it.
+
+Charts obey the same rule. The output-per-year plot in `Research.astro` is
+built from the same array the list under it renders, carries **no script**, and
+publishes its numbers as a visually hidden `<table>` with the bars marked
+`aria-hidden` — a bar chart's readable form is a table anyway. Empty years stay
+in the plot: the thin stretch while the doctorate was the priority is part of
+the measurement, and dropping those columns would make the shape decoration.
 
 ---
 

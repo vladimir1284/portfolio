@@ -1,0 +1,54 @@
+---
+import { resolveLang, useTranslations } from "../i18n/utils";
+import publications from "../data/publications.json";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+/*
+  The fact band. Its only job is to put the case in front of someone who will
+  not scroll: six figures, each one followed by the method that makes it
+  defensible (CLAUDE.md §7 — no metric ships that cannot be defended in an
+  interview).
+
+  It renders inside `Hero.astro`, between the calls to action and the radar
+  panel, and therefore carries no `.shell` of its own — the hero already
+  provides the content column. Below the radar panel it was around 1900px down
+  the page, which is a long way to scroll for the thing meant to save you the
+  scroll. Claim first, evidence under it.
+
+  Three of the six are counted from the data at build time, so they cannot
+  drift from the sections below. The other three are claims Vladímir already
+  makes in `experience.json`, with the same wording and the same caveats —
+  `~300` and `~10` keep their tilde because they are estimates and saying so
+  is the point.
+*/
+const journal = publications.filter((p) => p.type === "journal").length;
+const conference = publications.filter((p) => p.type === "conference").length;
+
+const facts = [
+  { figure: "2008 →", method: t("facts.teaching") },
+  { figure: "~300", method: t("facts.students") },
+  { figure: "2", method: t("facts.doctorates") },
+  {
+    figure: String(publications.length),
+    method: t("facts.publications", { journal, conference }),
+  },
+  { figure: "2014 →", method: t("facts.vesta") },
+  { figure: "~10", method: t("facts.team") },
+];
+---
+
+<section aria-labelledby="facts-title" class="mt-14">
+  <h2 id="facts-title" class="sr-only">{t("facts.title")}</h2>
+  <dl class="facts">
+    {
+      facts.map((f) => (
+        <div>
+          <dt class="figure-n">{f.figure}</dt>
+          <dd class="figure-method">{f.method}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

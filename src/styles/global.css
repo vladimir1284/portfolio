@@ -14,7 +14,7 @@
   --color-warn: #f5a524;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer base {
@@ -156,5 +156,67 @@
     transition-property: color, background-color, border-color, opacity, transform;
     transition-duration: 120ms;
     transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Etched fact grid. The 1px gap over a border-coloured ground draws the
+     rules; the cells are the page ground, so nothing floats (DESIGN.md §1). */
+  .facts {
+    display: grid;
+    gap: 1px;
+    background-color: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    overflow: hidden;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 640px) {
+    .facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .facts {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+  .facts > * {
+    background-color: var(--color-bg);
+    padding: 1.125rem 1rem;
+  }
+
+  /* A measured figure. Always mono, always followed by its method. */
+  .figure-n {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+  .figure-method {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-muted);
+  }
+
+  /* Hero layer marker: one accent, used as a tick rather than a colour code. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+  .chip::before {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    flex: none;
+    background-color: var(--color-accent);
   }
 }

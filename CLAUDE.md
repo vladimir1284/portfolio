@@ -87,6 +87,7 @@ Single-page layout, sections in order:
 | Section    | Component          | Content                                                                                   |
 | :--------- | :----------------- | :---------------------------------------------------------------------------------------- |
 | Hero       | `Hero.astro`       | Name, tagline, short bio, CTAs, radar still + link to the live viewer.                    |
+| Facts      | `Facts.astro`      | Six figures under the hero, each with the method that makes it defensible.                |
 | System     | `System.astro`     | Interactive walkthrough of the LAMULA radar chain. Data in `components/lamula/stages.ts`. |
 | About      | `About.astro`      | Photo, extended bio, current role/institution, research interests.                        |
 | Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                         |
@@ -164,6 +165,7 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 | `Layout.astro`     | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script. |
 | `Header.astro`     | Fixed nav: name, section anchors, theme toggle, language switcher.                       |
 | `Hero.astro`       | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.     |
+| `Facts.astro`      | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.         |
 | `System.astro`     | LAMULA chain walkthrough. CSS-driven (radio + peer), JS only adds arrow-key navigation.  |
 | `About.astro`      | Photo, extended bio, research interests, current affiliation.                            |
 | `Research.astro`   | Research lines + key publications from `data/publications.json`.                         |

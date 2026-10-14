@@ -14,8 +14,22 @@ const { email: EMAIL, links } = profile;
 <section id="contact" class="section">
   <div class="shell">
     <p class="label">06</p>
-    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
-      {t("contact.title")}
+    {
+      /*
+      The last section is the one with something to ask for, so it is set as a
+      statement rather than as another section heading, and the address is the
+      page's terminal action rather than one more link in a paragraph.
+
+      `contact.title` stays in the dictionary on purpose although nothing here
+      renders it: `scripts/build_corpus.py` takes a chunk's heading from the
+      group's `.title` key, and "Contact" is what a retrieved passage should be
+      headed. The statement is the page's voice, not a good index entry.
+    */
+    }
+    <h2
+      class="mt-2 max-w-[18ch] text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.1] font-semibold tracking-tight"
+    >
+      {t("contact.statement")}
     </h2>
 
     <p class="prose-col mt-5 text-muted">{t("contact.lede")}</p>
@@ -24,7 +38,7 @@ const { email: EMAIL, links } = profile;
       <p class="label">{t("contact.email.label")}</p>
       <a
         href={`mailto:${EMAIL}`}
-        class="data t-fast mt-1.5 inline-block text-lg text-accent underline underline-offset-4 hover:text-accent-hover"
+        class="data t-fast mt-2.5 inline-block rounded border border-accent bg-accent px-5 py-3 text-base text-bg hover:border-accent-hover hover:bg-accent-hover"
       >
         {EMAIL}
       </a>

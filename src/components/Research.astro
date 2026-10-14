@@ -1,11 +1,13 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
-import publications from "../data/publications.json";
-import training from "../data/training.json";
+import type { Publication } from "../data/types";
+import publicationsData from "../data/publications.json";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const publications = publicationsData as Publication[];
 
 const SCHOLAR_URL = "https://scholar.google.com/citations?user=tIVrnBwAAAAJ";
 const THESIS_URL =
@@ -28,6 +30,40 @@ const grouped = groups
     items: publications.filter((p) => p.group === g).sort((a, b) => b.year - a.year),
   }))
   .filter((g) => g.items.length > 0);
+
+/*
+  Output per year, built at render time from the same array the list below
+  renders — the chart cannot disagree with the entries under it, because it is
+  the entries under it. Empty years are kept: the thinner stretch while the
+  doctorate was the priority is part of the record, and dropping those columns
+  would make the shape a decoration instead of a measurement.
+
+  It is plain markup with no script. The bars are hidden from assistive
+  technology and the same numbers are given as a table, which is the readable
+  form of a bar chart anyway.
+
+  The two series are told apart by fill *and* by stroke — journal solid,
+  conference outlined — rather than by two tints of the accent. A 35% tint of
+  the light-theme accent lands at 2.4:1 against the page, under the 3:1 a
+  meaningful graphic owes the reader (DESIGN.md §2); the outline carries the
+  accent at full strength, so the bar is legible in both themes and the
+  difference survives being printed or read by someone who misses the tint.
+*/
+const years = publications.map((p) => p.year);
+const firstYear = Math.min(...years);
+const lastYear = Math.max(...years);
+const histogram = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => {
+  const year = firstYear + i;
+  const items = publications.filter((p) => p.year === year);
+  return {
+    year,
+    journal: items.filter((p) => p.type === "journal").length,
+    conference: items.filter((p) => p.type === "conference").length,
+  };
+});
+const tallest = Math.max(...histogram.map((h) => h.journal + h.conference));
+/** Height of one publication, in rem. The plot area is 6rem tall. */
+const unit = 6 / tallest;
 ---
 
 <section id="research" class="section">
@@ -59,6 +95,67 @@ const grouped = groups
       </p>
     </div>
 
+    <figure class="panel mt-6 p-4 sm:p-6">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <figcaption class="label">{t("research.output.title")}</figcaption>
+        <p class="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-muted">
+          <span class="flex items-center gap-2">
+            <span class="inline-block h-2.5 w-2.5 bg-accent" aria-hidden="true"></span>
+            {t("research.type.journal")}
+          </span>
+          <span class="flex items-center gap-2">
+            <span
+              class="inline-block h-2.5 w-2.5 border border-accent bg-accent/20"
+              aria-hidden="true"></span>
+            {t("research.type.conference")}
+          </span>
+        </p>
+      </div>
+
+      <div class="mt-6 flex items-end gap-1 sm:gap-1.5" aria-hidden="true">
+        {
+          histogram.map((h) => (
+            <div class="flex min-w-0 flex-1 flex-col items-center gap-2">
+              <div class="flex w-full max-w-10 flex-col justify-end gap-px" style="height: 6rem">
+                {h.conference > 0 && (
+                  <div
+                    class="w-full border border-accent bg-accent/20"
+                    style={`height: ${h.conference * unit}rem`}
+                  />
+                )}
+                {h.journal > 0 && (
+                  <div class="w-full bg-accent" style={`height: ${h.journal * unit}rem`} />
+                )}
+              </div>
+              <span class="data text-[0.625rem] text-muted">{String(h.year).slice(2)}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <table class="sr-only">
+        <caption>{t("research.output.title")}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t("research.output.year")}</th>
+            <th scope="col">{t("research.type.journal")}</th>
+            <th scope="col">{t("research.type.conference")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            histogram.map((h) => (
+              <tr>
+                <th scope="row">{h.year}</th>
+                <td>{h.journal}</td>
+                <td>{h.conference}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </figure>
+
     <h3 class="label mt-14">{t("research.publications.title")}</h3>
 
     {
@@ -66,41 +163,66 @@ const grouped = groups
         <div class="mt-8">
           <p class="data text-xs text-accent">{t(group.label)}</p>
           <ul class="mt-4 divide-y divide-border border-t border-border">
-            {group.items.map((p) => (
-              <li class="py-5">
-                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span class="data text-sm text-muted">{p.year}</span>
-                  <h4 class="flex-1 text-base font-medium">{p.title}</h4>
-                  <span class="tag">{t(typeKey(p.type))}</span>
-                </div>
-                <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
-                <p class="mt-1 text-sm text-muted">
-                  <span class="italic">{p.venue}</span>
-                  {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
-                </p>
-                <p class="prose-col mt-2.5 text-sm text-muted">{p.abstract[lang]}</p>
-                {(p.doi || p.pdf) && (
-                  <p class="mt-3 flex gap-4">
-                    {p.doi && (
-                      <a
-                        class="data t-fast text-xs text-accent hover:text-accent-hover"
-                        href={p.doi}
-                      >
-                        {t("research.doi")}
-                      </a>
-                    )}
-                    {p.pdf && (
-                      <a
-                        class="data t-fast text-xs text-accent hover:text-accent-hover"
-                        href={p.pdf}
-                      >
-                        {t("research.pdf")}
-                      </a>
-                    )}
+            {group.items.map((p) => {
+              const rank = p.rank;
+              return (
+                <li class="py-5">
+                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span class="data text-sm text-muted">{p.year}</span>
+                    <h4 class="flex-1 text-base font-medium">{p.title}</h4>
+                    <span class="tag">{t(typeKey(p.type))}</span>
+                  </div>
+                  <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
+                  <p class="mt-1 text-sm text-muted">
+                    <span class="italic">{p.venue}</span>
+                    {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
                   </p>
-                )}
-              </li>
-            ))}
+                  {/*
+                  The quartile strip. It renders only for an entry that carries
+                  a `rank`, and it always prints the ranking and the edition
+                  beside it — a quartile with no year is a number a reader
+                  cannot check, which is the kind this site does not ship.
+                */}
+                  {rank && (
+                    <p class="mt-2.5 flex items-center gap-2.5">
+                      <span class="flex gap-0.5" aria-hidden="true">
+                        {[1, 2, 3, 4].map((q) => (
+                          <span
+                            class={`inline-block h-1.5 w-5 ${
+                              q <= 5 - rank.quartile ? "bg-accent" : "bg-border"
+                            }`}
+                          />
+                        ))}
+                      </span>
+                      <span class="data text-xs text-muted">
+                        Q{rank.quartile} &middot; {rank.source} {rank.year}
+                      </span>
+                    </p>
+                  )}
+                  <p class="prose-col mt-2.5 text-sm text-muted">{p.abstract[lang]}</p>
+                  {(p.doi || p.pdf) && (
+                    <p class="mt-3 flex gap-4">
+                      {p.doi && (
+                        <a
+                          class="data t-fast text-xs text-accent hover:text-accent-hover"
+                          href={p.doi}
+                        >
+                          {t("research.doi")}
+                        </a>
+                      )}
+                      {p.pdf && (
+                        <a
+                          class="data t-fast text-xs text-accent hover:text-accent-hover"
+                          href={p.pdf}
+                        >
+                          {t("research.pdf")}
+                        </a>
+                      )}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))
@@ -115,18 +237,5 @@ const grouped = groups
         {t("research.scholar")} &rarr;
       </a>
     </p>
-
-    <h3 class="label mt-14">{t("research.training.title")}</h3>
-    <ul class="mt-4 divide-y divide-border border-t border-border">
-      {
-        training.map((c) => (
-          <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4">
-            <span class="data text-sm text-muted">{c.year}</span>
-            <span class="flex-1 text-sm">{c.title[lang]}</span>
-            <span class="data text-xs text-muted">{c.place[lang]}</span>
-          </li>
-        ))
-      }
-    </ul>
   </div>
 </section>

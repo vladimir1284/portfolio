@@ -17,19 +17,56 @@ const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
     </h2>
     <p class="prose-col mt-5 text-muted">{t("projects.lede")}</p>
 
-    <div class="mt-12 space-y-16">
+    <!--
+      The index. Six projects at full depth is a long read, and a visitor who
+      wants one of them should not have to scroll past the other five to find
+      out they are there. It is a contents list, not a summary: year, name,
+      status, and a jump. The depth stays below, unabridged.
+    -->
+    <nav class="mt-10" aria-labelledby="projects-index-title">
+      <p class="label" id="projects-index-title">{t("projects.index.title")}</p>
+      <ul class="mt-4 divide-y divide-border border-t border-b border-border">
+        {
+          projects.map((p) => (
+            <li>
+              <a
+                href={`#project-${p.id}`}
+                class="t-fast flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3 hover:text-accent"
+              >
+                <span class="data w-24 shrink-0 text-xs text-muted">{p.years}</span>
+                <span class="min-w-0 flex-1 text-sm font-medium">{p.title[lang]}</span>
+                <span class="data text-xs text-muted">{t(statusKey(p.status))}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="mt-16 space-y-16">
       {
-        projects.map((p) => (
-          <article id={`project-${p.id}`} class="border-t border-border pt-8">
+        projects.map((p, i) => (
+          <article id={`project-${p.id}`} class="scroll-mt-24 border-t border-border pt-8">
             <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
               <span class="data text-sm text-muted">{p.years}</span>
-              <h3 class="flex-1 text-xl font-semibold tracking-tight">{p.title[lang]}</h3>
+              <h3
+                class:list={[
+                  "flex-1 font-semibold tracking-tight",
+                  i === 0 ? "text-[clamp(1.375rem,2.2vw,1.75rem)]" : "text-xl",
+                ]}
+              >
+                {p.title[lang]}
+              </h3>
               <span class={["scaffolding", "poc"].includes(p.status) ? "badge-warn" : "tag"}>
                 {t(statusKey(p.status))}
               </span>
             </div>
 
-            <p class="prose-col mt-4 text-muted">{p.summary[lang]}</p>
+            {/* The lead project carries the argument of the section, so its
+                summary is set at reading size rather than body size. */}
+            <p class:list={["prose-col mt-4 text-muted", i === 0 && "text-lg leading-relaxed"]}>
+              {p.summary[lang]}
+            </p>
 
             <div class="prose-col mt-6 space-y-4 text-sm text-muted" set:html={p.body[lang]} />
 

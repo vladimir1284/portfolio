@@ -1,6 +1,7 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
 import experience from "../data/experience.json";
+import training from "../data/training.json";
 import type { Position } from "../data/types";
 
 const lang = resolveLang(Astro.currentLocale);
@@ -11,6 +12,18 @@ const { education, courses, teachingHighlights } = experience;
 // Typed through `types.ts` so the shape is declared in one place; the block
 // renders only when there is something to render.
 const positions = experience.positions as Position[];
+
+/*
+  Two columns. The roles and the course taught in depth are the argument and
+  keep the wide measure; education, the course list and the workshops are a
+  record you scan rather than read, so they sit beside it in a narrow column
+  instead of pushing the roles further and further above the fold.
+
+  Advanced training used to live at the end of Research. It is not research
+  output — it is training received — and it reads as part of the record here.
+  Its retrieval chunk is keyed to the Contact anchor either way, so the move
+  costs the Ask section nothing.
+*/
 ---
 
 <section id="experience" class="section">
@@ -21,140 +34,155 @@ const positions = experience.positions as Position[];
     </h2>
     <p class="prose-col mt-5 text-muted">{t("experience.lede")}</p>
 
-    {
-      positions.length > 0 && (
-        <>
-          <h3 class="label mt-12">{t("experience.roles.title")}</h3>
-          <ul class="mt-4 divide-y divide-border border-t border-border">
-            {positions.map((p) => (
-              <li class="py-6">
-                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span class="data text-sm text-muted">{p.dateLabel[lang]}</span>
-                  <h3 class="flex-1 text-base font-medium">{p.role[lang]}</h3>
-                </div>
+    <div class="mt-12 grid gap-14 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
+      <div>
+        {
+          positions.length > 0 && (
+            <>
+              <h3 class="label">{t("experience.roles.title")}</h3>
+              <ul class="mt-4 divide-y divide-border border-t border-border">
+                {positions.map((p) => (
+                  <li class="py-6">
+                    <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                      <span class="data text-sm text-muted">{p.dateLabel[lang]}</span>
+                      <h4 class="flex-1 text-base font-medium">{p.role[lang]}</h4>
+                    </div>
+                    <p class="mt-1 text-sm text-muted">
+                      {p.institution} &middot; {p.place[lang]}
+                    </p>
+                    {p.highlights && (
+                      <ul class="prose-col mt-3 space-y-1.5 text-sm text-muted">
+                        {p.highlights[lang].map((h) => (
+                          <li class="flex gap-2.5">
+                            <span class="text-accent" aria-hidden="true">
+                              &#8250;
+                            </span>
+                            <span set:html={h} />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {p.stack && (
+                      <ul class="mt-4 flex flex-wrap gap-2">
+                        {p.stack.map((item) => (
+                          <li class="tag">{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {p.shots && (
+                      <ul class="mt-5 flex flex-wrap items-start gap-4">
+                        {p.shots.map((shot) => (
+                          <li class={shot.portrait ? "w-44 shrink-0 sm:w-52" : "min-w-72 flex-1"}>
+                            <figure class="overflow-hidden rounded border border-border">
+                              <img
+                                src={shot.src}
+                                alt={shot.alt[lang]}
+                                width={shot.width}
+                                height={shot.height}
+                                loading="lazy"
+                                decoding="async"
+                                class="block w-full bg-bg"
+                              />
+                              <figcaption class="border-t border-border px-3 py-2 text-xs text-muted">
+                                {shot.caption[lang]}
+                              </figcaption>
+                            </figure>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {p.links && (
+                      <ul class="mt-4 flex flex-wrap gap-2">
+                        {p.links.map((l) => (
+                          <li>
+                            <a
+                              href={l.url}
+                              rel="noopener"
+                              class="tag t-fast hover:border-accent hover:text-accent"
+                            >
+                              {l.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+
+        <h3 class="label mt-12">{t("experience.highlight.title")}</h3>
+        {
+          teachingHighlights.map((h) => (
+            <article class="panel mt-4 p-6">
+              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <span class="data text-sm text-muted">{h.dateLabel[lang]}</span>
+                <h4 class="flex-1 text-base font-medium">{h.course[lang]}</h4>
+              </div>
+              <p class="mt-1 text-sm text-muted">
+                {h.institution} &middot; {h.unit[lang]}
+              </p>
+              <p class="prose-col mt-3 text-sm text-muted">{h.detail[lang]}</p>
+              <ul class="prose-col mt-4 space-y-2 text-sm text-muted">
+                {h.facts.map((f) => (
+                  <li class="flex gap-2.5">
+                    <span class="text-accent" aria-hidden="true">
+                      &#8250;
+                    </span>
+                    <span>{f[lang]}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <aside class="lg:self-start">
+        <h3 class="label">{t("experience.education.title")}</h3>
+        <ul class="mt-4 divide-y divide-border border-t border-border">
+          {
+            education.map((e) => (
+              <li class="py-4">
+                <p class="data text-xs text-muted">{e.dateLabel[lang]}</p>
+                <h4 class="mt-1 text-sm font-medium">{e.degree[lang]}</h4>
                 <p class="mt-1 text-sm text-muted">
-                  {p.institution} &middot; {p.place[lang]}
+                  {e.institution} &middot; {e.place[lang]}
                 </p>
-                {p.highlights && (
-                  <ul class="prose-col mt-3 space-y-1.5 text-sm text-muted">
-                    {p.highlights[lang].map((h) => (
-                      <li class="flex gap-2.5">
-                        <span class="text-accent" aria-hidden="true">
-                          &#8250;
-                        </span>
-                        <span set:html={h} />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {p.stack && (
-                  <ul class="mt-4 flex flex-wrap gap-2">
-                    {p.stack.map((item) => (
-                      <li class="tag">{item}</li>
-                    ))}
-                  </ul>
-                )}
-                {p.shots && (
-                  <ul class="mt-5 flex flex-wrap items-start gap-4">
-                    {p.shots.map((shot) => (
-                      <li class={shot.portrait ? "w-44 shrink-0 sm:w-52" : "min-w-72 flex-1"}>
-                        <figure class="overflow-hidden rounded border border-border">
-                          <img
-                            src={shot.src}
-                            alt={shot.alt[lang]}
-                            width={shot.width}
-                            height={shot.height}
-                            loading="lazy"
-                            decoding="async"
-                            class="block w-full bg-bg"
-                          />
-                          <figcaption class="border-t border-border px-3 py-2 text-xs text-muted">
-                            {shot.caption[lang]}
-                          </figcaption>
-                        </figure>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {p.links && (
-                  <ul class="mt-4 flex flex-wrap gap-2">
-                    {p.links.map((l) => (
-                      <li>
-                        <a
-                          href={l.url}
-                          rel="noopener"
-                          class="tag t-fast hover:border-accent hover:text-accent"
-                        >
-                          {l.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                {e.field[lang] && <p class="data mt-1 text-xs text-muted">{e.field[lang]}</p>}
+                {e.note[lang] && <p class="mt-1.5 text-xs text-muted" set:html={e.note[lang]} />}
               </li>
-            ))}
-          </ul>
-        </>
-      )
-    }
+            ))
+          }
+        </ul>
 
-    <h3 class="label mt-12">{t("experience.teaching.title")}</h3>
-    <ul class="mt-4 flex flex-wrap gap-2">
-      {
-        courses.map((c) => (
-          <li class="tag">
-            {c[lang]}
-            {c.level[lang] && <span class="ml-2 opacity-60">{c.level[lang]}</span>}
-          </li>
-        ))
-      }
-    </ul>
-
-    <h3 class="label mt-12">{t("experience.highlight.title")}</h3>
-    {
-      teachingHighlights.map((h) => (
-        <article class="panel mt-4 p-6">
-          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span class="data text-sm text-muted">{h.dateLabel[lang]}</span>
-            <h4 class="flex-1 text-base font-medium">{h.course[lang]}</h4>
-          </div>
-          <p class="mt-1 text-sm text-muted">
-            {h.institution} &middot; {h.unit[lang]}
-          </p>
-          <p class="prose-col mt-3 text-sm text-muted">{h.detail[lang]}</p>
-          <ul class="prose-col mt-4 space-y-2 text-sm text-muted">
-            {h.facts.map((f) => (
-              <li class="flex gap-2.5">
-                <span class="text-accent" aria-hidden="true">
-                  &#8250;
-                </span>
-                <span>{f[lang]}</span>
+        <h3 class="label mt-10">{t("experience.teaching.title")}</h3>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {
+            courses.map((c) => (
+              <li class="tag">
+                {c[lang]}
+                {c.level[lang] && <span class="ml-2 opacity-60">{c.level[lang]}</span>}
               </li>
-            ))}
-          </ul>
-        </article>
-      ))
-    }
+            ))
+          }
+        </ul>
 
-    <h3 class="label mt-12">{t("experience.education.title")}</h3>
-    <ul class="mt-4 divide-y divide-border border-t border-border">
-      {
-        education.map((e) => (
-          <li class="py-6">
-            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-              <span class="data text-sm text-muted">{e.dateLabel[lang]}</span>
-              <h4 class="flex-1 text-base font-medium">{e.degree[lang]}</h4>
-            </div>
-            <p class="mt-1 text-sm text-muted">
-              {e.institution} &middot; {e.place[lang]}
-            </p>
-            {e.field[lang] && <p class="data mt-1 text-xs text-muted">{e.field[lang]}</p>}
-            {e.note[lang] && (
-              <p class="prose-col mt-2 text-sm text-muted" set:html={e.note[lang]} />
-            )}
-          </li>
-        ))
-      }
-    </ul>
+        <h3 class="label mt-10">{t("experience.training.title")}</h3>
+        <ul class="mt-4 divide-y divide-border border-t border-border">
+          {
+            training.map((c) => (
+              <li class="py-3">
+                <p class="data text-xs text-muted">{c.year}</p>
+                <p class="mt-0.5 text-sm">{c.title[lang]}</p>
+                <p class="data mt-0.5 text-xs text-muted">{c.place[lang]}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
   </div>
 </section>

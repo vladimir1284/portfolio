@@ -36,3 +36,33 @@ export interface Position {
   links?: PositionLink[];
   shots?: Shot[];
 }
+
+/**
+ * A journal ranking, shown as a four-segment quartile strip.
+ *
+ * It is optional and deliberately unpopulated: a quartile is a checkable
+ * number, so it ships with the ranking system and the year it was taken
+ * (`SJR`, `2020`) or it does not ship at all. Fill `rank` on an entry in
+ * `publications.json` and the strip appears on that entry alone.
+ */
+export interface Rank {
+  quartile: 1 | 2 | 3 | 4;
+  /** The ranking consulted — "SJR", "JCR". Rendered verbatim. */
+  source: string;
+  /** The edition the quartile was read from. Quartiles move between years. */
+  year: number;
+}
+
+export interface Publication {
+  group: string;
+  type: string;
+  title: string;
+  authors: string[];
+  venue: string;
+  detail?: string;
+  year: number;
+  doi?: string;
+  pdf?: string;
+  abstract: Localized;
+  rank?: Rank;
+}
