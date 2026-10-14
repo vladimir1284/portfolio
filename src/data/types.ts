@@ -30,6 +30,9 @@ export interface Position {
   dateLabel: Localized;
   /** Rendered with `set:html` — inline markup (<strong>, <em>) is allowed. */
   highlights?: Localized<string[]>;
+  /** What the job actually ran on. Not a skills list — omit it when the
+   *  highlights already name the tools. */
+  stack?: string[];
   links?: PositionLink[];
   shots?: Shot[];
 }

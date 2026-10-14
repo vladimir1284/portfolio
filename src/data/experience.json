@@ -203,6 +203,7 @@
           "Automatización industrial sobre ESP32 para la industria cubana: bombeo de agua, esterilización, pesaje con celdas HX711, medición de energía."
         ]
       },
+      "stack": ["Python", "C", "ESP32", "Modbus TCP", "Docker", "Docker Swarm", "PostgreSQL"],
       "links": [
         {
           "label": "ladetec.com",
@@ -244,6 +245,17 @@
           "Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, unos 10 programadores bajo mi supervisión."
         ]
       },
+      "stack": [
+        "Python",
+        "Django",
+        "Django REST Framework",
+        "Vue",
+        "PostgreSQL",
+        "Docker",
+        "Docker Swarm",
+        "Kill Bill",
+        "BigCommerce"
+      ],
       "links": [
         {
           "label": "nitza.dev",

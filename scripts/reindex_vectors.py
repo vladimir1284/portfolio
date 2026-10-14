@@ -38,11 +38,17 @@ import urllib.error
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
 CORPUS = ROOT / "rag" / "corpus.json"
 VECTORS = ROOT / "rag" / "vectors.json"
+from build_corpus import digest  # noqa: E402  (needs ROOT on sys.path)
+
 API = "https://api.cloudflare.com/client/v4"
 # Cloudflare answers 403 to a bare urllib user agent.
 UA = "Mozilla/5.0 (X11; Linux x86_64) portfolio-reindex"
+# Not the pages.dev hostname: functions/_middleware.ts 301s it to here, and
+# urllib would follow that redirect as a GET, which /api/reindex does not route.
+DEFAULT_ORIGIN = "https://vladimir.ladetec.com"
 
 
 def env(name: str) -> str:
@@ -122,7 +128,7 @@ def main() -> int:
     parser.add_argument("--project", default="vladimir-portfolio")
     parser.add_argument(
         "--origin",
-        help="Origin to call. Defaults to https://<project>.pages.dev.",
+        help=f"Origin to call. Defaults to {DEFAULT_ORIGIN}.",
     )
     parser.add_argument(
         "--skip-deploy",
@@ -130,7 +136,7 @@ def main() -> int:
         help="The running deployment already carries the secret.",
     )
     args = parser.parse_args()
-    origin = args.origin or f"https://{args.project}.pages.dev"
+    origin = args.origin or DEFAULT_ORIGIN
 
     token = env("CLOUDFLARE_API_TOKEN")
     account = env("CLOUDFLARE_ACCOUNT_ID")
@@ -161,6 +167,7 @@ def main() -> int:
                     "dims": result["dims"],
                     "count": result["count"],
                     "ids": ids,
+                    "digest": digest(corpus),
                     "b64": result["b64"],
                 },
                 ensure_ascii=False,

@@ -362,7 +362,10 @@ is both wrong and exactly the kind of undefendable number §7 bans.
   aligned to `rag/corpus.json`; a corpus rebuilt alone would shift every row
   and make answers cite the wrong passage. `_rag.ts` compares the id lists at
   startup and refuses the matrix if they disagree, which degrades to the
-  fallback instead of citing wrongly. `pnpm corpus:check` catches it earlier.
+  fallback instead of citing wrongly. `pnpm corpus:check` catches it earlier,
+  and also compares a sha256 over the ids **and** the text: editing the copy
+  behind an id leaves the rows lined up perfectly while the vectors describe
+  wording that is no longer on the page, which no id comparison can see.
 - **Rebuilding the index needs no new permission.** Workers AI is reached
   through the `AI` binding declared in `wrangler.toml`, which needs no token
   at all — the deploy token has `Cloudflare Pages: Edit` and nothing else, and

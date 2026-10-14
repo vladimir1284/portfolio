@@ -269,6 +269,7 @@ def experience_chunks() -> list[dict]:
                     localized(pos.get("place", ""), lang),
                     localized(pos.get("dateLabel", ""), lang),
                     " ".join(plain(h) for h in highlights),
+                    "Stack: " + ", ".join(pos["stack"]) if pos.get("stack") else "",
                 )
                 if p
             )
@@ -442,6 +443,19 @@ def paper_chunks() -> list[dict]:
     return chunks
 
 
+def digest(chunks: list[dict]) -> str:
+    """Fingerprint of the corpus content, not just its ids.
+
+    Ids stay stable when the text behind them is edited, so an id-for-id
+    comparison cannot tell a fresh index from one embedded before the edit.
+    The index would then answer with vectors for text nobody can read any more.
+    """
+    payload = json.dumps(
+        [[c["id"], c["text"]] for c in chunks], ensure_ascii=False, sort_keys=True
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def check(chunks: list[dict]) -> int:
     """Fail if the committed corpus or index no longer matches the content.
 
@@ -461,6 +475,13 @@ def check(chunks: list[dict]) -> int:
     if vectors.get("ids") != [c["id"] for c in chunks]:
         print(
             "  index does not match the corpus — re-run POST /api/reindex (see rag/README.md)",
+            file=sys.stderr,
+        )
+        status = 1
+    elif "digest" in vectors and vectors["digest"] != digest(chunks):
+        print(
+            "  the ids match but the text behind them changed — the index is stale.\n"
+            "  Re-run: python3 scripts/reindex_vectors.py (see rag/README.md)",
             file=sys.stderr,
         )
         status = 1

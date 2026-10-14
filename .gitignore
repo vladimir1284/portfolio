@@ -34,3 +34,6 @@ _material/
 # Notas de trabajo. Nunca se commitea: el repo es público y este archivo cita
 # cifras del cliente que están deliberadamente difuminadas en las capturas.
 PREGUNTAS.md
+
+# Python bytecode — scripts/reindex_vectors.py imports scripts/build_corpus.py
+__pycache__/

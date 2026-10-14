@@ -41,7 +41,24 @@ index and hands it back. Nothing has to be widened to rebuild the index.
 That endpoint is closed unless `RAG_ADMIN_SECRET` is set on the project, and
 production does not set it. `scripts/reindex_vectors.py` opens it for one run
 and closes it again; read the docstring before running it, because Pages only
-shows environment changes to _new_ deployments and the order matters.
+shows environment changes to _new_ deployments and the order matters. It calls
+`vladimir.ladetec.com` and not the pages.dev hostname, which
+`functions/_middleware.ts` now 301s — urllib would follow that redirect as a
+GET, and `/api/reindex` does not route one.
+
+## Two guards, because they catch different mistakes
+
+`vectors.json` is row-aligned to `corpus.json`, so a corpus rebuilt without a
+reindex would shift every row and make answers cite the wrong passage.
+
+- **The id list.** Caught at startup by `_rag.ts`, which refuses the matrix and
+  degrades to the fallback rather than cite wrongly, and earlier by
+  `pnpm corpus:check`.
+- **A sha256 over the ids _and_ the text.** Ids survive an edit to the text
+  behind them, so an id-for-id comparison cannot tell a fresh index from one
+  embedded before the edit — the rows would line up perfectly and answer with
+  vectors for wording nobody can read any more. `vectors.json` carries the
+  digest and `pnpm corpus:check` compares it.
 
 ## The rule
 

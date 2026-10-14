@@ -47,6 +47,13 @@ const positions = experience.positions as Position[];
                     ))}
                   </ul>
                 )}
+                {p.stack && (
+                  <ul class="mt-4 flex flex-wrap gap-2">
+                    {p.stack.map((item) => (
+                      <li class="tag">{item}</li>
+                    ))}
+                  </ul>
+                )}
                 {p.shots && (
                   <ul class="mt-5 flex flex-wrap items-start gap-4">
                     {p.shots.map((shot) => (
