@@ -39,6 +39,8 @@ export interface Env {
 /** Multilingual by necessity: the site is English and Spanish. */
 export const EMBED_MODEL = "@cf/baai/bge-m3";
 export const DIMS = 1024;
+/** Most windows of the published PDFs one answer may draw on. */
+export const PAPERS_PER_ANSWER = 2;
 /** Cheapest instruct model that follows a citation format reliably. */
 export const CHAT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8-fast";
 
@@ -100,11 +102,27 @@ export function search(query: Float32Array, lang: string, k: number): Hit[] {
     const base = row * DIMS;
     let dot = 0;
     for (let i = 0; i < DIMS; i++) dot += MATRIX[base + i] * query[i];
-    // Back to roughly a cosine, so the floor below means something.
+    // Back to roughly a cosine, so the floor the caller applies means something.
     hits.push({ chunk, score: dot / 127 });
   }
   hits.sort((a, b) => b.score - a.score);
-  return hits.slice(0, k);
+
+  // A paper is split into twenty-odd overlapping windows that all score alike,
+  // so without a cap they take most of the slots and push out the one passage
+  // that actually answers. Measured: "¿Qué sustituyó en la cadena de radar?"
+  // lost the RCP stage — the passage naming Gematronik — to four windows of
+  // the same PDF.
+  const picked: Hit[] = [];
+  let papers = 0;
+  for (const hit of hits) {
+    if (hit.chunk.kind === "paper") {
+      if (papers >= PAPERS_PER_ANSWER) continue;
+      papers++;
+    }
+    picked.push(hit);
+    if (picked.length >= k) break;
+  }
+  return picked;
 }
 
 export function json(body: unknown, status = 200): Response {

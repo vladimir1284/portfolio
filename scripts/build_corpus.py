@@ -26,6 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "src" / "data"
 I18N = ROOT / "src" / "i18n"
+STAGES = ROOT / "src" / "components" / "lamula" / "stages.ts"
 PAPERS = ROOT / "public" / "papers"
 OUT = ROOT / "rag" / "corpus.json"
 # Which PDF each committed paper chunk was extracted from, by content hash.
@@ -79,6 +80,53 @@ def load(name: str):
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
+def stage_extras(lang: str) -> dict[str, str]:
+    """The stage facts that live in `stages.ts` rather than in the dictionaries.
+
+    Which commercial product a stage replaces is data, not copy, so it never
+    reached the corpus — and "what did he replace?" is one of the first things
+    anyone asks. The repository and documentation URLs come along for the same
+    reason: they are the answer to "where is the code", and an answer without a
+    link is not one.
+    """
+    label = {
+        "en": (
+            "Replaces the commercial product: {0}.",
+            "Marked on the diagram as: {0}.",
+            "Source code: {0}.",
+            "Documentation: {0}.",
+        ),
+        "es": (
+            "Sustituye al producto comercial: {0}.",
+            "En el diagrama aparece como: {0}.",
+            "Código fuente: {0}.",
+            "Documentación: {0}.",
+        ),
+    }[lang]
+    source = STAGES.read_text(encoding="utf-8")
+    extras: dict[str, str] = {}
+    for block in re.split(r"\n  \{", source)[1:]:
+        found = re.search(r'id:\s*"([^"]+)"', block)
+        if not found:
+            continue
+        parts = []
+        replaces = re.search(r'replaces:\s*"([^"]+)"', block)
+        if replaces:
+            parts.append(label[0].format(replaces.group(1)))
+        annotation = re.search(r'annotation:\s*"([^"]+)"', block)
+        if annotation:
+            parts.append(label[1].format(annotation.group(1)))
+        repo = re.search(r'repo:\s*"([^"]+)"', block)
+        if repo:
+            parts.append(label[2].format(repo.group(1)))
+        docs = re.findall(r'"(https://[^"]*-docs\.ladetec\.com/?)"', block)
+        if docs:
+            parts.append(label[3].format(", ".join(docs)))
+        if parts:
+            extras[found.group(1)] = " ".join(parts)
+    return extras
+
+
 def i18n_chunks() -> list[dict]:
     """One chunk per key group: `system.stage.rf.*` together, `hero.*` together.
 
@@ -90,6 +138,7 @@ def i18n_chunks() -> list[dict]:
     """
     chunks: list[dict] = []
     for lang in LANGS:
+        extras = stage_extras(lang)
         strings = json.loads((I18N / f"{lang}.json").read_text(encoding="utf-8"))
         groups: dict[str, dict[str, str]] = {}
         for key, value in strings.items():
@@ -106,6 +155,10 @@ def i18n_chunks() -> list[dict]:
                 group,
             )
             prose = [v for k, v in values.items() if len(v) >= MIN_SENTENCE]
+            if group.startswith("system.stage."):
+                extra = extras.get(group.rsplit(".", 1)[-1])
+                if extra:
+                    prose.append(extra)
             text = " ".join(prose)
             if len(text) < MIN_CHARS:
                 continue
