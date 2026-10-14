@@ -24,10 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # No `version:` — the action reads `packageManager` from package.json, so
+      # CI runs the same pnpm as the working copy.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -50,10 +50,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # No `version:` — the action reads `packageManager` from package.json, so
+      # CI runs the same pnpm as the working copy.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -88,10 +88,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # No `version:` — the action reads `packageManager` from package.json, so
+      # CI runs the same pnpm as the working copy.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11
 
       - name: Setup Node
         uses: actions/setup-node@v4
