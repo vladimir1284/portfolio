@@ -1,5 +1,5 @@
 {
-  "site.title": "Vladímir Rodríguez-Diez — Electrical Engineer & Systems Developer",
+  "site.title": "Vladímir Rodríguez Diez — Electrical Engineer & Systems Developer",
   "site.description": "Electrical engineer with a PhD in Computer Science. I design the hardware, write the algorithm, and run it in production — from an FPGA receiver to a distributed system.",
   "nav.about": "About",
   "nav.system": "The system",
@@ -13,7 +13,7 @@
   "nav.lang.switch": "Ver en español",
   "nav.skip": "Skip to content",
   "hero.greeting": "Electrical engineer · PhD in Computer Science",
-  "hero.name": "Vladímir Rodríguez-Diez",
+  "hero.name": "Vladímir Rodríguez Diez",
   "hero.tagline": "I design the hardware, write the algorithm, and run it in production.",
   "hero.bio": "Eighteen years of engineering across three layers that rarely meet in one person: <strong>FPGA and instrumentation</strong>, <strong>algorithms for problems that are expensive to compute</strong>, and <strong>the distributed systems that deliver the result</strong>. Professor of Electrical Engineering since 2008, weather-radar software since 2012, and development lead for remote teams of up to ten since 2022.",
   "hero.cta.cv": "Download CV",
@@ -25,7 +25,7 @@
   "hero.radar.alt": "LAMULA WebViewer showing base reflectivity from the KEOX radar: a large precipitation system over the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs.",
   "about.title": "About",
   "about.body": "I trained as an <strong>electrical engineer</strong> at the Universidad de Camagüey (BSc summa cum laude, 2008; MSc in industrial electrical systems, 2009) and I have been teaching there since the year I graduated — control engineering, industrial automation and PLCs, electric drives, and two electives I wrote myself, FPGA design and Arduino. I am a <strong>Profesor Titular</strong>, the highest academic rank in Cuban higher education.<br /><br />Weather radar came next. From 2012 to 2014 I wrote software at the Camagüey Meteorological Centre: the parser for the raw radar data, the Level III processing and database loading, the ingest into ORPG, the first web viewer. <strong>That software still runs the Cuban radar network today.</strong><br /><br />The doctorate ran in parallel. Invited to INAOE in late 2013 for my FPGA experience, I spent four years on reduct computation — an NP-hard combinatorial problem — and attacked it from both ends at once: two new algorithms, <span class=\"data\">GCreduct</span> and <span class=\"data\">MinReduct</span>, and hardware architectures to accelerate them. One investigation, defended twice: UCLV in Cuba (2019) and BUAP in Mexico (2022).<br /><br />Since 2022 I have led software teams for clients in the United States, and since 2023 I have been a founder of LADETEC, with the radar specialists I worked beside at the meteorological centre. The thread has not changed: the algorithm and the machine it runs on, designed together.",
-  "about.photo.alt": "Portrait of Vladímir Rodríguez-Diez",
+  "about.photo.alt": "Portrait of Vladímir Rodríguez Diez",
   "about.interests.title": "What I work on",
   "about.interest.1": "Real-time radar signal processing and instrumentation",
   "about.interest.2": "FPGA architectures for accelerating combinatorial algorithms",
@@ -99,6 +99,6 @@
   "contact.links.scholar": "Google Scholar",
   "contact.links.orcid": "ORCID",
   "contact.links.researchgate": "ResearchGate",
-  "footer.copyright": "© {year} Vladímir Rodríguez-Diez",
+  "footer.copyright": "© {year} Vladímir Rodríguez Diez",
   "footer.built": "Built with Astro. Source on GitHub."
 }

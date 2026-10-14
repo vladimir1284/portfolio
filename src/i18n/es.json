@@ -1,5 +1,5 @@
 {
-  "site.title": "Vladímir Rodríguez-Diez — Ingeniero eléctrico y desarrollador de sistemas",
+  "site.title": "Vladímir Rodríguez Diez — Ingeniero eléctrico y desarrollador de sistemas",
   "site.description": "Ingeniero eléctrico con doctorado en Ciencias Computacionales. Diseño el hardware, escribo el algoritmo y lo pongo en producción — del receptor FPGA al sistema distribuido.",
   "nav.about": "Perfil",
   "nav.system": "El sistema",
@@ -13,7 +13,7 @@
   "nav.lang.switch": "View in English",
   "nav.skip": "Ir al contenido",
   "hero.greeting": "Ingeniero eléctrico · Doctor en Ciencias Computacionales",
-  "hero.name": "Vladímir Rodríguez-Diez",
+  "hero.name": "Vladímir Rodríguez Diez",
   "hero.tagline": "Diseño el hardware, escribo el algoritmo y lo pongo en producción.",
   "hero.bio": "Dieciocho años de ingeniería en tres capas que rara vez coinciden en una misma persona: <strong>FPGA e instrumentación</strong>, <strong>algoritmos para problemas caros de computar</strong> y <strong>los sistemas distribuidos que entregan el resultado</strong>. Profesor de Ingeniería Eléctrica desde 2008, software de radar meteorológico desde 2012 y líder de desarrollo de equipos remotos de hasta diez personas desde 2022.",
   "hero.cta.cv": "Descargar CV",
@@ -25,7 +25,7 @@
   "hero.radar.alt": "LAMULA WebViewer mostrando reflectividad base del radar KEOX: un gran sistema de precipitación sobre la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie.",
   "about.title": "Perfil",
   "about.body": "Me formé como <strong>ingeniero eléctrico</strong> en la Universidad de Camagüey (ingeniería summa cum laude, 2008; maestría en sistemas eléctricos industriales, 2009) y doy clases allí desde el año en que me gradué — ingeniería de control, automatización industrial y autómatas, accionamiento eléctrico, y dos optativas que escribí yo, diseño con FPGA y Arduino. Soy <strong>Profesor Titular</strong>, la categoría docente más alta de la educación superior cubana.<br /><br />Después vino el radar meteorológico. De 2012 a 2014 escribí software en el Centro Meteorológico de Camagüey: el parser del dato crudo del radar, el procesamiento de los productos Level III y su carga en base de datos, la ingesta en ORPG, el primer visor web. <strong>Ese software sigue sosteniendo hoy la red de radares de Cuba.</strong><br /><br />El doctorado corrió en paralelo. Invitado al INAOE a finales de 2013 por mi experiencia con FPGA, pasé cuatro años en el cómputo de reductos — un problema combinatorio NP-duro — atacándolo por los dos extremos a la vez: dos algoritmos nuevos, <span class=\"data\">GCreduct</span> y <span class=\"data\">MinReduct</span>, y arquitecturas hardware para acelerarlos. Una sola investigación, defendida dos veces: UCLV en Cuba (2019) y BUAP en México (2022).<br /><br />Desde 2022 lidero equipos de software para clientes en Estados Unidos, y desde 2023 soy fundador de LADETEC junto a los especialistas de radar con los que trabajé en el centro meteorológico. El hilo no ha cambiado: el algoritmo y la máquina donde corre, diseñados juntos.",
-  "about.photo.alt": "Retrato de Vladímir Rodríguez-Diez",
+  "about.photo.alt": "Retrato de Vladímir Rodríguez Diez",
   "about.interests.title": "En qué trabajo",
   "about.interest.1": "Procesamiento de señal de radar en tiempo real e instrumentación",
   "about.interest.2": "Arquitecturas FPGA para acelerar algoritmos combinatorios",
@@ -99,6 +99,6 @@
   "contact.links.scholar": "Google Scholar",
   "contact.links.orcid": "ORCID",
   "contact.links.researchgate": "ResearchGate",
-  "footer.copyright": "© {year} Vladímir Rodríguez-Diez",
+  "footer.copyright": "© {year} Vladímir Rodríguez Diez",
   "footer.built": "Hecho con Astro. Código en GitHub."
 }
