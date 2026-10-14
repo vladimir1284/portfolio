@@ -45,7 +45,7 @@
   "kind": "section",
   "title": "DSP — moment estimation",
   "url": "/#system",
-  "text": "DSP — moment estimation. Estimation of the Doppler power spectrum moments of the weather radar signal — reflectivity Z , mean radial velocity V and spectrum width W . Filtering and removal of ground clutter. File organisation and formatting through the radar control processor, over a 1 GbE link. Marked on the diagram as: Z · V · W. Source code: https://github.com/vladimir1284/lamula-dsp. Documentation: https://lamula-dsp-docs.ladetec.com/."
+  "text": "DSP — moment estimation. Estimation of the Doppler power spectrum moments of the weather radar signal — reflectivity Z , mean radial velocity V and spectrum width W . Filtering and removal of ground clutter. The moments reach the control processor over a 1 GbE link. Marked on the diagram as: Z · V · W. Source code: https://github.com/vladimir1284/lamula-dsp. Documentation: https://lamula-dsp-docs.ladetec.com/."
  },
  {
   "id": "ui-system.stage.rcp-en",
@@ -53,7 +53,7 @@
   "kind": "section",
   "title": "RCP — control processor & operator MMI",
   "url": "/#system",
-  "text": "RCP — control processor & operator MMI. Runs the radar control logic, power-up and positioning routines. Archives the volume observation as NEXRAD Level-II and feeds ORPG in real time by fully emulating the WSR-88D RDA standard (ICD 2620002) — emulating the interface rather than licensing the vendor's. A swappable hardware abstraction layer exposes one interface with two adapters: the real plant over Modbus TCP / Profibus, and a faithful simulator, so control logic can be developed without the radar. Replaces the commercial product: Gematronik Ravis 1.3 · RCP · Rainbow. Marked on the diagram as: ICD 2620002. Source code: https://github.com/vladimir1284/lamula-rcp. Documentation: https://lamula-rcp-docs.ladetec.com/, https://radar-emulator-docs.ladetec.com/."
+  "text": "RCP — control processor & operator MMI. Runs the radar control logic, power-up and positioning routines, and organises and formats the moment files it receives. Archives the volume observation as NEXRAD Level-II and feeds ORPG in real time by fully emulating the WSR-88D RDA standard (ICD 2620002) — emulating the interface rather than licensing the vendor's. A swappable hardware abstraction layer exposes one interface with two adapters: the real plant over Modbus TCP / Profibus, and a faithful simulator, so control logic can be developed without the radar. Replaces the commercial product: Gematronik Ravis 1.3 · RCP · Rainbow. Marked on the diagram as: ICD 2620002. Source code: https://github.com/vladimir1284/lamula-rcp. Documentation: https://lamula-rcp-docs.ladetec.com/, https://radar-emulator-docs.ladetec.com/."
  },
  {
   "id": "ui-system.stage.orpg-en",
@@ -133,7 +133,7 @@
   "kind": "section",
   "title": "DSP — estimación de momentos",
   "url": "/es/#system",
-  "text": "DSP — estimación de momentos. Estimación de los momentos del espectro de potencia Doppler de la señal de radar meteorológico — reflectividad Z , velocidad radial media V y ancho espectral W . Filtrado y eliminación del clutter de tierra. Organización y formato de los ficheros a través del procesador de control del radar, por un enlace de 1 GbE. En el diagrama aparece como: Z · V · W. Código fuente: https://github.com/vladimir1284/lamula-dsp. Documentación: https://lamula-dsp-docs.ladetec.com/."
+  "text": "DSP — estimación de momentos. Estimación de los momentos del espectro de potencia Doppler de la señal de radar meteorológico — reflectividad Z , velocidad radial media V y ancho espectral W . Filtrado y eliminación del clutter de tierra. Los momentos llegan al procesador de control por un enlace de 1 GbE. En el diagrama aparece como: Z · V · W. Código fuente: https://github.com/vladimir1284/lamula-dsp. Documentación: https://lamula-dsp-docs.ladetec.com/."
  },
  {
   "id": "ui-system.stage.rcp-es",
@@ -141,7 +141,7 @@
   "kind": "section",
   "title": "RCP — procesador de control y MMI de operador",
   "url": "/es/#system",
-  "text": "RCP — procesador de control y MMI de operador. Ejecuta la lógica de control del radar y las rutinas de encendido y posicionado. Archiva la observación volumétrica en NEXRAD Level-II y alimenta a ORPG en tiempo real emulando por completo el estándar WSR-88D RDA (ICD 2620002) — emular la interfaz en vez de licenciar la del fabricante. Una capa de abstracción de hardware intercambiable expone una sola interfaz con dos adaptadores: la planta real por Modbus TCP / Profibus, y un simulador fiel, de modo que la lógica de control se desarrolla sin el radar delante. Sustituye al producto comercial: Gematronik Ravis 1.3 · RCP · Rainbow. En el diagrama aparece como: ICD 2620002. Código fuente: https://github.com/vladimir1284/lamula-rcp. Documentación: https://lamula-rcp-docs.ladetec.com/, https://radar-emulator-docs.ladetec.com/."
+  "text": "RCP — procesador de control y MMI de operador. Ejecuta la lógica de control del radar y las rutinas de encendido y posicionado, y organiza y da formato a los ficheros de momentos que recibe. Archiva la observación volumétrica en NEXRAD Level-II y alimenta a ORPG en tiempo real emulando por completo el estándar WSR-88D RDA (ICD 2620002) — emular la interfaz en vez de licenciar la del fabricante. Una capa de abstracción de hardware intercambiable expone una sola interfaz con dos adaptadores: la planta real por Modbus TCP / Profibus, y un simulador fiel, de modo que la lógica de control se desarrolla sin el radar delante. Sustituye al producto comercial: Gematronik Ravis 1.3 · RCP · Rainbow. En el diagrama aparece como: ICD 2620002. Código fuente: https://github.com/vladimir1284/lamula-rcp. Documentación: https://lamula-rcp-docs.ladetec.com/, https://radar-emulator-docs.ladetec.com/."
  },
  {
   "id": "ui-system.stage.orpg-es",
@@ -517,7 +517,7 @@
   "kind": "position",
   "title": "Development lead",
   "url": "/#experience",
-  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover, down to a residual error of around $100 across payments in the hundreds of thousands — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, around 10 developers under my supervision.. Stack: Python, Django, Django REST Framework, Vue, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover, down to a residual error of around $100 across payments in the hundreds of thousands — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, around 10 developers under my supervision.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-en",
@@ -589,7 +589,7 @@
   "kind": "position",
   "title": "Líder de desarrollo",
   "url": "/es/#experience",
-  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío, hasta un error residual del orden de 100 USD sobre pagos de cientos de miles — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, unos 10 programadores bajo mi supervisión.. Stack: Python, Django, Django REST Framework, Vue, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío, hasta un error residual del orden de 100 USD sobre pagos de cientos de miles — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, unos 10 programadores bajo mi supervisión.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-es",
