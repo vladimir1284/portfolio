@@ -86,24 +86,46 @@ jobs:
       name: production
       url: https://vladimir.ladetec.com
     steps:
+      # The `secrets` context is not available in a job-level `if`, so the gate
+      # lives here instead: until both secrets exist the job reports a notice
+      # and stops, rather than failing every push with a known-pending error.
+      - name: Check Cloudflare credentials
+        id: creds
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Deploy skipped::Set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to publish to Cloudflare Pages (see CLAUDE.md section 9)."
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.creds.outputs.ready == 'true'
 
       # No `version:` — the action reads `packageManager` from package.json, so
       # CI runs the same pnpm as the working copy.
       - name: Setup pnpm
+        if: steps.creds.outputs.ready == 'true'
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
+        if: steps.creds.outputs.ready == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      - if: steps.creds.outputs.ready == 'true'
+        run: pnpm install --frozen-lockfile
 
-      - run: pnpm build
+      - if: steps.creds.outputs.ready == 'true'
+        run: pnpm build
 
       - name: Publish
+        if: steps.creds.outputs.ready == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

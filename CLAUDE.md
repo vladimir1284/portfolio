@@ -212,8 +212,13 @@ that ships is the tree the gate passed, and it only fires on a push to `master`.
 
 It needs two repository secrets — `CLOUDFLARE_API_TOKEN` (scope: `Cloudflare
 Pages: Edit`) and `CLOUDFLARE_ACCOUNT_ID` — and a Pages project named
-`vladimir-portfolio`. First-time setup, which needs a browser for the OAuth and
-so cannot be done by an agent:
+`vladimir-portfolio`. Until both secrets exist the job's first step stops it
+with a `::notice` instead of failing: a push should not go red over a setup step
+that is known to be pending. The `secrets` context is not readable from a
+job-level `if`, which is why the gate is a step and not a condition on the job.
+
+First-time setup, which needs a browser for the OAuth and so cannot be done by
+an agent:
 
 ```bash
 pnpm dlx wrangler login
