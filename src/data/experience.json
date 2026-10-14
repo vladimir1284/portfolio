@@ -250,19 +250,35 @@
           "url": "https://nitza.dev/"
         }
       ],
-      "shot": {
-        "src": "/img/projects/towit-erp.webp",
-        "width": 1800,
-        "height": 917,
-        "alt": {
-          "en": "Inventory screen of the custom ERP built for Towit Houston: a parts list with stock levels, beside navigation for work orders, storage, rental contracts, trailers and purchasing.",
-          "es": "Pantalla de inventario del ERP a medida de Towit Houston: listado de piezas con existencias, junto a la navegación de órdenes de trabajo, almacenamiento, contratos de renta, trailers y compras."
+      "shots": [
+        {
+          "src": "/img/projects/towit-erp.webp",
+          "width": 1800,
+          "height": 917,
+          "alt": {
+            "en": "Inventory screen of the custom ERP built for Towit Houston: a parts list with stock levels, beside navigation for work orders, storage, rental contracts, trailers and purchasing.",
+            "es": "Pantalla de inventario del ERP a medida de Towit Houston: listado de piezas con existencias, junto a la navegación de órdenes de trabajo, almacenamiento, contratos de renta, trailers y compras."
+          },
+          "caption": {
+            "en": "The trailer ERP, inventory module. Prices and supplier costs are blurred — they are the client’s margin, not mine to publish.",
+            "es": "El ERP de trailers, módulo de inventario. Precios y costos de proveedor van difuminados — son el margen del cliente, no algo que me toque publicar."
+          }
         },
-        "caption": {
-          "en": "The trailer ERP, inventory module. Prices and supplier costs are blurred — they are the client’s margin, not mine to publish.",
-          "es": "El ERP de trailers, módulo de inventario. Precios y costos de proveedor van difuminados — son el margen del cliente, no algo que me toque publicar."
+        {
+          "src": "/img/projects/towitlinks.webp",
+          "width": 776,
+          "height": 1632,
+          "portrait": true,
+          "alt": {
+            "en": "TowitLinks administration menu on a phone: manage users, manage companies, configure recordings and transcriptions, attention hours, missed-call SMS, phone numbers, extensions and voice messages.",
+            "es": "Menú de administración de TowitLinks en un teléfono: gestión de usuarios, gestión de empresas, configuración de grabaciones y transcripciones, horario de atención, SMS por llamada perdida, números, extensiones y mensajes de voz."
+          },
+          "caption": {
+            "en": "TowitLinks, administration on the mobile client. The number on my own account is blurred.",
+            "es": "TowitLinks, administración en el cliente móvil. El número de mi propia cuenta va difuminado."
+          }
         }
-      }
+      ]
     },
     {
       "role": {

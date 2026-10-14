@@ -1,4 +1,4 @@
-name: verify
+name: ci
 
 on:
   push:
@@ -66,3 +66,46 @@ jobs:
       - run: pnpm build
 
       - run: pnpm verify:links:full
+
+  # Publish to Cloudflare Pages. Gated on `verify`, and on the same checkout
+  # the gate ran against: the tree that passed is the tree that ships. Pages
+  # deployments are atomic, so a cancelled run leaves the previous one serving.
+  #
+  # Needs two repository secrets:
+  #   CLOUDFLARE_API_TOKEN   — token with `Cloudflare Pages: Edit` on the account
+  #   CLOUDFLARE_ACCOUNT_ID  — `wrangler whoami` prints it
+  deploy:
+    name: deploy to Cloudflare Pages
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    environment:
+      name: production
+      url: https://vladimir.ladetec.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Publish
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=vladimir-portfolio --branch=master

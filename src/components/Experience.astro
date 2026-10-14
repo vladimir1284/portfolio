@@ -47,21 +47,27 @@ const positions = experience.positions as Position[];
                     ))}
                   </ul>
                 )}
-                {p.shot && (
-                  <figure class="mt-5 max-w-3xl overflow-hidden rounded border border-border">
-                    <img
-                      src={p.shot.src}
-                      alt={p.shot.alt[lang]}
-                      width={p.shot.width}
-                      height={p.shot.height}
-                      loading="lazy"
-                      decoding="async"
-                      class="block w-full bg-bg"
-                    />
-                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
-                      {p.shot.caption[lang]}
-                    </figcaption>
-                  </figure>
+                {p.shots && (
+                  <ul class="mt-5 flex flex-wrap items-start gap-4">
+                    {p.shots.map((shot) => (
+                      <li class={shot.portrait ? "w-44 shrink-0 sm:w-52" : "min-w-72 flex-1"}>
+                        <figure class="overflow-hidden rounded border border-border">
+                          <img
+                            src={shot.src}
+                            alt={shot.alt[lang]}
+                            width={shot.width}
+                            height={shot.height}
+                            loading="lazy"
+                            decoding="async"
+                            class="block w-full bg-bg"
+                          />
+                          <figcaption class="border-t border-border px-3 py-2 text-xs text-muted">
+                            {shot.caption[lang]}
+                          </figcaption>
+                        </figure>
+                      </li>
+                    ))}
+                  </ul>
                 )}
                 {p.links && (
                   <ul class="mt-4 flex flex-wrap gap-2">

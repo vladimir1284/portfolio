@@ -17,6 +17,8 @@ export interface Shot {
   src: string;
   width: number;
   height: number;
+  /** Phone-shaped capture. Rendered narrow so it does not tower over a desktop one. */
+  portrait?: boolean;
   alt: Localized;
   caption: Localized;
 }
@@ -29,5 +31,5 @@ export interface Position {
   /** Rendered with `set:html` — inline markup (<strong>, <em>) is allowed. */
   highlights?: Localized<string[]>;
   links?: PositionLink[];
-  shot?: Shot;
+  shots?: Shot[];
 }
