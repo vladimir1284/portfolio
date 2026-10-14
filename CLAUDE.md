@@ -27,9 +27,10 @@ pnpm preview      # serve built ./dist/ locally
 pnpm astro ...    # CLI, e.g. `pnpm astro check`
 pnpm optimize:images [paths] [--max <px>] [--delete]   # convert raster assets to WebP (see §10)
 pnpm build:cv     # regenerate public/cv.pdf and public/cv.es.pdf from src/data/
+pnpm corpus       # rebuild rag/corpus.json from src/data and src/i18n (see §11)
 
 # Quality gate — run before committing/pushing
-pnpm verify       # lint + format check + astro check + build + internal link crawl
+pnpm verify       # lint + format check + astro check + corpus check + build + internal link crawl
 pnpm verify:full  # same, but also validates external links (slow, flaky)
 ```
 
@@ -52,7 +53,8 @@ src/
 │   ├── ui.ts                 # i18n config + UIKey type + parity guard
 │   └── utils.ts              # resolveLang, useTranslations, otherLang, getRouteFromPathname
 ├── components/               # section components (see §5)
-│   └── lamula/stages.ts      # LAMULA processing chain, as data (System.astro)
+│   ├── lamula/stages.ts      # LAMULA processing chain, as data (System.astro)
+│   └── ask/faq.ts            # fallback questions for the Ask section (see §11)
 ├── data/
 │   ├── projects.json         # portfolio projects / case studies
 │   ├── publications.json     # academic publications (grouped: core | radar | teaching)
@@ -65,6 +67,11 @@ public/                       # static assets (favicon, avatar, radar still as .
 scripts/optimize_images.py    # JPG/PNG → WebP converter (see §10)
 scripts/build_cv.py           # src/data/*.json → public/cv{,.es}.pdf (`pnpm build:cv`)
 scripts/build_headers.py      # dist/_headers for Cloudflare Pages — CSP hashes (see §9)
+scripts/build_corpus.py       # src/data + src/i18n → rag/corpus.json (`pnpm corpus`)
+scripts/reindex_vectors.py    # rebuild rag/vectors.json through the deployed site (§11)
+functions/api/                # Pages Functions — /api/ask, /api/reindex (see §11)
+rag/                          # generated corpus + vector index (see rag/README.md)
+wrangler.toml                 # Pages config — output dir and the `AI` binding
 _material/                    # gitignored working material (CV, thesis, reference code)
 ```
 
@@ -84,6 +91,7 @@ Single-page layout, sections in order:
 | Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                         |
 | Projects   | `Projects.astro`   | Cards from `data/projects.json`: title, stack tags, links (demo/GitHub).                  |
 | Experience | `Experience.astro` | Timeline: positions, institutions, dates.                                                 |
+| Ask        | `Ask.astro`        | Retrieval over the site's own content. Degrades to a static question list (§11).          |
 | Contact    | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
 | Header     | `Header.astro`     | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                   |
 | Footer     | `Footer.astro`     | Copyright, social icons.                                                                  |
@@ -200,8 +208,9 @@ Run locally before pushing. CI enforces it on every push/PR.
 | 1    | `pnpm lint`         | ESLint errors.                                       |
 | 2    | `pnpm format:check` | Unformatted files. Fix: `pnpm format`.               |
 | 3    | `pnpm check`        | `.astro`/TS errors, i18n key-parity guard.           |
-| 4    | `pnpm build`        | Broken pages, bad imports, missing assets.           |
-| 5    | `pnpm verify:links` | Broken internal links (needs `dist/` already built). |
+| 4    | `pnpm corpus:check` | A retrieval corpus or vector index gone stale (§11). |
+| 5    | `pnpm build`        | Broken pages, bad imports, missing assets.           |
+| 6    | `pnpm verify:links` | Broken internal links (needs `dist/` already built). |
 
 `pnpm verify:full` additionally validates external links. Its config skips
 `vladimir.ladetec.com` (not resolving yet) and `researchgate.net` (403s every bot),
@@ -288,3 +297,64 @@ pnpm optimize:images public/img/avatar --max 512 --delete
 
 - `--quality <1-100>` (default 80), `--max <px>` downscales (never upscales), `--delete` removes source.
 - **References not rewritten automatically** — update `data/*.json` paths after converting.
+
+---
+
+## 11. Ask — retrieval over the site's own content
+
+`Ask.astro` puts a question box between Experience and Contact. It posts to
+`/api/ask`, a **Cloudflare Pages Function** in `functions/api/`, which embeds
+the question, scores it against `rag/vectors.json`, and asks a model to answer
+from the passages it found.
+
+**It is a Pages Function and not a separate Worker on purpose.** Same origin
+means the CSP stays `connect-src 'self'`, there is no CORS, and no second
+hostname has to be attached — the custom domain is the one thing still
+blocked. It deploys with the site, from the same `wrangler pages deploy`.
+
+**The rule, which is the whole feature:** an answer carries a citation and a
+link, or it is not shown. `/api/ask` rejects a model response with no citation
+marker, retries once with a correction, and then gives up. Every failure path
+returns `ok: false` with a reason, never an error status, and the page shows
+the questions in `src/components/ask/faq.ts` — answered from the page itself,
+with no model involved. A visitor never sees a stack trace.
+
+The model is told not to compute figures. This is not a style preference: an
+earlier prompt let it turn "teaching since 2008" into "about 15 years", which
+is both wrong and exactly the kind of undefendable number §7 bans.
+
+### Keeping it honest
+
+- **The corpus is generated**, by `scripts/build_corpus.py`, from `src/data/`
+  and the two i18n dictionaries. Every chunk carries the URL that proves it.
+  Edit content, then run `pnpm corpus`; `pnpm verify` fails if you forget.
+- **The index must be rebuilt with the corpus.** `rag/vectors.json` is row-
+  aligned to `rag/corpus.json`; a corpus rebuilt alone would shift every row
+  and make answers cite the wrong passage. `_rag.ts` compares the id lists at
+  startup and refuses the matrix if they disagree, which degrades to the
+  fallback instead of citing wrongly. `pnpm corpus:check` catches it earlier.
+- **Rebuilding the index needs no new permission.** Workers AI is reached
+  through the `AI` binding declared in `wrangler.toml`, which needs no token
+  at all — the deploy token has `Cloudflare Pages: Edit` and nothing else, and
+  it should stay that way. `/api/reindex` is closed unless `RAG_ADMIN_SECRET`
+  is set on the project; production does not set it. Run
+  `python3 scripts/reindex_vectors.py` and read its docstring first: Pages
+  only shows environment changes to _new_ deployments, so the order matters.
+- **The thesis is not in the corpus.** It lives in `_material/`, and whether
+  the PDF is public is unsettled. The two papers under `public/papers/` are
+  included, since they already ship.
+
+### Budget, on the free allowance
+
+10 000 neurons/day. At the published rates for
+`@cf/meta/llama-3.1-8b-instruct-fp8-fast` (4119 neurons per million input
+tokens, 34868 per million output), an answer of roughly 2000 input and 300
+output tokens costs about **19 neurons — around 500 answers a day**. Embedding
+the question with `@cf/baai/bge-m3` costs 0.05 of one. There is no Vectorize
+usage at all: 102 chunks at 1024 dimensions are 108 KB of int8 scored with a
+dot product per row, which is cheaper than the round trip to a managed index.
+
+Past the allowance Workers AI refuses, `/api/ask` answers `ok: false`, and the
+page shows the fallback. A per-IP limit of 10 questions a minute sits in front,
+on the Cache API; it races by construction and is there for casual hammering,
+not for a determined attacker.

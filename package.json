@@ -19,9 +19,11 @@
     "check": "astro check",
     "verify:links": "linkinator ./dist --config .linkinatorrc.json",
     "verify:links:full": "linkinator ./dist --config .linkinatorrc.full.json",
-    "verify": "pnpm lint && pnpm format:check && pnpm check && pnpm build && pnpm verify:links",
+    "verify": "pnpm lint && pnpm format:check && pnpm check && pnpm corpus:check && pnpm build && pnpm verify:links",
     "verify:full": "pnpm lint && pnpm format:check && pnpm check && pnpm build && pnpm verify:links:full",
-    "build:cv": "python3 scripts/build_cv.py && python3 scripts/build_cv.py --lang es -o public/cv.es.pdf"
+    "build:cv": "python3 scripts/build_cv.py && python3 scripts/build_cv.py --lang es -o public/cv.es.pdf",
+    "corpus": "python3 scripts/build_corpus.py",
+    "corpus:check": "python3 scripts/build_corpus.py --check"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

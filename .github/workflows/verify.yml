@@ -130,4 +130,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=vladimir-portfolio --branch=master
+          # No `dist` here: wrangler.toml declares pages_build_output_dir. That
+          # config also carries the `AI` binding /api/ask runs on — deploying
+          # without it leaves the endpoint answering `unavailable`, which the
+          # page degrades past, but silently.
+          command: pages deploy --project-name=vladimir-portfolio --branch=master

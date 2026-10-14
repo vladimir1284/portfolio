@@ -1,0 +1,198 @@
+---
+import { resolveLang, useTranslations } from "../i18n/utils";
+import { FAQ } from "./ask/faq";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const base = lang === "en" ? "/" : "/es/";
+
+// Everything the client script needs to say, resolved here so the script
+// carries no copy of its own — the same rule as every other component.
+const strings = {
+  thinking: t("ask.thinking"),
+  sources: t("ask.sources"),
+  errors: {
+    "no-match": t("ask.error.no-match"),
+    "no-answer": t("ask.error.no-answer"),
+    uncited: t("ask.error.uncited"),
+    "rate-limited": t("ask.error.rate-limited"),
+    unavailable: t("ask.error.unavailable"),
+    "bad-request": t("ask.error.bad-request"),
+  },
+};
+---
+
+<section id="ask" class="section">
+  <div class="shell">
+    <p class="label">05</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("ask.title")}
+    </h2>
+    <p class="prose-col mt-5 text-muted">{t("ask.lede")}</p>
+
+    <!--
+      The form is hidden until the script runs. Without JavaScript there is no
+      endpoint to reach, and `form-action 'none'` in the CSP means a real
+      submit goes nowhere — a visible input that cannot do anything would be
+      worse than none. What is always there is the list below.
+    -->
+    <div id="ask-app" hidden data-lang={lang} data-strings={JSON.stringify(strings)} class="mt-10">
+      <div class="panel p-5">
+        <label class="label" for="ask-input">{t("ask.label")}</label>
+        <div class="mt-3 flex flex-wrap gap-3">
+          <input
+            id="ask-input"
+            type="text"
+            maxlength="400"
+            autocomplete="off"
+            placeholder={t("ask.placeholder")}
+            class="t-fast min-w-0 flex-1 rounded border border-border bg-bg px-3 py-2 text-sm focus:border-accent focus:outline-none"
+          />
+          <button
+            id="ask-submit"
+            type="button"
+            class="tag t-fast cursor-pointer border-accent px-4 text-accent hover:bg-accent hover:text-bg"
+          >
+            {t("ask.submit")}
+          </button>
+        </div>
+        <p class="mt-3 text-xs text-muted">{t("ask.disclaimer")}</p>
+      </div>
+
+      <output id="ask-output" class="mt-5 block" aria-live="polite"></output>
+    </div>
+
+    <div class="mt-12">
+      <p class="label">{t("ask.faq.title")}</p>
+      <dl class="mt-5 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+        {
+          FAQ.map((entry) => (
+            <div>
+              <dt class="text-sm font-medium">
+                <a
+                  href={`${base}#${entry.anchor}`}
+                  class="t-fast underline decoration-border underline-offset-4 hover:decoration-accent"
+                >
+                  {t(entry.question)}
+                </a>
+              </dt>
+              <dd class="mt-2 text-sm text-muted">{t(entry.answer)}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface Citation {
+    n: number;
+    title: string;
+    url: string;
+    kind: string;
+  }
+
+  type Answer = { ok: true; answer: string; citations: Citation[] } | { ok: false; reason: string };
+
+  const app = document.getElementById("ask-app");
+  const input = document.getElementById("ask-input") as HTMLInputElement | null;
+  const button = document.getElementById("ask-submit") as HTMLButtonElement | null;
+  const output = document.getElementById("ask-output");
+
+  if (app && input && button && output) {
+    const lang = app.dataset.lang ?? "en";
+    const strings = JSON.parse(app.dataset.strings ?? "{}") as {
+      thinking: string;
+      sources: string;
+      errors: Record<string, string>;
+    };
+
+    app.hidden = false;
+
+    const note = (text: string) => {
+      output.textContent = "";
+      const p = document.createElement("p");
+      p.className = "panel p-4 text-sm text-muted";
+      p.textContent = text;
+      output.append(p);
+    };
+
+    /**
+     * Model output is never written as HTML. The citation markers are turned
+     * into links by walking the string and building nodes, so the worst a
+     * model can emit is text that looks like markup and is shown as such.
+     */
+    const render = (data: Extract<Answer, { ok: true }>) => {
+      output.textContent = "";
+      const byNumber = new Map(data.citations.map((c) => [c.n, c]));
+
+      const body = document.createElement("div");
+      body.className = "panel prose-col p-5 text-sm";
+      let cursor = 0;
+      for (const match of data.answer.matchAll(/\[(\d+)\]/g)) {
+        const at = match.index ?? 0;
+        body.append(document.createTextNode(data.answer.slice(cursor, at)));
+        cursor = at + match[0].length;
+        const citation = byNumber.get(Number(match[1]));
+        if (!citation) continue;
+        const sup = document.createElement("sup");
+        const link = document.createElement("a");
+        link.href = citation.url;
+        link.textContent = String(match[1]);
+        link.className = "t-fast px-0.5 text-accent hover:text-accent-hover";
+        link.title = citation.title;
+        if (citation.url.startsWith("http")) link.rel = "noopener";
+        sup.append(link);
+        body.append(sup);
+      }
+      body.append(document.createTextNode(data.answer.slice(cursor)));
+      output.append(body);
+
+      const sources = document.createElement("ol");
+      sources.className = "mt-4 space-y-1.5 text-xs text-muted";
+      for (const citation of data.citations) {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = citation.url;
+        link.textContent = `[${citation.n}] ${citation.title}`;
+        link.className = "data t-fast text-accent underline underline-offset-4";
+        if (citation.url.startsWith("http")) link.rel = "noopener";
+        li.append(link);
+        sources.append(li);
+      }
+      const heading = document.createElement("p");
+      heading.className = "label mt-5";
+      heading.textContent = strings.sources;
+      output.append(heading, sources);
+    };
+
+    const ask = async () => {
+      const question = input.value.trim();
+      if (!question) return;
+      button.disabled = true;
+      note(strings.thinking);
+      try {
+        const response = await fetch("/api/ask", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ q: question, lang }),
+        });
+        const data = (await response.json()) as Answer;
+        if (data.ok) render(data);
+        else note(strings.errors[data.reason] ?? strings.errors.unavailable);
+      } catch {
+        // Offline, blocked, or the endpoint is gone. The list below the form
+        // is still on the page, which is the whole point of it being there.
+        note(strings.errors.unavailable);
+      } finally {
+        button.disabled = false;
+      }
+    };
+
+    button.addEventListener("click", ask);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") ask();
+    });
+  }
+</script>

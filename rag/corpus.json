@@ -1,0 +1,818 @@
+[
+ {
+  "id": "ui-hero-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "Vladímir Rodríguez Diez",
+  "url": "/#top",
+  "text": "Vladímir Rodríguez Diez. Eighteen years of engineering across three layers that rarely meet in one person: FPGA and instrumentation , algorithms for problems that are expensive to compute , and the distributed systems that deliver the result . Professor of Electrical Engineering since 2008, weather-radar software since 2012, and development lead for remote teams since 2022. KEOX, base reflectivity (N0B), VCP 212, elevation 0.5° — 9 October 2026, 21:53 GMT−4. NEXRAD Level III decoded, regridded and rendered by the chain described below. Basemap © OpenStreetMap contributors. LAMULA WebViewer showing base reflectivity from the KEOX radar: a large precipitation system over the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs."
+ },
+ {
+  "id": "ui-about-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "About",
+  "url": "/#about",
+  "text": "About. I trained as an electrical engineer at the Universidad de Camagüey (BSc summa cum laude, 2008; MSc in industrial electrical systems, 2009) and I have been teaching there since the year I graduated — control engineering, industrial automation and PLCs, electric drives, and two electives I wrote myself, FPGA design and Arduino. I am a Profesor Titular , the highest academic rank in Cuban higher education. Weather radar came next. From 2012 to 2014 I wrote software at the Camagüey Meteorological Centre: the parser for the raw radar data, the Level III processing and database loading, the ingest into ORPG, the first web viewer. That software still runs the Cuban radar network today. The doctorate ran in parallel. Invited to INAOE in late 2013 for my FPGA experience, I spent four years on reduct computation — an NP-hard combinatorial problem — and attacked it from both ends at once: two new algorithms, GCreduct and MinReduct , and hardware architectures to accelerate them. One investigation, defended twice: UCLV in Cuba (2019) and BUAP in Mexico (2022). Since 2022 I have led software teams for clients in the United States, and since 2023 I have been a founder of LADETEC, with the radar specialists I worked beside at the meteorological centre. The thread has not changed: the algorithm and the machine it runs on, designed together."
+ },
+ {
+  "id": "ui-system-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "The system",
+  "url": "/#system",
+  "text": "The system. A commercial weather radar's processing chain, rebuilt end to end with no dependency on the original vendor. Select a stage. LAMULA is open source and, today, a proof of concept — not a system in operation. What makes the chain above credible is not this repository but what it descends from: Vesta , the processing suite we built at the Cuban meteorological service between 2012 and 2014, which has been running that country's radar network ever since — a Gematronik radar among them. Credit where it is due. The chain is my work, written largely with AI assistance, on top of a body of work that belongs to the team: parts of it start from Vesta code that was not all mine, and the only way this stops being a proof of concept and becomes a product is the experience of that whole team, not mine alone."
+ },
+ {
+  "id": "ui-system.stage.rf-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "Antenna & RF front end",
+  "url": "/#system",
+  "text": "Antenna & RF front end. Pedestal, transmitter and receiver front end. The physical layer: this is where the returned power actually exists, and everything downstream is a question of not losing it."
+ },
+ {
+  "id": "ui-system.stage.drx-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "DRX — digital receiver",
+  "url": "/#system",
+  "text": "DRX — digital receiver. Digital receiver on FPGA (Xilinx Vivado / Vitis / PetaLinux). Digitises and conditions the return at the earliest possible point. Hard real-time lives here, not further up the stack."
+ },
+ {
+  "id": "ui-system.stage.dsp-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "DSP — moment estimation",
+  "url": "/#system",
+  "text": "DSP — moment estimation. Clutter filtering and estimation of the base moments — reflectivity Z , mean radial velocity V , and spectrum width W — delivered to the control processor over a 1 GbE link."
+ },
+ {
+  "id": "ui-system.stage.rcp-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "RCP — control processor & operator MMI",
+  "url": "/#system",
+  "text": "RCP — control processor & operator MMI. Runs the radar control logic, power-up and positioning routines. Archives the volume observation as NEXRAD Level-II and feeds ORPG in real time by fully emulating the WSR-88D RDA standard (ICD 2620002) — emulating the interface rather than licensing the vendor's. A swappable hardware abstraction layer exposes one interface with two adapters: the real plant over Modbus TCP / Profibus, and a faithful simulator, so control logic can be developed without the radar."
+ },
+ {
+  "id": "ui-system.stage.orpg-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "ORPG — product generation",
+  "url": "/#system",
+  "text": "ORPG — product generation. The RCP deliberately generates no meteorological products. It archives base observations and acts as the RDA; product generation is delegated to ORPG, which emits Level III. Clean separation of responsibilities, and standard interfaces at the boundary."
+ },
+ {
+  "id": "ui-system.stage.pipeline-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "Level III ingest pipeline",
+  "url": "/#system",
+  "text": "Level III ingest pipeline. Headless Python service: decodes Level III PDB / Symbology / Tabular blocks, regrids to an azimuthal-equidistant projection, and writes Cloud-Optimized GeoTIFFs plus catalogue metadata and extracted phenomena."
+ },
+ {
+  "id": "ui-system.stage.viewer-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "WebViewer",
+  "url": "/#system",
+  "text": "WebViewer. Product viewer rendering the COGs directly in the browser with OpenLayers WebGL . Read-only by design: it neither generates nor persists data — the pipeline owns the data contract."
+ },
+ {
+  "id": "ui-research-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "Research",
+  "url": "/#research",
+  "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation."
+ },
+ {
+  "id": "ui-hero-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Vladímir Rodríguez Diez",
+  "url": "/es/#top",
+  "text": "Vladímir Rodríguez Diez. Dieciocho años de ingeniería en tres capas que rara vez coinciden en una misma persona: FPGA e instrumentación , algoritmos para problemas caros de computar y los sistemas distribuidos que entregan el resultado . Profesor de Ingeniería Eléctrica desde 2008, software de radar meteorológico desde 2012 y líder de desarrollo de equipos remotos desde 2022. KEOX, reflectividad base (N0B), VCP 212, elevación 0,5° — 9 de octubre de 2026, 21:53 GMT−4. NEXRAD Level III decodificado, regrillado y renderizado por la cadena que se describe abajo. Mapa base © colaboradores de OpenStreetMap. LAMULA WebViewer mostrando reflectividad base del radar KEOX: un gran sistema de precipitación sobre la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie."
+ },
+ {
+  "id": "ui-about-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Perfil",
+  "url": "/es/#about",
+  "text": "Perfil. Me formé como ingeniero eléctrico en la Universidad de Camagüey (ingeniería summa cum laude, 2008; maestría en sistemas eléctricos industriales, 2009) y doy clases allí desde el año en que me gradué — ingeniería de control, automatización industrial y autómatas, accionamiento eléctrico, y dos optativas que escribí yo, diseño con FPGA y Arduino. Soy Profesor Titular , la categoría docente más alta de la educación superior cubana. Después vino el radar meteorológico. De 2012 a 2014 escribí software en el Centro Meteorológico de Camagüey: el parser del dato crudo del radar, el procesamiento de los productos Level III y su carga en base de datos, la ingesta en ORPG, el primer visor web. Ese software sigue sosteniendo hoy la red de radares de Cuba. El doctorado corrió en paralelo. Invitado al INAOE a finales de 2013 por mi experiencia con FPGA, pasé cuatro años en el cómputo de reductos — un problema combinatorio NP-duro — atacándolo por los dos extremos a la vez: dos algoritmos nuevos, GCreduct y MinReduct , y arquitecturas hardware para acelerarlos. Una sola investigación, defendida dos veces: UCLV en Cuba (2019) y BUAP en México (2022). Desde 2022 lidero equipos de software para clientes en Estados Unidos, y desde 2023 soy fundador de LADETEC junto a los especialistas de radar con los que trabajé en el centro meteorológico. El hilo no ha cambiado: el algoritmo y la máquina donde corre, diseñados juntos. Cómputo de reductos y testores (teoría de conjuntos aproximados, selección de atributos)"
+ },
+ {
+  "id": "ui-system-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "El sistema",
+  "url": "/es/#system",
+  "text": "El sistema. La cadena de procesamiento de un radar meteorológico comercial, reconstruida de punta a punta sin dependencia del fabricante original. Elige una etapa. LAMULA es código abierto y, hoy, una prueba de concepto — no un sistema en explotación. Lo que hace creíble la cadena de arriba no es este repositorio sino de dónde viene: Vesta , la suite de procesamiento que construimos en el servicio meteorológico cubano entre 2012 y 2014 y que desde entonces sostiene la red de radares del país — un radar Gematronik entre ellos. Cada cosa en su sitio: la cadena es trabajo mío, escrito en buena medida con asistencia de IA, sobre un cuerpo de trabajo que es del equipo. Parte de ella arranca de código de Vesta que no era todo mío, y el único modo de que deje de ser prueba de concepto y pase a ser un producto es la experiencia de ese equipo completo, no la mía sola."
+ },
+ {
+  "id": "ui-system.stage.rf-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Antena y cabeza de RF",
+  "url": "/es/#system",
+  "text": "Antena y cabeza de RF. Pedestal, transmisor y front end de recepción. La capa física: aquí es donde la potencia retornada existe de verdad, y todo lo que viene después es cuestión de no perderla."
+ },
+ {
+  "id": "ui-system.stage.drx-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "DRX — receptor digital",
+  "url": "/es/#system",
+  "text": "DRX — receptor digital. Receptor digital en FPGA (Xilinx Vivado / Vitis / PetaLinux). Digitaliza y acondiciona el retorno en el punto más temprano posible. El tiempo real duro vive aquí, no más arriba."
+ },
+ {
+  "id": "ui-system.stage.dsp-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "DSP — estimación de momentos",
+  "url": "/es/#system",
+  "text": "DSP — estimación de momentos. Filtrado de clutter y estimación de los momentos base — reflectividad Z , velocidad radial media V y ancho espectral W — entregados al procesador de control por un enlace de 1 GbE."
+ },
+ {
+  "id": "ui-system.stage.rcp-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "RCP — procesador de control y MMI de operador",
+  "url": "/es/#system",
+  "text": "RCP — procesador de control y MMI de operador. Ejecuta la lógica de control del radar y las rutinas de encendido y posicionado. Archiva la observación volumétrica en NEXRAD Level-II y alimenta a ORPG en tiempo real emulando por completo el estándar WSR-88D RDA (ICD 2620002) — emular la interfaz en vez de licenciar la del fabricante. Una capa de abstracción de hardware intercambiable expone una sola interfaz con dos adaptadores: la planta real por Modbus TCP / Profibus, y un simulador fiel, de modo que la lógica de control se desarrolla sin el radar delante."
+ },
+ {
+  "id": "ui-system.stage.orpg-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "ORPG — generación de productos",
+  "url": "/es/#system",
+  "text": "ORPG — generación de productos. El RCP deliberadamente no genera productos meteorológicos. Archiva observaciones base y actúa como RDA; la generación de productos se delega a ORPG, que emite Level III. Separación limpia de responsabilidades e interfaces estándar en la frontera."
+ },
+ {
+  "id": "ui-system.stage.pipeline-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Pipeline de ingesta Level III",
+  "url": "/es/#system",
+  "text": "Pipeline de ingesta Level III. Servicio Python headless: decodifica los bloques PDB / Symbology / Tabular de Level III, regrilla a una proyección azimutal equidistante y escribe Cloud-Optimized GeoTIFFs junto con metadatos de catálogo y fenómenos extraídos."
+ },
+ {
+  "id": "ui-system.stage.viewer-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "WebViewer",
+  "url": "/es/#system",
+  "text": "WebViewer. Visor de productos que renderiza los COG directamente en el navegador con OpenLayers WebGL . De solo lectura por diseño: ni genera ni persiste datos — el contrato de datos lo posee el pipeline."
+ },
+ {
+  "id": "ui-research-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Investigación",
+  "url": "/es/#research",
+  "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo."
+ },
+ {
+  "id": "project-lamula-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "LAMULA — vendor-independent weather radar chain",
+  "url": "/#project-lamula",
+  "text": "The full processing chain of a commercial weather radar, rebuilt from the FPGA digital receiver to the WebGL product viewer. The problem. A weather radar whose control and processing software is a closed vendor suite is a radar you cannot maintain, extend or repair on your own terms. Spare parts and licences become a single point of failure for a national observation asset. The constraint that is not negotiable. The meteorological data must stay standard. Rebuilding the chain is worthless if the output stops being readable by the tools and archives the field already uses. The decision. Emulate the interface instead of licensing it. The control processor archives volume observations as NEXRAD Level-II and presents itself to ORPG as a WSR-88D RDA by implementing ICD 2620002 in full. The standard becomes the seam: everything behind it is ours, everything in front of it is unchanged. Where it stands. Open source, and today a proof of concept — not a system in operation. It descends from Vesta , the processing suite the team built at the Cuban meteorological service, which has run that network since 2014, a Gematronik radar among them. Parts of this chain start from Vesta code that was not all mine, and finishing it needs the whole team, not just me. What the design bought. A hardware abstraction layer with two interchangeable adapters — the real plant over Modbus TCP / Profibus, and a faithful simulator — so control logic is developed and tested without occupying the radar. Hard real-time stays in the FPGA and DSP; the orchestration layer is soft real-time Python and does not pretend otherwise. Stack: FPGA / Xilinx, C, Python, Vue 3, Nuxt 3, OpenLayers WebGL, Modbus TCP, Profibus, Docker Swarm, PostgreSQL Years: 2021—. Status: poc."
+ },
+ {
+  "id": "project-lamula-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "LAMULA — cadena de radar meteorológico sin dependencia de fabricante",
+  "url": "/es/#project-lamula",
+  "text": "La cadena completa de procesamiento de un radar meteorológico comercial, reconstruida desde el receptor digital en FPGA hasta el visor de productos en WebGL. El problema. Un radar meteorológico cuyo software de control y procesamiento es una suite cerrada del fabricante es un radar que no puedes mantener, extender ni reparar en tus términos. Los repuestos y las licencias se vuelven un punto único de fallo para un activo nacional de observación. La restricción que no se negocia. El dato meteorológico tiene que seguir siendo estándar. Reconstruir la cadena no vale nada si la salida deja de ser legible por las herramientas y los archivos que el campo ya usa. La decisión. Emular la interfaz en vez de licenciarla. El procesador de control archiva observaciones volumétricas en NEXRAD Level-II y se presenta ante ORPG como un RDA WSR-88D implementando por completo el ICD 2620002. El estándar se vuelve la costura: todo lo que queda detrás es nuestro, todo lo que queda delante no cambia. En qué punto está. Código abierto y, hoy, una prueba de concepto — no un sistema en explotación. Desciende de Vesta , la suite de procesamiento que el equipo construyó en el servicio meteorológico cubano y que sostiene esa red desde 2014, con un radar Gematronik entre ellos. Parte de esta cadena arranca de código de Vesta que no era todo mío, y terminarla requiere al equipo completo, no solo a mí. Qué permitió el diseño. Una capa de abstracción de hardware con dos adaptadores intercambiables — la planta real por Modbus TCP / Profibus y un simulador fiel — de modo que la lógica de control se desarrolla y se prueba sin ocupar el radar. El tiempo real duro se queda en el FPGA y el DSP; la capa de orquestación es Python en tiempo real blando y no pretende otra cosa. Stack: FPGA / Xilinx, C, Python, Vue 3, Nuxt 3, OpenLayers WebGL, Modbus TCP, Profibus, Docker Swarm, PostgreSQL Years: 2021—. Status: poc."
+ },
+ {
+  "id": "project-process-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "Process — a radar analysis workbench that outlives its operating system",
+  "url": "/#project-process",
+  "text": "A rewrite of Vesta | Proceso, the analysis program of Cuba's radar network, freed from Delphi and from Windows: one codebase that runs on the desktop and in the browser, with no backend. The problem. Vesta | Proceso is the processing and visualisation program of the Radar Centre at Cuba's Institute of Meteorology, written in Delphi/VCL by Wilfredo Pozas. Forecasters have used it for years, and it works — but it is tied to Windows and to a toolchain whose licence and future are outside the institution's control. A tool that outlives its platform has to be rewritten before the platform forces the issue, not after. The constraint that is not negotiable. It must keep ingesting raw radar data . Deriving products from already-derived Level III output would be cheaper to build and would quietly cap what the tool can ever answer: once a product is computed, the choices behind it — thresholds, interpolation, the elevation it came from — are no longer yours to revisit. The decision. One codebase, two targets. The same Pascal core compiles to a desktop application and runs in the browser, and the browser build carries no backend at all — the volume is read client-side. Nothing to deploy, nothing to keep running, nothing to pay for while it is idle. Reach, without an operations bill. Why it is not part of the LAMULA chain. It reads the same archive the chain writes, but it is a separate tool, not a stage. The chain ends at a viewer that consumes Level III products generated upstream; Process starts from the raw volume and computes its own. Shown as a stage it would suggest a dependency that does not exist in either direction. What it is not. An analytical instrument rather than a display: it opens empty, and shows something once an observation is loaded. The screenshot below is a real Level-II volume, named in the caption — the same file can be pulled from NOAA's archive and compared. Successor to a program that is not mine. Vesta | Proceso was written by Wilfredo Pozas at the Radar Centre, and the rewrite starts from the behaviour his program defined. Stack: Pascal, Svelte, NEXRAD Level-II, desktop + browser Years: 2026—. Status: active."
+ },
+ {
+  "id": "project-process-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "Process — un banco de análisis de radar que sobrevive a su sistema operativo",
+  "url": "/es/#project-process",
+  "text": "Reescritura de Vesta | Proceso, el programa de análisis de la red de radares de Cuba, liberado de Delphi y de Windows: un mismo código que corre en el escritorio y en el navegador, sin backend. El problema. Vesta | Proceso es el programa de procesamiento y visualización del Centro de Radares del Instituto de Meteorología de Cuba, escrito en Delphi/VCL por Wilfredo Pozas. Los pronosticadores llevan años usándolo y funciona — pero está atado a Windows y a una cadena de herramientas cuya licencia y cuyo futuro no dependen de la institución. Una herramienta que va a sobrevivir a su plataforma hay que reescribirla antes de que la plataforma obligue, no después. La restricción que no se negocia. Tiene que seguir ingiriendo datos crudos de radar . Derivar productos a partir de una salida Level III ya derivada saldría más barato de construir y limitaría en silencio lo que la herramienta podrá preguntar nunca: una vez calculado el producto, las decisiones que hay detrás — umbrales, interpolación, de qué elevación salió — dejan de estar a tu alcance. La decisión. Un código, dos destinos. El mismo núcleo en Pascal compila a aplicación de escritorio y corre en el navegador, y la versión de navegador no lleva backend ninguno : el volumen se lee en el cliente. Nada que desplegar, nada que mantener en pie, nada que pagar mientras está ocioso. Alcance, sin factura de operación. Por qué no es parte de la cadena LAMULA. Lee el mismo archivo que la cadena escribe, pero es una herramienta aparte, no una etapa. La cadena termina en un visor que consume productos Level III generados aguas arriba; Process arranca del volumen crudo y calcula los suyos. Enseñarlo como etapa sugeriría una dependencia que no existe en ninguna de las dos direcciones. Lo que no es. Un instrumento analítico, no un visor: abre vacío y muestra algo cuando se le carga una observación. La captura de abajo es un volumen Level-II real, nombrado en el pie de foto — ese mismo fichero se baja del archivo de NOAA y se compara. Sucesor de un programa que no es mío. Vesta | Proceso lo escribió Wilfredo Pozas en el Centro de Radares, y la reescritura parte del comportamiento que definió su programa. Stack: Pascal, Svelte, NEXRAD Level-II, desktop + browser Years: 2026—. Status: active."
+ },
+ {
+  "id": "project-commission-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "Replacing a 20-year-old commission engine",
+  "url": "/#project-commission",
+  "text": "A money-critical MLM commission engine, replaced on a cold cutover with no parallel run — and the four months of reconciliation that followed. The problem. Twenty years of commission rules living in accumulated SQL, with nested conditionals whose execution path depended on the year a plan had been configured. The source was readable; the intent was not. The person who designed it was unavailable. The constraint that was not negotiable. A cold cutover. The old engine was switched off at 23:59 on the 20th of the month and the new one went live the same night, with no parallel run — so the first two biweekly periods were part old engine, which could no longer be queried, and part new engine, which did not yet encode every rule. What did not work. Reading the old SQL to recover the rules. We stopped writing code and sat with the client's finance department to define the terms instead: what a generation is, what makes a director active, what happens when someone changes level mid-month. The hardest case was multi-level commissions paid to directors over successive generations below them, on a hierarchy that changes over time — a slowly changing dimension, with almost no clean history to validate against. The outcome, stated honestly. About four months of cycles with errors, reconciled with finance, each discrepancy traced to a specific plan rule rather than written off as a system fault. Residual error at the end: on the order of $100 in total, across payments summing to hundreds of thousands of dollars distributed among thousands of consultants. Written four-handed with Alejandro Cespón. The number worth quoting here is not the one that sounds good. Four months of errors is the honest headline; the ~$100 residual is what the four months bought. Stack: Python, SQL, Recursive CTEs, BigCommerce, Kill Bill Years: 2026. Status: production."
+ },
+ {
+  "id": "project-commission-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "Sustituir un motor de comisiones de 20 años",
+  "url": "/es/#project-commission",
+  "text": "Un motor de comisiones MLM crítico para el dinero, sustituido en un corte en frío sin ejecución en paralelo — y los cuatro meses de conciliación que vinieron después. El problema. Veinte años de reglas de comisión viviendo en SQL acumulado, con condicionales anidados cuya ruta de ejecución dependía del año en que se había configurado el plan. El código era legible; la intención no. Quien lo diseñó no estaba disponible. La restricción que no se negociaba. Un corte en frío. El motor viejo se apagó a las 23:59 del día 20 del mes y el nuevo entró esa misma noche, sin ejecución en paralelo — así que los dos primeros periodos quincenales fueron en parte del motor viejo, que ya no se podía consultar, y en parte del nuevo, que todavía no codificaba todas las reglas. Qué no funcionó. Leer el SQL viejo para recuperar las reglas. Dejamos de escribir código y nos sentamos con el departamento financiero del cliente a definir los términos: qué es una generación, qué hace que un director esté activo, qué pasa cuando alguien cambia de nivel a mitad de mes. El caso más duro fueron las comisiones multinivel que cobran los directores sobre generaciones sucesivas por debajo, sobre una jerarquía que cambia en el tiempo — una dimensión de cambio lento, casi sin histórico limpio contra el que validar. El resultado, dicho con honestidad. Unos cuatro meses de ciclos con errores, conciliados con finanzas, con cada discrepancia rastreada hasta una regla concreta del plan en lugar de darla por fallo genérico del sistema. Error residual al final: del orden de 100 USD en total, sobre pagos que suman cientos de miles de dólares repartidos entre miles de consultores. Escrito a cuatro manos con Alejandro Cespón. La cifra que vale citar aquí no es la que suena bien. Cuatro meses con errores es el titular honesto; los ~100 USD residuales son lo que compraron esos cuatro meses. Stack: Python, SQL, Recursive CTEs, BigCommerce, Kill Bill Years: 2026. Status: production."
+ },
+ {
+  "id": "project-siting-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "Radar Siting Toolkit",
+  "url": "/#project-siting",
+  "text": "Open-source QGIS plugin answering where weather radars should be sited, and what each configuration would actually see. The problem. Siting a radar network is an investment decision made by a government or a donor. It needs reproducible geometric evidence, not a pretty coverage picture. The decision that matters. For each azimuth the terrain is sampled along the ray at native DEM resolution, accumulating the maximum horizon angle seen up to each range, corrected for earth curvature by an effective-radius factor. Minimum clear elevation and minimum visible height fall out directly — a single O(N) pass per ray, with no discrete elevation-angle loop. A detail that is easy to get wrong. Partial beam blockage is published as the range-cumulative maximum, never as raw per-bin PBB. Publishing per-bin values produces wrong maps across the entire sector behind an obstacle. A dependency refused on purpose. Implemented in plain numpy. wradlib would pull in scipy, matplotlib, xarray and xradar and recommends a conda install — which cannot be installed from the QGIS Plugin Manager, where the users actually are. wradlib is used offline, as a validation reference only. This toolkit covers roughly 15% of a full siting study. Saying so is the point: the number that is defensible is worth more than the number that is impressive. Out of scope: Rain attenuation and frequency-band selection; Real anomalous propagation — only the effective earth-radius factor is parameterised; Sea clutter, ground clutter, RF interference, spectrum compatibility; Quantitative precipitation estimation and nowcasting; Tower structure, radome, wind load, electrical resilience; Cost, lifecycle and staffing Stack: Python, numpy, QGIS, GDAL, Jupyter Years: 2026—. Status: scaffolding."
+ },
+ {
+  "id": "project-siting-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "Radar Siting Toolkit",
+  "url": "/es/#project-siting",
+  "text": "Plugin QGIS de código abierto que responde dónde emplazar radares meteorológicos y qué vería realmente cada configuración. El problema. Emplazar una red de radares es una decisión de inversión que toma un gobierno o un donante. Necesita evidencia geométrica reproducible, no una imagen bonita de cobertura. La decisión que importa. Por cada azimut se muestrea el terreno a lo largo del rayo a la resolución nativa del DEM, acumulando el ángulo máximo de horizonte visto hasta cada rango, corregido por curvatura terrestre mediante un factor de radio efectivo. La elevación mínima despejada y la altura mínima visible salen directo — una sola pasada O(N) por rayo, sin bucle discreto de ángulos de elevación. Un detalle fácil de hacer mal. El bloqueo parcial del haz se publica como máximo acumulado en rango, nunca como PBB crudo por bin. Publicar valores por bin produce mapas equivocados en todo el sector detrás de un obstáculo. Una dependencia rechazada a propósito. Implementado en numpy puro. wradlib arrastraría scipy, matplotlib, xarray y xradar, y recomienda instalación por conda — que no se puede instalar desde el Gestor de Complementos de QGIS, que es donde están los usuarios. wradlib se usa fuera de línea, solo como referencia de validación. Este toolkit cubre aproximadamente el 15% de un estudio completo de emplazamiento. Decirlo es justamente el punto: la cifra defendible vale más que la cifra impresionante. Out of scope: Atenuación por lluvia y selección de banda de frecuencia; Propagación anómala real — solo se parametriza el factor de radio terrestre efectivo; Clutter de mar, clutter de suelo, interferencia de RF, compatibilidad espectral; Estimación cuantitativa de precipitación y nowcasting; Estructura de torre, radomo, carga de viento, resiliencia eléctrica; Costo, ciclo de vida y personal Stack: Python, numpy, QGIS, GDAL, Jupyter Years: 2026—. Status: scaffolding."
+ },
+ {
+  "id": "project-modbuslab-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "ModbusLab — virtual industrial automation laboratory",
+  "url": "/#project-modbuslab",
+  "text": "A Modbus teaching lab built as a PyQt desktop application in 2012, abandoned when the hardware it still needed became unavailable, and rebuilt in 2026 with no hardware at all. The problem. Industrial automation is taught on equipment that is expensive, scarce, and sitting in one room. A student with an hour of lab time a week does not get to make the mistakes that teach the subject. The first answer, in 2012. A PyQt desktop application driving the lab's Modbus devices. It ran for two or three course cycles and then stopped being used — because it had not actually removed the constraint. The software was on the student's machine, but the PLC and the power analyser were still in the laboratory, and when that hardware stopped being available the tool went with it. The second answer, fourteen years later. The same idea rebuilt with the devices themselves simulated: a virtual Master-K120S PLC and a virtual WM14 power analyser served over the web, speaking Modbus. Nothing physical is required, so the laboratory is wherever the student is. My students are using it now. What it demonstrates. Not persistence — diagnosis. The 2012 version failed for a reason I could name, and the rebuild is aimed at that reason rather than at the technology that had moved on in the meantime. Stack: SvelteKit, TypeScript, Cloudflare Workers, Modbus RTU/TCP, Python, PyQt Years: 2012 · 2026. Status: production."
+ },
+ {
+  "id": "project-modbuslab-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "ModbusLab — laboratorio virtual de automatización industrial",
+  "url": "/es/#project-modbuslab",
+  "text": "Laboratorio docente de Modbus construido como aplicación de escritorio en PyQt en 2012, abandonado cuando dejó de haber el hardware que todavía necesitaba, y reconstruido en 2026 sin hardware alguno. El problema. La automatización industrial se enseña sobre equipamiento caro, escaso y que está en un solo salón. Un estudiante con una hora de laboratorio a la semana no llega a cometer los errores que enseñan la materia. La primera respuesta, en 2012. Una aplicación de escritorio en PyQt que manejaba los dispositivos Modbus del laboratorio. Se usó dos o tres cursos y dejó de usarse — porque en realidad no había quitado la restricción. El software estaba en la máquina del estudiante, pero el PLC y el analizador de red seguían en el laboratorio, y cuando ese hardware dejó de estar disponible la herramienta se fue con él. La segunda respuesta, catorce años después. La misma idea reconstruida con los propios dispositivos simulados: un PLC Master-K120S virtual y un analizador WM14 virtual servidos por web, hablando Modbus. No hace falta nada físico, así que el laboratorio está donde esté el estudiante. Mis estudiantes lo están usando ahora. Qué demuestra. No constancia — diagnóstico. La versión de 2012 falló por una razón que puedo nombrar, y la reconstrucción apunta a esa razón y no a la tecnología que mientras tanto había cambiado. Stack: SvelteKit, TypeScript, Cloudflare Workers, Modbus RTU/TCP, Python, PyQt Years: 2012 · 2026. Status: production."
+ },
+ {
+  "id": "project-reducts-en",
+  "lang": "en",
+  "kind": "project",
+  "title": "Reduct computation: from the algorithm to the FPGA",
+  "url": "/#project-reducts",
+  "text": "Doctoral work on an NP-hard combinatorial problem, attacked simultaneously in algorithm design and in hardware. The problem. Computing all reducts of a decision system — the minimal attribute subsets that preserve its discernibility — is NP-hard. The naive approach enumerates the power set, and the cost is not something you optimise your way out of with better code. Two fronts at once. On the algorithmic side, GCreduct prunes the search space using gap elimination and attribute contribution; MinReduct computes all the shortest reducts without enumerating the rest. On the hardware side, a co-designed FPGA platform accelerates the computation of irreducible testors. Why it still matters here. It is the same instinct that produced everything else on this page: when a computation is expensive, the answer is rarely a bigger machine. It is a better algorithm, the right place to run it, and the willingness to design both. Stack: FPGA, VHDL, C, Rough set theory Years: 2015—2022. Status: archived."
+ },
+ {
+  "id": "project-reducts-es",
+  "lang": "es",
+  "kind": "project",
+  "title": "Cómputo de reductos: del algoritmo al FPGA",
+  "url": "/es/#project-reducts",
+  "text": "Trabajo doctoral sobre un problema combinatorio NP-duro, atacado a la vez en diseño de algoritmos y en hardware. El problema. Computar todos los reductos de un sistema de decisión — los subconjuntos mínimos de atributos que preservan su capacidad de discernimiento — es NP-duro. El enfoque ingenuo enumera el conjunto potencia, y de ese costo no se sale escribiendo mejor código. Dos frentes a la vez. Del lado algorítmico, GCreduct poda el espacio de búsqueda mediante eliminación de brechas y contribución de atributos; MinReduct computa todos los reductos más cortos sin enumerar el resto. Del lado del hardware, una plataforma FPGA co-diseñada acelera el cómputo de testores irreducibles. Por qué sigue importando aquí. Es el mismo instinto que produjo todo lo demás en esta página: cuando un cómputo es caro, la respuesta rara vez es una máquina más grande. Es un algoritmo mejor, el lugar correcto donde correrlo, y la disposición a diseñar ambos. Stack: FPGA, VHDL, C, Rough set theory Years: 2015—2022. Status: archived."
+ },
+ {
+  "id": "pub-0-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "MinReduct: A new algorithm for computing the shortest reducts",
+  "url": "https://doi.org/10.1016/j.patrec.2020.07.004",
+  "text": "MinReduct: A new algorithm for computing the shortest reducts. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, J. Arturo Olvera-López. Pattern Recognition Letters. 2020. Computes all the shortest reducts of a decision system using binary cumulative operations over a pairwise comparison matrix, with a fast candidate evaluation that avoids the costly operations most prior algorithms rely on.. vol. 138, pp. 177–184"
+ },
+ {
+  "id": "pub-0-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "MinReduct: A new algorithm for computing the shortest reducts",
+  "url": "https://doi.org/10.1016/j.patrec.2020.07.004",
+  "text": "MinReduct: A new algorithm for computing the shortest reducts. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, J. Arturo Olvera-López. Pattern Recognition Letters. 2020. Computa todos los reductos más cortos de un sistema de decisión mediante operaciones binarias acumulativas sobre una matriz de comparación por pares, con una evaluación rápida de candidatos que evita las operaciones costosas de las que dependen los algoritmos previos.. vol. 138, pp. 177–184"
+ },
+ {
+  "id": "pub-1-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "A new algorithm for reduct computation based on gap elimination and attribute contribution",
+  "url": "https://doi.org/10.1016/j.ins.2017.12.027",
+  "text": "A new algorithm for reduct computation based on gap elimination and attribute contribution. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, Jesús A. Carrasco-Ochoa, Manuel S. Lazo-Cortés. Information Sciences. 2018. GCreduct: computes all reducts of a decision system using the pruning properties of gap elimination and attribute contribution, with simpler candidate-evaluation operations to cut runtime.. vol. 435, pp. 111–123"
+ },
+ {
+  "id": "pub-1-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "A new algorithm for reduct computation based on gap elimination and attribute contribution",
+  "url": "https://doi.org/10.1016/j.ins.2017.12.027",
+  "text": "A new algorithm for reduct computation based on gap elimination and attribute contribution. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, Jesús A. Carrasco-Ochoa, Manuel S. Lazo-Cortés. Information Sciences. 2018. GCreduct: computa todos los reductos de un sistema de decisión aprovechando las propiedades de poda de la eliminación de brechas y la contribución de atributos, con operaciones de evaluación de candidatos más simples para reducir el tiempo de ejecución.. vol. 435, pp. 111–123"
+ },
+ {
+  "id": "pub-2-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "A fast hardware software platform for computing irreducible testors",
+  "url": "https://doi.org/10.1016/j.eswa.2015.07.037",
+  "text": "A fast hardware software platform for computing irreducible testors. Vladímir Rodríguez-Diez, José Francisco Martínez-Trinidad, Jesús Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, Claudia Feregrino-Uribe, René Cumplido. Expert Systems with Applications. 2015. A hardware/software co-designed FPGA platform for computing irreducible testors, following a pruning strategy that cuts the number of candidates evaluated — the algorithm and the silicon designed together.. vol. 42, pp. 9612–9619"
+ },
+ {
+  "id": "pub-2-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "A fast hardware software platform for computing irreducible testors",
+  "url": "https://doi.org/10.1016/j.eswa.2015.07.037",
+  "text": "A fast hardware software platform for computing irreducible testors. Vladímir Rodríguez-Diez, José Francisco Martínez-Trinidad, Jesús Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, Claudia Feregrino-Uribe, René Cumplido. Expert Systems with Applications. 2015. Plataforma FPGA con co-diseño hardware/software para computar testores irreducibles, con una estrategia de poda que reduce el número de candidatos evaluados — el algoritmo y el silicio diseñados juntos.. vol. 42, pp. 9612–9619"
+ },
+ {
+  "id": "pub-3-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "A Comparative Study of Two Algorithms for Computing the Shortest Reducts: MiLIT and MinReduct",
+  "url": "https://doi.org/10.1007/978-3-030-77004-4_6",
+  "text": "A Comparative Study of Two Algorithms for Computing the Shortest Reducts: MiLIT and MinReduct. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, J. Arturo Olvera-López. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2021. Head-to-head evaluation of the two fastest published algorithms for computing all the shortest reducts, identifying which decision-system characteristics favour each.. pp. 57–67"
+ },
+ {
+  "id": "pub-3-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "A Comparative Study of Two Algorithms for Computing the Shortest Reducts: MiLIT and MinReduct",
+  "url": "https://doi.org/10.1007/978-3-030-77004-4_6",
+  "text": "A Comparative Study of Two Algorithms for Computing the Shortest Reducts: MiLIT and MinReduct. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, J. Arturo Olvera-López. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2021. Evaluación frente a frente de los dos algoritmos publicados más rápidos para computar todos los reductos más cortos, identificando qué características del sistema de decisión favorecen a cada uno.. pp. 57–67"
+ },
+ {
+  "id": "pub-4-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "The Impact of Basic Matrix Dimension on the Performance of Algorithms for Computing Typical Testors",
+  "url": "https://doi.org/10.1007/978-3-319-92198-3_5",
+  "text": "The Impact of Basic Matrix Dimension on the Performance of Algorithms for Computing Typical Testors. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, Jesús Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2018. Experimental study of how the dimensions of the basic matrix affect algorithm runtime — evidence for choosing the right algorithm for a given dataset rather than assuming one dominates.. pp. 41–50"
+ },
+ {
+  "id": "pub-4-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "The Impact of Basic Matrix Dimension on the Performance of Algorithms for Computing Typical Testors",
+  "url": "https://doi.org/10.1007/978-3-319-92198-3_5",
+  "text": "The Impact of Basic Matrix Dimension on the Performance of Algorithms for Computing Typical Testors. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, Jesús Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2018. Estudio experimental de cómo las dimensiones de la matriz básica afectan el tiempo de ejecución — evidencia para elegir el algoritmo adecuado a cada conjunto de datos en vez de suponer que uno domina siempre.. pp. 41–50"
+ },
+ {
+  "id": "pub-5-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Fast-BR vs. Fast-CT_EXT: An Empirical Performance Study",
+  "url": "https://doi.org/10.1007/978-3-319-59226-8_13",
+  "text": "Fast-BR vs. Fast-CT_EXT: An Empirical Performance Study. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2017. Empirical comparison of the two fastest state-of-the-art algorithms for computing typical testors, over synthetic basic matrices with controlled characteristics and over standard UCI datasets.. pp. 127–136"
+ },
+ {
+  "id": "pub-5-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Fast-BR vs. Fast-CT_EXT: An Empirical Performance Study",
+  "url": "https://doi.org/10.1007/978-3-319-59226-8_13",
+  "text": "Fast-BR vs. Fast-CT_EXT: An Empirical Performance Study. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés. Mexican Conference on Pattern Recognition (MCPR), LNCS. 2017. Comparación empírica de los dos algoritmos más rápidos del estado del arte para computar testores típicos, sobre matrices básicas sintéticas de características controladas y sobre conjuntos de datos estándar del UCI.. pp. 127–136"
+ },
+ {
+  "id": "pub-6-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "A hardware architecture for filtering irreducible testors",
+  "url": "https://doi.org/10.1109/ReConFig.2014.7032526",
+  "text": "A hardware architecture for filtering irreducible testors. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, René Cumplido, Claudia Feregrino-Uribe. International Conference on ReConFigurable Computing and FPGAs (ReConFig). 2014. An FPGA architecture that filters irreducible testors in hardware, removing the step that dominated runtime in software implementations. The design that led to the hardware/software platform published the following year.. pp. 1–4"
+ },
+ {
+  "id": "pub-6-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "A hardware architecture for filtering irreducible testors",
+  "url": "https://doi.org/10.1109/ReConFig.2014.7032526",
+  "text": "A hardware architecture for filtering irreducible testors. Vladímir Rodríguez-Diez, José Fco. Martínez-Trinidad, J. Ariel Carrasco-Ochoa, Manuel S. Lazo-Cortés, René Cumplido, Claudia Feregrino-Uribe. International Conference on ReConFigurable Computing and FPGAs (ReConFig). 2014. Arquitectura FPGA que filtra testores irreducibles en hardware, eliminando el paso que dominaba el tiempo de ejecución en las implementaciones en software. El diseño que condujo a la plataforma hardware/software publicada al año siguiente.. pp. 1–4"
+ },
+ {
+  "id": "pub-7-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Simulador de radar meteorológico basado en modelo de reflectividades en el espacio",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/3961094.pdf",
+  "text": "Simulador de radar meteorológico basado en modelo de reflectividades en el espacio. Vladímir Rodríguez Diez, Orlando L. Rodríguez González, Milagros Diez Rodríguez. Ingeniería Energética. 2012. A weather-radar simulator driven by a spatial reflectivity distribution, used to study how the scan pattern and the acquisition and processing scheme distort the perception of a meteorological target. The question that the whole LAMULA chain is a working answer to, asked fourteen years earlier.. vol. XXXIII, n.º 2, pp. 103–112"
+ },
+ {
+  "id": "pub-7-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Simulador de radar meteorológico basado en modelo de reflectividades en el espacio",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/3961094.pdf",
+  "text": "Simulador de radar meteorológico basado en modelo de reflectividades en el espacio. Vladímir Rodríguez Diez, Orlando L. Rodríguez González, Milagros Diez Rodríguez. Ingeniería Energética. 2012. Simulador de radar meteorológico alimentado por una distribución espacial de reflectividades, para estudiar cómo el patrón de barrido y el esquema de adquisición y procesamiento deforman la percepción del blanco meteorológico. La pregunta que la cadena LAMULA responde en la práctica, formulada catorce años antes.. vol. XXXIII, n.º 2, pp. 103–112"
+ },
+ {
+  "id": "pub-8-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Data processing in weather radars revisited",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "Data processing in weather radars revisited. Vladímir Rodríguez Diez, Orlando L. Rodríguez González. ERAD — Sixth European Conference on Radar in Meteorology and Hydrology. 2010. A review of the weather-radar data processing chain presented at ERAD — the first published piece of the radar work, two years before the Camagüey Meteorological Centre.. Sibiu, Romania"
+ },
+ {
+  "id": "pub-8-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Data processing in weather radars revisited",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "Data processing in weather radars revisited. Vladímir Rodríguez Diez, Orlando L. Rodríguez González. ERAD — Sixth European Conference on Radar in Meteorology and Hydrology. 2010. Revisión de la cadena de procesamiento de datos de radar meteorológico presentada en ERAD — la primera pieza publicada del trabajo de radar, dos años antes del Centro Meteorológico de Camagüey.. Sibiu, Romania"
+ },
+ {
+  "id": "pub-9-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Instrumento virtual con acceso local y remoto para prácticas de Ingeniería del Control",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/5695796.pdf",
+  "text": "Instrumento virtual con acceso local y remoto para prácticas de Ingeniería del Control. Orlando Regalón Anias, Vladímir Rodríguez Diez, Milagros Diez Rodríguez, Raúl Báez Prieto, Leisis López Rodríguez, Francisco Pacheco Ballagas. RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones. 2015. A virtual instrument reachable both from the lab bench and over the network, so a control-engineering practical does not depend on a student being physically in front of the rig. The same problem ModbusLab solves today.. vol. XXXVI, n.º 3, pp. 69–79"
+ },
+ {
+  "id": "pub-9-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Instrumento virtual con acceso local y remoto para prácticas de Ingeniería del Control",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/5695796.pdf",
+  "text": "Instrumento virtual con acceso local y remoto para prácticas de Ingeniería del Control. Orlando Regalón Anias, Vladímir Rodríguez Diez, Milagros Diez Rodríguez, Raúl Báez Prieto, Leisis López Rodríguez, Francisco Pacheco Ballagas. RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones. 2015. Instrumento virtual accesible tanto desde el puesto de laboratorio como por red, para que una práctica de Ingeniería del Control no dependa de que el estudiante esté físicamente frente al equipo. El mismo problema que hoy resuelve ModbusLab.. vol. XXXVI, n.º 3, pp. 69–79"
+ },
+ {
+  "id": "pub-10-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Automatización integral del proceso de secado de bioproductos",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/5695784.pdf",
+  "text": "Automatización integral del proceso de secado de bioproductos. Orlando Regalón Anias, Josué García Parrado, Danny Echevarría Báez, Francisco Herrera Fernández, Yunier Paneque Díaz, Santiago Bardanca Consuegra, Jesús Zamora Sánchez, Vladímir Rodríguez Diez, Leisis López Rodríguez. RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones. 2015. Full automation of a bioproduct drying process — industrial automation applied to a real plant, the field the Industrial Automation course teaches.. vol. XXXVI, n.º 2, pp. 1–14"
+ },
+ {
+  "id": "pub-10-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Automatización integral del proceso de secado de bioproductos",
+  "url": "https://dialnet.unirioja.es/descarga/articulo/5695784.pdf",
+  "text": "Automatización integral del proceso de secado de bioproductos. Orlando Regalón Anias, Josué García Parrado, Danny Echevarría Báez, Francisco Herrera Fernández, Yunier Paneque Díaz, Santiago Bardanca Consuegra, Jesús Zamora Sánchez, Vladímir Rodríguez Diez, Leisis López Rodríguez. RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones. 2015. Automatización integral de un proceso de secado de bioproductos — automatización industrial aplicada a una planta real, el terreno que enseña la asignatura de Automatización Industrial.. vol. XXXVI, n.º 2, pp. 1–14"
+ },
+ {
+  "id": "pub-11-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Aplicación de algoritmos de control clásico, adaptable y robusto a sistemas dinámicos de parámetros variables",
+  "url": "https://www.redalyc.org/pdf/3291/329127751002.pdf",
+  "text": "Aplicación de algoritmos de control clásico, adaptable y robusto a sistemas dinámicos de parámetros variables. Orlando Regalón Anias, Vladímir Rodríguez Diez, Milagros Diez Rodríguez, Raúl Báez Prieto. Ingeniería Energética. 2012. Classical, adaptive and robust control compared on first-order systems whose parameters drift over time — the trade-off that decides which controller a plant actually gets.. vol. XXXIII, n.º 3, pp. 184–195"
+ },
+ {
+  "id": "pub-11-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Aplicación de algoritmos de control clásico, adaptable y robusto a sistemas dinámicos de parámetros variables",
+  "url": "https://www.redalyc.org/pdf/3291/329127751002.pdf",
+  "text": "Aplicación de algoritmos de control clásico, adaptable y robusto a sistemas dinámicos de parámetros variables. Orlando Regalón Anias, Vladímir Rodríguez Diez, Milagros Diez Rodríguez, Raúl Báez Prieto. Ingeniería Energética. 2012. Control clásico, adaptable y robusto comparados sobre sistemas de primer orden con parámetros que varían en el tiempo — el compromiso que decide qué controlador lleva realmente una planta.. vol. XXXIII, n.º 3, pp. 184–195"
+ },
+ {
+  "id": "pub-12-en",
+  "lang": "en",
+  "kind": "publication",
+  "title": "Software para el procesamiento de los ensayos de la máquina sincrónica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "Software para el procesamiento de los ensayos de la máquina sincrónica. Orlando L. Rodríguez González, Vladímir Rodríguez Diez. Ingeniería Energética. 2009. Software for processing synchronous-machine test data, written the year I graduated. The first thing I published, and already the same pattern: an instrument produces data, and the data needs a program.. vol. XXX, n.º 1, pp. 30–36"
+ },
+ {
+  "id": "pub-12-es",
+  "lang": "es",
+  "kind": "publication",
+  "title": "Software para el procesamiento de los ensayos de la máquina sincrónica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "Software para el procesamiento de los ensayos de la máquina sincrónica. Orlando L. Rodríguez González, Vladímir Rodríguez Diez. Ingeniería Energética. 2009. Software para procesar los datos de los ensayos de la máquina sincrónica, escrito el año en que me gradué. Lo primero que publiqué, y ya el mismo patrón: un instrumento produce datos y los datos necesitan un programa.. vol. XXX, n.º 1, pp. 30–36"
+ },
+ {
+  "id": "edu-0-en",
+  "lang": "en",
+  "kind": "education",
+  "title": "PhD in Computer Sciences",
+  "url": "/#experience",
+  "text": "PhD in Computer Sciences. Language and Knowledge Engineering. Benemérita Universidad Autónoma de Puebla. Puebla, Mexico. January 2019 – December 2022. Thesis: Development of fast algorithms for reduct computation . Coursework completed remotely while teaching in Cuba."
+ },
+ {
+  "id": "edu-1-en",
+  "lang": "en",
+  "kind": "education",
+  "title": "Doctor of Technical Sciences",
+  "url": "/#experience",
+  "text": "Doctor of Technical Sciences. Universidad Central \"Marta Abreu\" de Las Villas. Santa Clara, Cuba. Defended December 2019. Same body of research, defended in Spanish as Desarrollo de estrategias para el cálculo de reductos en sistemas de decisión . Advisor: Dra. Yailé Caballero Mota. Two doctoral degrees, one investigation — the Cuban route ran in parallel with the Mexican one."
+ },
+ {
+  "id": "edu-2-en",
+  "lang": "en",
+  "kind": "education",
+  "title": "Doctoral research",
+  "url": "/#experience",
+  "text": "Doctoral research. Computer Science Department. Instituto Nacional de Astrofísica, Óptica y Electrónica (INAOE). Tonantzintla, Puebla, Mexico. 2014 – 2018. CONACYT fellowship 399547. Where the work behind all three journal papers was done — I arrived in late 2013 on a research visit, invited for prior FPGA experience, which became the 2015 Expert Systems with Applications platform."
+ },
+ {
+  "id": "pos-0-en",
+  "lang": "en",
+  "kind": "position",
+  "title": "Founder and software lead",
+  "url": "/#experience",
+  "text": "Founder and software lead. LADETEC. Cuba. 2023 – present. Founded with the weather-radar specialists I had worked alongside at the Camagüey Meteorological Centre — the same people, now a private company. I set technical direction and choose the stack; these days I write far less code than I decide what gets written. Industrial automation built on ESP32 for Cuban industry: water pumping, sterilisation, weighing with HX711 load cells, power metering."
+ },
+ {
+  "id": "pos-1-en",
+  "lang": "en",
+  "kind": "position",
+  "title": "Development lead",
+  "url": "/#experience",
+  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover, down to a residual error of around $100 across payments in the hundreds of thousands — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, around 10 developers under my supervision."
+ },
+ {
+  "id": "pos-2-en",
+  "lang": "en",
+  "kind": "position",
+  "title": "Software developer",
+  "url": "/#experience",
+  "text": "Software developer. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : a Python library for reading the raw data of the Cuban weather radars. Vesta PostGIS : processing of ORPG Level III products into a database and an FTP raster feed. RdaBackend : ingest from the Cuban radars into ORPG. Vesta WebView : web visualisation of radar data with GWT and OpenLayers — the direct ancestor of what I build today. Clear-air observation processing to generate ground-clutter templates; TITAN customised into the national processing suite; GEMPAK configured to build mosaics from ORPG products. Support and operations for all of it throughout. It is still running in the Cuban radar network today."
+ },
+ {
+  "id": "pos-3-en",
+  "lang": "en",
+  "kind": "position",
+  "title": "Full professor of Electrical Engineering",
+  "url": "/#experience",
+  "text": "Full professor of Electrical Engineering. Universidad de Camagüey. Camagüey, Cuba · Faculty of Electromechanics. 2008 – present. Profesor Titular — the highest academic rank in Cuban higher education. Six courses taught across the degree, from classical control to FPGA design; four core, two electives I proposed and wrote myself. Currently: Automated Electric Drives one semester, Industrial Automation the next, around 20 students per group. Roughly 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority."
+ },
+ {
+  "id": "courses-en",
+  "lang": "en",
+  "kind": "teaching",
+  "title": "Courses taught",
+  "url": "/#experience",
+  "text": "Control Engineering Industrial Automation and PLCs Automated Electric Drives Simulation Sequential System Design (FPGA, VHDL) Arduino for Electrical Engineers"
+ },
+ {
+  "id": "teach-0-en",
+  "lang": "en",
+  "kind": "teaching",
+  "title": "Introduction to Arduino for Electrical Engineers",
+  "url": "/#experience",
+  "text": "Introduction to Arduino for Electrical Engineers. Universidad de Camagüey. Electrical Engineering Dept., Faculty of Electromechanics. 2017 – 2020. An elective I designed and taught: typical problems of the degree solved with an Arduino program instead of a relay panel or a PLC. 12 h of lectures, 12 h of lab, 8 h of assessment, and a final project each student had to build and demonstrate.. Six lectures written from scratch: introduction, data types, decision making, loops, functions, scope. 23 students in the 2019 cohort — the one year the whole class took it rather than a self-selected group — each delivering a working final project: an injector test bench, a spot welder, an electronic lock, a wattmeter, a water-pump controller, a proximity alarm. Also taught as a three-day open workshop in Camagüey, 12–14 October 2018."
+ },
+ {
+  "id": "edu-0-es",
+  "lang": "es",
+  "kind": "education",
+  "title": "Doctorado en Ciencias Computacionales",
+  "url": "/es/#experience",
+  "text": "Doctorado en Ciencias Computacionales. Ingeniería del Lenguaje y del Conocimiento. Benemérita Universidad Autónoma de Puebla. Puebla, México. enero de 2019 – diciembre de 2022. Tesis: Development of fast algorithms for reduct computation . Créditos cursados de forma remota mientras impartía clases en Cuba."
+ },
+ {
+  "id": "edu-1-es",
+  "lang": "es",
+  "kind": "education",
+  "title": "Doctor en Ciencias Técnicas",
+  "url": "/es/#experience",
+  "text": "Doctor en Ciencias Técnicas. Universidad Central \"Marta Abreu\" de Las Villas. Santa Clara, Cuba. Defendida en diciembre de 2019. La misma investigación, defendida en español como Desarrollo de estrategias para el cálculo de reductos en sistemas de decisión . Tutora: Dra. Yailé Caballero Mota. Dos grados doctorales, una sola investigación : la vía cubana corrió en paralelo con la mexicana."
+ },
+ {
+  "id": "edu-2-es",
+  "lang": "es",
+  "kind": "education",
+  "title": "Investigación doctoral",
+  "url": "/es/#experience",
+  "text": "Investigación doctoral. Coordinación de Ciencias Computacionales. Instituto Nacional de Astrofísica, Óptica y Electrónica (INAOE). Tonantzintla, Puebla, México. 2014 – 2018. Beca CONACYT 399547. Allí se hizo el trabajo que sostiene los tres artículos de revista — llegué a finales de 2013 en estancia de investigación, invitado por mi experiencia previa con FPGA, que se convirtió en la plataforma de Expert Systems with Applications de 2015."
+ },
+ {
+  "id": "pos-0-es",
+  "lang": "es",
+  "kind": "position",
+  "title": "Fundador y líder de desarrollo de software",
+  "url": "/es/#experience",
+  "text": "Fundador y líder de desarrollo de software. LADETEC. Cuba. 2023 – actualidad. Fundada con los especialistas de radar meteorológico con los que trabajé en el Centro Meteorológico de Camagüey — la misma gente, ahora una empresa privada. Marco la dirección técnica y elijo el stack; hoy escribo bastante menos código del que decido que se escriba. Automatización industrial sobre ESP32 para la industria cubana: bombeo de agua, esterilización, pesaje con celdas HX711, medición de energía."
+ },
+ {
+  "id": "pos-1-es",
+  "lang": "es",
+  "kind": "position",
+  "title": "Líder de desarrollo",
+  "url": "/es/#experience",
+  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío, hasta un error residual del orden de 100 USD sobre pagos de cientos de miles — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, unos 10 programadores bajo mi supervisión."
+ },
+ {
+  "id": "pos-2-es",
+  "lang": "es",
+  "kind": "position",
+  "title": "Desarrollador de software",
+  "url": "/es/#experience",
+  "text": "Desarrollador de software. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : biblioteca en Python para leer el dato crudo de los radares meteorológicos cubanos. Vesta PostGIS : procesamiento de los productos Level III de ORPG con carga a base de datos y salida de rásters por FTP. RdaBackend : ingesta de los radares cubanos en ORPG. Vesta WebView : visualización web del dato de radar con GWT y OpenLayers — el antecesor directo de lo que construyo hoy. Procesamiento de observaciones de aire claro para generar plantillas de eco fijo; TITAN personalizado e integrado en la suite nacional; GEMPAK configurado para generar mosaicos a partir de los productos de ORPG. Soporte y operación de todo ello durante el periodo. Sigue en uso hoy en la red de radares de Cuba."
+ },
+ {
+  "id": "pos-3-es",
+  "lang": "es",
+  "kind": "position",
+  "title": "Profesor Titular de Ingeniería Eléctrica",
+  "url": "/es/#experience",
+  "text": "Profesor Titular de Ingeniería Eléctrica. Universidad de Camagüey. Camagüey, Cuba · Facultad de Electromecánica. 2008 – actualidad. Profesor Titular — la categoría docente más alta de la educación superior cubana. Seis asignaturas impartidas a lo largo de la carrera, del control clásico al diseño con FPGA; cuatro del currículo base y dos optativas que propuse y escribí yo. Ahora mismo: Accionamiento Eléctrico Automatizado un semestre, Automatización Industrial el otro, con grupos de unos 20 estudiantes. Unos 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
+ },
+ {
+  "id": "courses-es",
+  "lang": "es",
+  "kind": "teaching",
+  "title": "Asignaturas impartidas",
+  "url": "/es/#experience",
+  "text": "Ingeniería de Control Automatización Industrial y Autómatas Accionamiento Eléctrico Automatizado Simulación Diseño de sistemas secuenciales (FPGA, VHDL) Arduino para Ingenieros Electricistas"
+ },
+ {
+  "id": "teach-0-es",
+  "lang": "es",
+  "kind": "teaching",
+  "title": "Introducción a Arduino para Ingenieros Eléctricos",
+  "url": "/es/#experience",
+  "text": "Introducción a Arduino para Ingenieros Eléctricos. Universidad de Camagüey. Dpto. de Ingeniería Eléctrica, Facultad de Electromecánica. 2017 – 2020. Optativa que diseñé e impartí: problemas típicos de la carrera resueltos con un programa de Arduino en lugar de un panel de relés o un PLC. 12 h de conferencias, 12 h de laboratorio, 8 h de evaluación y un proyecto final que cada estudiante tenía que construir y demostrar.. Seis conferencias escritas desde cero: introducción, tipos de datos, toma de decisiones, ciclos, funciones, alcance. 23 estudiantes en la cohorte de 2019 — el único año en que la cursó el grupo completo y no un puñado de voluntarios — cada uno con un proyecto final funcionando: un banco de pruebas para inyectores, un soldador de puntos, una cerradura electrónica, un watímetro, un control de bomba de agua, una alarma de proximidad. Impartida también como taller abierto de tres días en Camagüey, 12–14 de octubre de 2018."
+ },
+ {
+  "id": "profile-en",
+  "lang": "en",
+  "kind": "profile",
+  "title": "Vladímir Rodríguez Diez",
+  "url": "/#contact",
+  "text": "Vladímir Rodríguez Diez. Electrical engineer · PhD in Computer Science. Mexico City, Mexico. vladimir@ladetec.com. TOEFL 626 (2014). Advanced Workshop on Modern FPGA-Based Technology for Scientific Computing (International Centre for Theoretical Physics (ICTP), Trieste, Italy, 2019). Latin-American Advanced Course on FPGA Design for Scientific Instrumentation (International Centre for Theoretical Physics (ICTP), Havana, Cuba, 2012). Second Workshop on Distributed Laboratory Instrumentation Systems (International Centre for Theoretical Physics (ICTP), Valdivia, Chile, 2008)"
+ },
+ {
+  "id": "profile-es",
+  "lang": "es",
+  "kind": "profile",
+  "title": "Vladímir Rodríguez Diez",
+  "url": "/es/#contact",
+  "text": "Vladímir Rodríguez Diez. Ingeniero eléctrico · Doctor en Ciencias de la Computación. Ciudad de México, México. vladimir@ladetec.com. TOEFL 626 (2014). Advanced Workshop on Modern FPGA-Based Technology for Scientific Computing (International Centre for Theoretical Physics (ICTP), Trieste, Italia, 2019). Latin-American Advanced Course on FPGA Design for Scientific Instrumentation (International Centre for Theoretical Physics (ICTP), La Habana, Cuba, 2012). Second Workshop on Distributed Laboratory Instrumentation Systems (International Centre for Theoretical Physics (ICTP), Valdivia, Chile, 2008)"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-0",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "energética Vol. XXX, No. 1/2009 APLICACIÓN DE LA COMPUTACIÓN Software para el procesamiento de los ensayos de la máquina sincrónica Orlando L. Rodríguez Vladímir Rodríguez Recibido: Octubre del 2008 Aprobado: Diciembre del 2008 Resumen/ Abstract Este trabajo resuelve, haciendo uso de las facilidades que brinda el MATLAB, de forma cuasi analítica, este problema.El software sigue los mismos pasos que realiza manualmente por el método tradicional. Fue implementado el método de la fuerza magnetomotriz. Para el ajuste de la curva en el tramo saturado se emplea una aproximación según la función arcotangente, en el sentido de los mínimos cuadrados. El punto intercepción entre curvas se calcula con métodos numéricos, hasta una precisión que supera la que pueden tener los datos del experimento. Está destinado para su uso en la industria y para la docencia en las universidades. Palabras claves: ensayos de la máquina sincrónica, métodos numéricos, software libre Synchronous Machine tests, such as no load, short circuit and zero power factor, are achieved to trace Zero Power-factor, Regulation and External Load characteristics, in addition to Voltage Regulation for any given state. To carry out this results we are familiarized with graphical methods, which are cumbersome and imprecise. This is a new cuasi analytic approach to this problem by means of a MATLAB software. Algorithm is similar"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-1",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "t this results we are familiarized with graphical methods, which are cumbersome and imprecise. This is a new cuasi analytic approach to this problem by means of a MATLAB software. Algorithm is similar to that followed by someone who is carrying out solutions by traditional way. It was implemented Magneto Motriz Force method. Saturation was approached to an inverse tangent curve in a least means square sense. To compute the interception point between curves it was used numerical methods which achieved a precision higher than experiments offer.This software is intended to be used either in Indutry or in universities with academic purpose. Keywords : synchronous machine tests, numerical methods, open source INTRODUCCIÓN Las máquinas de corriente continua y de inducción tienen un amplio rango de aplicaciones industriales tales como tracción, bombeo y otros. Sin embargo, la operación del sistema eléctrico de potencia requiere la conversión de grandes cantidades de energía primaria petróleo, gas natural, agua, carbón, uranio, en energía y potencia eléctrica. La energía eléctrica puede ser transportada y convertida a otras formas de energía de manera limpia y económica. La máquina sincrónica es hoy por hoy, la más ampliamente utilizada para convertir grandes cantidades de energía mecánica en eléctrica [1]. La razón de ello reside en el hecho de que el conjunto de los generadores de un"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-2",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "ica es hoy por hoy, la más ampliamente utilizada para convertir grandes cantidades de energía mecánica en eléctrica [1]. La razón de ello reside en el hecho de que el conjunto de los generadores de un sistema eléctrico que funcione correctamente debe suministrar en todo momento las potencias activa y reactiva que en ese instante demandan los abonados. Es cierto que en las inductancias y capacidades del sistema se almacena una cierta cantidad de energía en forma de campo 31 electromagnético, pero esa reserva es tan pequeña que no permite su uso para cubrir eventuales desequilibrios entre la producción y el consumo. Dado que las potencias activa y reactiva pueden variar, y de hecho varían, de forma independiente, las máquinas utilizadas como generadores en el sistema eléctrico deben tener la capacidad de variar por separado ambas magnitudes. Y ésta es precisamente la gran ventaja de las máquinas sincrónicas frente a las asincrónicas. Durante la operación de la máquina sincrónica en régimen permanente, la velocidad mecánica del rotor es igual a la velocidad angular del campo magnético rotatorio producido por el estator. En estas condiciones, sobre los conductores o bobinas del campo no se induce fuerza electromotriz. Para producir fuerza magnetomotriz en el rotor es necesario inyectar corriente en esta bobina mediante una fuente externa. De esta forma se obtienen dos campos magnét"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-3",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "o se induce fuerza electromotriz. Para producir fuerza magnetomotriz en el rotor es necesario inyectar corriente en esta bobina mediante una fuente externa. De esta forma se obtienen dos campos magnéticos rotatorios que giran a la misma velocidad, uno producido por el estator y otro por el rotor. Estos campos interactúan produciendo torque eléctrico medio y se realiza el proceso de conversión electromecánica de energía. La bobina del rotor o campo de la máquina sincrónica se alimenta mediante la inyección de corriente continua, como se mencionó anteriormente, con la finalidad de producir un campo magnético de magnitud constante, semejante al de un imán permanente, pero de una intensidad mucho mayor. Debido a que el rotor de la máquina gira en régimen permanente a la velocidad sincrónica, el campo magnético constante producido en este sistema se comporta, desde el punto de vista del estator, como un campo magnético rotatorio. trazamos una recta que intercepta a la curva de vacío en el punto C’. Si trazamos desde el punto C’ una perpendicular, el intercepto con el segmento O’A’ será el punto B’. El triángulo A’B’C’ será el triángulo de Potier. El cateto A’B’ será equivalente a KaFa (Reacción de armadura referida al rotor) y el cateto B’C’ será igual a IaXσa (Caída de tensión en la reactancia de dispersión) [2]. B. Característica de factor de potencia cero Para obtener esta caract"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-4",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "Reacción de armadura referida al rotor) y el cateto B’C’ será igual a IaXσa (Caída de tensión en la reactancia de dispersión) [2]. B. Característica de factor de potencia cero Para obtener esta característica basta con desplazar el triángulo de Potier paralelo a sí mismo con el punto C’ sobre la característica de vacío mientras el punto A’ describe la curva en cuestión. C. Regulación de tensión Para obtener la regulación de tensión existen dos métodos que se describen a continuación por separado. Método de FEM Primeramente hallamos la reactancia sincrónica. Para esto nos valemos de la tensión de vacío nominal (Eon) y con la correspondiente corriente de excitación (Iccn) tomamos la corriente de cortocircuito que se asocia a esta última. Para esto utilizamos (1). Donde: Xs – Reactancia sincrónica (ohm). (1) Luego sumamos a la tensión de línea la caída de tensión correspondiente a la corriente en cuestión y producida en la impedancia del estator (r+jXs). Así se obtiene la FEM de vacío (Eo) como en (2). CURVAS CARACTERÍSTICAS DEL GENERADOR SINCRÓNICO El ensayo de vacío, la prueba de corto circuito y de factor de potencia cero, se realizan con el objetivo de obtener la característica de factor de potencia cero, la característica de regulación, la característica externa y la regulación de tensión. E on 3 I ccn Xs = _ _ _ Eo = U f + I (r + jX s) (2) A. Triángulo de potier El primer pa"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-5",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": " factor de potencia cero, la característica de regulación, la característica externa y la regulación de tensión. E on 3 I ccn Xs = _ _ _ Eo = U f + I (r + jX s) (2) A. Triángulo de potier El primer paso para la obtención de estas curvas, es la realización del llamado triángulo de Potier. Primeramente debemos superponer la curva de cortocircuito a la de vacío y ubicar el punto de la prueba de factor de potencia cero. Buscando la corriente de excitación que produce corriente nominal de cortocircuito obtenemos, desde el origen el segmento OA. Desplazamos luego este segmento de forma tal que el nuevo punto A coincida con el punto de la prueba de factor de potencia cero, tendremos el segmento O’A’. Desde el punto O’ y con la misma pendiente del tramo recto de la característica de vacío, Donde: Xs – Reactancia sincrónica (ohm). r – Resistencia del estator (ohm). I – Corriente del estator (A). Uf –Tensión de fase (V). 32 Método de FMM El método anterior tiene la desventaja de que no toma en cuenta la saturación de la máquina, el que se describe a continuación es mucho más preciso. Una vez hallado el triángulo de Potier hallamos la FEM resultante en el entrehierro (Eδ) con ayuda de (3): Donde: (3) D. Característica de regulación Esta característica determina la dependencia I ex = f (I a ) para tensión, factor de potencia y frecuencia constantes. Muestra cómo ha de variarse la corriente"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-6",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "nde: (3) D. Característica de regulación Esta característica determina la dependencia I ex = f (I a ) para tensión, factor de potencia y frecuencia constantes. Muestra cómo ha de variarse la corriente de excitación de un generador sincrónico, para que con las variaciones de la carga su voltaje se mantenga invariable. Dado que suponemos de condición inicial el factor de potencia constante y una corriente de armadura dada, nos damos a la tarea de determinar la corriente de excitación de la siguiente forma. Primeramente calculamos el factor de reducción de la corriente de estator al rotor (Ka) y la reactancia de dispersión, por medio de (6) y (7) respectivamente. Xσa – Reactancia de dispersión (ohm). r – Resistencia del estator (ohm). _ Xσ a = _ Eδ =U f + Iar + jIa Xσa Ia – Corriente del estator (A). Uf – Tensión de fase (V). Ka = Con el módulo de esta última, (en línea) hallamos la FMM de excitación correspondiente y restándole fasorialmente KaFa como en (4), obtenemos la FMM de vacío. _ _ (4) (7) Una vez determinados estos valores seguimos con (3) para hallar la FEM en el entrehierro. Y al igual que en el cálculo de la regulación de tensión, obtenemos la FMM de vacío. La corriente de excitación aplicada en este punto (Iex) es equivalente a este último resultado, como vemos en (8). Fo – Fuerza magnetomotriz de vacío (A). Fδ – Fuerza magnetomotriz del entrehierro (A). Con este val"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-7",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "e excitación aplicada en este punto (Iex) es equivalente a este último resultado, como vemos en (8). Fo – Fuerza magnetomotriz de vacío (A). Fδ – Fuerza magnetomotriz del entrehierro (A). Con este valor y mediante la curva de vacío hallamos finalmente Eo. La regulación de tensión por ambos métodos la hallamos por medio de (5). Eo − Vn *100% Vn K a Fa Ia (6) Ia – Corriente a la que se realiza la prueba de factor de potencia cero. Donde: ∆V = Ia Donde: _ F o = F δ − Ka F a Ia Xσ a (5) Donde: I ex = F o (8) E. Característica externa Esta característica determina la dependencia U = f (I a ) para corriente de excitación, factor de potencia y frecuencia constantes. Indica como varía el voltaje del generador cuando variamos la magnitud de la carga con excitación constante. El procedimiento a seguir para obtenerla se explica a continuación. En (9) se obtiene el valor del módulo de la FMM del entrehierro, teniendo como datos: su ángulo (perpendicular a su FEM), el módulo de la FMM de vacío y el vector KaFa. ∆V – Regulación de tensión (V). Vn – Tensión nominal (V). Aunque este método asume que la máquina es de polos lisos, sus resultados son perfectamente aplicables a la máquina de polos salientes [3]. _ _ _ F δ = F o + Ka F a (9) 33 Mediante la curva de vacío hallamos la FEM resultante en el entrehierro y con ésta calculamos la tensión de fase según (10). _ B. Algoritmo para el trazado "
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-8",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "ientes [3]. _ _ _ F δ = F o + Ka F a (9) 33 Mediante la curva de vacío hallamos la FEM resultante en el entrehierro y con ésta calculamos la tensión de fase según (10). _ B. Algoritmo para el trazado del triángulo de potier _ U f = Eδ − I a r − jIa Xσ a (10) Es necesario suponer que la tensión y Eδ tienen el mismo ángulo. DESCRIPCIÓN DEL SOFTWARE Esta aplicación fue desarrollada con el ambiente de desarrollo de interfaces gráficas del MatLab, GUIDE, por sus siglas en inglés. Aprovechando la similitud de la sintaxis, se realizaron las modificaciones pertinentes para que el programa pueda ser utilizado además en Octave. A. Ventana principal En la ventana principal contamos con una línea de asistencia para efectuar correctamente la introducción de los datos, véase figura 1. Se comienza introduciendo los datos de la máquina en el grupo de entradas de la esquina superior izquierda. Posteriormente se introducen y “plotean” los datos de los ensayos de cortocircuito y vacío en ese orden, respectivamente. Luego el usuario debe introducir el número de puntos que, a su juicio, se encuentran alineados. Con esta información se ajusta el tramo recto de la curva según una recta, y el tramo curva según un polinomio de grado tres, véase figura 2. A continuación se entran los datos de la prueba de factor de potencia cero y se traza el triángulo de Potier. A partir de este punto ya el usuario es "
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-9",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "según un polinomio de grado tres, véase figura 2. A continuación se entran los datos de la prueba de factor de potencia cero y se traza el triángulo de Potier. A partir de este punto ya el usuario es libre de ejecutar las opciones del programa de acuerdo a sus intereses. Se puede calcular la regulación de tensión para diferentes estados de carga (esquina inferior derecha) y trazar las características de regulación y externa para distintos valores del factor de potencia. Primeramente hallamos la corriente de excitación que produce en cortocircuito una corriente de estator igual a la de la prueba de factor de potencia cero. Recordemos que la característica de cortocircuito es una recta, figura 3 y que este valor obtenido es equivalente a la longitud del segmento O´A´ en la figura 4. Luego se obtiene el intercepto de la recta que pasa por el punto O´ y tiene la pendiente del tramo recto de la curva de saturación. Con la descripción de esta recta y los coeficientes del ajuste polinómico del tramo saturado de la curva se calculan las coordenadas del intercepto de ellas (punto C´) por el método de bisección del intervalo. Naturalmente el punto B´ tiene la abscisa de C´ y la ordenada de A´. El factor de reducción de la reacción de armadura y la reactancia de dispersión, se obtienen de (6) y (7) respectivamente, como ya se explicó anteriormente. La curva de factor de potencia cero (col"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-10",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "´. El factor de reducción de la reacción de armadura y la reactancia de dispersión, se obtienen de (6) y (7) respectivamente, como ya se explicó anteriormente. La curva de factor de potencia cero (color verde en la figura 4) se traza restado a la curva de vacío el valor de los catetos de triángulo en cada punto. Con estos resultados estamos listos para el trazado de las características de la máquina. Fig. 2. Curva de vacío. Fig. 1. Ventana principal del programa. 34 Mucho más interesante resulta el próximo paso, en el que debemos obtener la FEM de vacío a partir de su FMM. En el caso más común en que la carga es inductiva, se tienen valores de estas dos magnitudes que pueden sobrepasar las mediciones de los ensayos. En estos casos se necesita una extrapolación de la curva de vacío, puesto que el ajuste polinómico se vuelve inaceptable fuera del intervalo de mediciones. Se optó pues, por realizar un ajuste en el sentido de los mínimos cuadrados, para aproximar el tramo curvo de la característica, a una función arcotangente. Finalmente, con este resultado y utilizando (5), se muestra la regulación de tensión porcentual, como en la figura 5. Fig. 3. Curva de cortocircuito. D.Algoritmo para el trazado de la característica de regulación Esta curva se traza para tensión de línea nominal y en el rango de corrientes de estator de cero a 1.25In. Para cambiar estos parámetros solo se deb"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-11",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": " para el trazado de la característica de regulación Esta curva se traza para tensión de línea nominal y en el rango de corrientes de estator de cero a 1.25In. Para cambiar estos parámetros solo se deben alterar estos datos de entrada al programa. Se sigue el procedimiento anterior para cada valor de la corriente de salida y nos detenemos en el cálculo de la FMM del entrehierro que es nuestra variable de salida (8). E. Algoritmo para el trazado de la característica externa En (9) se representa la situación que ilustramos vectorialmente en la figura 6. El módulo de Fδ se obtiene despejando la expresión de la ley de los cosenos para este triángulo (11). Fig. 4. Triángulo de Potier. C. Algoritmo para el cálculo de la regulación de tensión El primer paso en el cálculo de la regulación de tensión es obtener Eδ a partir de los datos del régimen de carga, véase figura 5, y haciendo uso de (3). Es importante seleccionar correctamente el carácter inductivo o capacitivo del factor de potencia, por medio de los “radio buttons” que se encuentran en la esquina inferior izquierda de la figura 1. Con los coeficientes del ajuste de la curva de vacío se obtiene la FMM del entrehierro y con esta la FMM de vacío según (4). Fig. 6. Diagrama vectorial de fuerzas magnetomotrices. Fig. 5. Cálculo de la regulación de tensión en porciento. 35 π  2 2 2 Fo = Fδ + (K a Fa ) − 2 ∗ K a Fa ∗ Fδ ∗ cos  ϕ + "
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-12",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "MM de vacío según (4). Fig. 6. Diagrama vectorial de fuerzas magnetomotrices. Fig. 5. Cálculo de la regulación de tensión en porciento. 35 π  2 2 2 Fo = Fδ + (K a Fa ) − 2 ∗ K a Fa ∗ Fδ ∗ cos  ϕ +  2  Datos de chapa de la máquina. Tabla. 1 Fδ = a + a 2 + Fo − (K a Fa ) 2 Valor Especificación Un 230 V Tensión nominal fn 60 Hz Frecuencia nominal n 1800 r.p.m. Velocidad nominal fp 0.8 Factor de potencia 2 π  a = K a Fa ∗ cos  ϕ +  2  (11) Donde: φ – ángulo del factor de potencia. Para el cálculo de Eδ a partir de su FMM se sigue el procedimiento descrito en el cálculo de la regulación de tensión y se obtiene la tensión de salida mediante (10). CASO DE ESTUDIO La validación del programa se hizo a partir de ensayos realizados a una máquina sincrónica específica. A continuación se exponen los datos y mediciones de laboratorio para este generador, al que pertenecen los valores que se observan en las figuras anteriores. A. Datos de los ensayos Los datos de chapa de la máquina ensayada se pueden ver en la tabla 1. Los resultados de las pruebas de vacío y coroto circuito se muestran en la tabla 2 y la tabla 3 respectivamente. nominal Sn 6.25 kVA Potencia nominal In 15.7 A Corriente nominal Iex 8.1 A Corriente de excitación η 82 % Eficiencia Clase de Aislamiento B Resultado de la prueba de vacio. Tabla 2. Iex (A) B. Características de regulación y externa Solamente nos resta m"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-13",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": "te nominal Iex 8.1 A Corriente de excitación η 82 % Eficiencia Clase de Aislamiento B Resultado de la prueba de vacio. Tabla 2. Iex (A) B. Características de regulación y externa Solamente nos resta mostrar las curvas de las características de regulación y externa, para la máquina ensayada. En la figura 7 se muestra el trazado de la característica de regulación para tensión nominal y factor de potencia 0.8 inductivo, 1 y 0.8 capacitivo respectivamente. Estos resultados de los ensayos se pueden ver en asteriscos rojos en las figura 2 y figura 3 respectivamente. Y desde luego, el trazado del triángulo de Potier de la figura 4 así como la regulación de tensión de la figura 5 se corresponde con estas mediciones. Corriente de excitación 6.0 4.5 4.0 3.5 2.7 2.3 2.1 1.9 1.7 1.4 1.1 Vo (V) Tensión de línea 300 280 260 240 220 200 180 160 140 120 100 36 Tabla3 Resultado de la prueba de corto circuito Corriente Punto 1 Punto 2 Punto 3 Iex (A) Ia (A) 2.7 8.0 5.1 15.0 6.8 20.0 En la figura 8 se muestra la característica externa para corriente de excitación nominal y factor de potencia 0.8 inductivo, 1 y 0.8 capacitivo respectivamente. Estas curvas pueden ser comparadas con las de la referencia 4 para corroborar de forma cualitativa su veracidad. RECONOCIMIENTOS Agradecemos al profesor de máquinas eléctrica Elías de la Rosa, por instarnos a desarrollar estos algoritmos de forma genérica, pa"
+ },
+ {
+  "id": "paper-rodriguez-2009-energetica-ensayos-maquin-14",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2009 energetica ensayos maquina sincronica",
+  "url": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
+  "text": " 4 para corroborar de forma cualitativa su veracidad. RECONOCIMIENTOS Agradecemos al profesor de máquinas eléctrica Elías de la Rosa, por instarnos a desarrollar estos algoritmos de forma genérica, para poderse reutilizar y por algunas sugerencias que resultaron vitales. REFERENCIAS [1]S. Chapman: Máquinas Eléctricas. McGraw Hill, 2005. [2]Santana y Costa :Prácticas de laboratorio de máquinas eléctricas III. La Habana, 1988. [3] Kostenko y Piotrovski: Máquinas Eléctricas. 2nd ed., Moscú, 1979. [4] Voldek: Máquinas Eléctricas. La Habana, 1987. AUTORES Orlando Lázaro Rodríguez González. Fig. 8. Característica externa de la máquina ensayada. Ingeniero Eléctrico, especialista en Automática, Telemecánica y Comunicaciones para el Transporte Ferroviario, en el Instituto de Transporte de Moscú. Doctor en Ciencias Técnicas Investigador Auxiliar .Jefe del Centro Nacional de Radares del Instituto de Meteorología (2003 hasta la fecha). Profesor Titular Adjunto de la Universidad de Camagüey. Cuba. e- mail :[email removed] Vladímir Rodríguez Diez. Ingeniero Eléctrico, Profesor Instructor. Universidad de Camagüey (desde 2008 hasta la fecha) e-mail:[email removed]"
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-0",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "ERAD 2010 - THE SIXTH EUROPEAN CONFERENCE ON RADAR IN METEOROLOGY AND HYDROLOGY Data processing in Weather Radars revisited Vladímir Rodríguez1, Orlando L. Rodríguez2 1 Universidad de Camagüey, Carr. Circunvalación km 5½, Camagüey, Cuba, [email removed] 2 Centro de Radares, Instituto de Meteorología, GP 160, CP 70100, Camagüey, Cuba, [email removed] (Dated: 29June, 2010) Vladímir Rodríguez 1. Introduction When digital data recording was introduced in the 70’s, it was a common practice to be limited to one ray per 1 or 2 degrees (typically one ray per beam width), and one range cell per 1 or 2 km. With the advent of faster digitizers and more powerful computers little changed, maybe some improvement in range resolution up to 150 - 250 m (Fabry, 1997). The number of elevation scans and the antenna rotation speed continue to be constraining dwell time. More elevation scans is always desired to have a better vertical resolution, but that means longer dwell time or faster antenna rotation, which in turn means less accuracy both in Z and V. Today’s computing power allows us to handle quite larger amounts of polar data than ever before, so some questions arose: Do we need to continue making polar cells by integrating in range and angle-time? Or can we make Cartesian products (say CAPPI for example) directly from high resolution polar data? If so, how high must be this resolution? How "
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-1",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "ng polar cells by integrating in range and angle-time? Or can we make Cartesian products (say CAPPI for example) directly from high resolution polar data? If so, how high must be this resolution? How many elevation scans? How fast must we rotate antenna? Resolution in angle is constrained by the radar nature to one ray per pulse, but range resolution can go down to 15 m or less, is it useful? How do all these factors affect different products for different applications? 2. Storm model To answer these questions we simulated a Reflectivity field based on statistical model of storms (Konrad, 1978), which imply linearly changing Reflectivity (in dBZ) with range. As a model, it was taken a cylinder of 12 km diameter, placed at 50 km from radar; center of cylinder is in 0° azimuth (North). This storm (cylinder) goes from 0 to 11 km in height (typical storm from Konrad, 1978). Fig. 1 Horizontal slice (2 km height), showing the original (mathematically generated) cylinder. The radar acquisition process of this field of Reflectivity (using real beam width and real pulse length from our MRL-5 radar), is simulated taking into account beam smoothing (due to antenna rotation, Zawadzki, 1982) and range smoothing (due to receiver bandwidth, Doviak and Zrnic, 1979). On the assumption that we know the spatial distribution of Z, the value estimated by detection integration can be obtained, as pr"
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-2",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "d range smoothing (due to receiver bandwidth, Doviak and Zrnic, 1979). On the assumption that we know the spatial distribution of Z, the value estimated by detection integration can be obtained, as proposed by Zawadzki (1982), from: Where: ERAD 2010 - THE SIXTH EUROPEAN CONFERENCE ON RADAR IN METEOROLOGY AND HYDROLOGY Sr – Slant range from radar W(Sr) – range-dependent weight J(Sr,φ) – Jacobian determinant to solve the integral in the more convenient “spherical” coordinates. G2(θ,φ) – Gaussian beam function Jacobian determinant: obtained from radar coordinate conversion equations, does not differ substantially from that obtained from spherical to Cartesian coordinate conversion equations. In our case, the integral was solved numerically, establishing an integration region, wide enough to get weighting functions attenuated, for each sample. In the simulation of the acquisition process, the following parameters were taken: Parameter Radar Pulse Repetition Frequency (PRF), in Hz Antenna Beam width, in ° Antenna rotation speed in azimuth, in r.p.m. Analog to Digital Converter clock, in MHz Range acquisition cell, in m Value 250 1.5 6 2 150 3. Coarse (usual) resolution case Routinely, for Reflectivity measurements our MRL-5 radar acquires 360 angular sectors in one PPI (each sector 1.0°), and 450 cells in range (1.05 km each cell). Antenna is rotated at 6 rpm, PRF is 250 Hz. In the "
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-3",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "or Reflectivity measurements our MRL-5 radar acquires 360 angular sectors in one PPI (each sector 1.0°), and 450 cells in range (1.05 km each cell). Antenna is rotated at 6 rpm, PRF is 250 Hz. In the actual acquisition process, 7 range gates are integrated to form 1.05 km cell, and 7 rays are integrated to form 1° sector. Taking this into account the simulated acquired data resolution was intentionally downgraded to make it comparable to that of the actual radar acquisition, by means of integrating 7 range gates, and 7 rays. The question about can we obtain better resolution making products with lower Cartesian cell? is clearly answered in the following Fig. 2 a) and b). Fig 2. a) CAPPI at 2 km height, 1 km x 1 km. b) CAPPI at 2 km height, 100 m x 100 m. In Fig. 2 a), a conventional CAPPI at 2 km height is shown. This CAPPI was built making Cartesian cells as usual: 1 km x 1 km. In Fig. 2 b) it’s shown an attempt to improve resolution making the CAPPI with Cartesian cells of 100 m x 100 m. As can be clearly seen, no further improvement was obtained. From a coarse raw data, just a coarse Cartesian product can be obtained. In both cases, the Adaptive Barnes fixed filter was used as described by Askelson, Aubagnac and Straka (2000). This algorithm was selected by its ability to take into account radar data properties, and to reduce variance of high resolution product. Parameters o"
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-4",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "escribed by Askelson, Aubagnac and Straka (2000). This algorithm was selected by its ability to take into account radar data properties, and to reduce variance of high resolution product. Parameters of filter used: kr=0.075 km2; kθ=kφ=0.155 deg2. 4. High resolution case We have now an increasingly amazing computing power available. So, why do we need to reduce data volume by means of making coarser polar cells? Why not to send all rays, and as shorter range gates as possible, directly to computer memory? ERAD 2010 - THE SIXTH EUROPEAN CONFERENCE ON RADAR IN METEOROLOGY AND HYDROLOGY In that case, we would make Cartesian products directly from raw non-integrated in range and angle/time data. Can we improve resolution? Let’s take a look. Fig 3. a) CAPPI at 2 km height, 1 km x 1 km. b) CAPPI at 2 km height, 100 m x 100 m. As can be seen, image on the right (Fig. 3 b)) shows better resolution. So, using acquired resolution instead of making coarser polar cells, do improve resolution. In both cases, again, the Adaptive Barnes fixed filter was used as described by Askelson, Aubagnac and Straka (2000). One question can arise here. How about variance reduction? Classically, we used to reduce signal variance by means of integrating in range, and in angle/time a number of range gates and a number of rays. Further, the Polar to Cartesian filter again provided some variance reduction (Mohr"
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-5",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "ce signal variance by means of integrating in range, and in angle/time a number of range gates and a number of rays. Further, the Polar to Cartesian filter again provided some variance reduction (Mohr and Vaughan, 1979). Here the filter parameters (kr=0.075 km2; kθ=kφ=0.155 deg2) were chosen to get the same number of samples as in the actual coarse resolution case. 5. Concluding remarks A mathematical model of Reflectivity field was obtained, generating a cylinder that can be placed anywhere in the radar umbrella, with Reflectivity varying linearly with range. The acquisition process was simulated taking into account radar range and beam smoothing. The proposed method of generating products directly from raw data, shows better resolution, than conventional method of making products from cells integrated in range and angle/time. References Askelson, M.A., Aubagnac, J.P., Straka, J.M. 2000: An adaptation of the Barnes filter applied to the objective analysis of radar data. Monthly Weather Review, 128, 3050-3082. Fabry, F. 1997: Rethinking radar data collection for the computing era. 28th Conference on Radar Meteorology. AMS. Doviak, R.J., Zrnic, D. 1979: Receiver bandwidth effect on Reflectivity and Doppler velocity estimates. Journal of Applied Meteorology, 18, 69–76. Konrad, T.G. 1978: Statistical models of summers rain showers derived from fine-scale radar observations. Journa"
+ },
+ {
+  "id": "paper-rodriguez-2010-erad-data-processing-weat-6",
+  "lang": "*",
+  "kind": "paper",
+  "title": "rodriguez 2010 erad data processing weather radars",
+  "url": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+  "text": "Reflectivity and Doppler velocity estimates. Journal of Applied Meteorology, 18, 69–76. Konrad, T.G. 1978: Statistical models of summers rain showers derived from fine-scale radar observations. Journal of Applied Meteorology, 17, 171-188. Mohr, C.G., Vaugham R.L. 1979: An economical procedure for Cartesian interpolation and display of Reflectivity Factor data in threedimensional space. Journal of Applied Meteorology, 18, 661-670. Zawadzki, I. 1982: The Quantitative Interpretation of Weather Radar Measurements. Atmosphere-Ocean. 20, 158-180."
+ }
+]

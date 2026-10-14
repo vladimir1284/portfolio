@@ -1,0 +1,15 @@
+# Cloudflare Pages configuration.
+#
+# The site is static; this file exists for one reason, which is the `AI`
+# binding that /api/ask and /api/reindex run on. A binding needs no API token
+# at runtime, so the deploy credentials stay scoped to Pages alone.
+#
+# `pages_build_output_dir` tells wrangler where the built site is, so the
+# workflow's deploy command no longer repeats it as a positional argument.
+
+name = "vladimir-portfolio"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "dist"
+
+[ai]
+binding = "AI"
