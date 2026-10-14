@@ -64,6 +64,7 @@ src/
 public/                       # static assets (favicon, avatar, radar still as .webp, cv.pdf)
 scripts/optimize_images.py    # JPG/PNG → WebP converter (see §10)
 scripts/build_cv.py           # src/data/*.json → public/cv{,.es}.pdf (`pnpm build:cv`)
+scripts/build_headers.py      # dist/_headers for Cloudflare Pages — CSP hashes (see §9)
 _material/                    # gitignored working material (CV, thesis, reference code)
 ```
 
@@ -233,6 +234,26 @@ The custom domain `vladimir.ladetec.com` can only be attached from Pages if the
 **Wrangler is deliberately not a dependency.** It pulls ~500 packages and a
 `workerd` binary; CI uses `cloudflare/wrangler-action`, which brings its own, and
 the setup above is a one-off. Run it with `pnpm dlx`, not `pnpm add`.
+
+### Response headers
+
+`dist/_headers` is **generated**, by `scripts/build_headers.py`, as the last
+step of `pnpm build`. Cloudflare Pages reads that file and serves what it says.
+
+It carries a Content-Security-Policy with **sha256 hashes of every inline
+`<script>` and `<style>` in the built output** — the theme-flash script in
+`Layout.astro` has to run before paint, so it cannot be externalised, and
+`'unsafe-inline'` would have made the policy decorative. The hashes are
+recomputed from `dist/` on every build, which is exactly why the file is not
+hand-written in `public/`: a stale hash blocks the script that prevents the
+flash, and nothing on the page would say so.
+
+The policy allows `fonts.googleapis.com` (stylesheet) and `fonts.gstatic.com`
+(font files), and nothing else off-origin. **`connect-src` is `'self'`** — the
+Phase 5 RAG endpoint will need its origin added there before any fetch works.
+
+Untested against a live origin so far: Pages has never served this site. Check
+the browser console for CSP violations on the first deploy.
 
 `packageManager` in `package.json` pins pnpm, and the workflow's
 `pnpm/action-setup` steps read it rather than hardcoding a version — CI and the
