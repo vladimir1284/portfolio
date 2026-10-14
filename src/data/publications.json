@@ -255,7 +255,7 @@
     "detail": "vol. XXX, n.º 1, pp. 30–36",
     "year": 2009,
     "doi": "",
-    "pdf": "",
+    "pdf": "/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.pdf",
     "abstract": {
       "en": "Software for processing synchronous-machine test data, written the year I graduated. The first thing I published, and already the same pattern: an instrument produces data, and the data needs a program.",
       "es": "Software para procesar los datos de los ensayos de la máquina sincrónica, escrito el año en que me gradué. Lo primero que publiqué, y ya el mismo patrón: un instrumento produce datos y los datos necesitan un programa."
