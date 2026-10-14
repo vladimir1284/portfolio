@@ -340,6 +340,12 @@ is both wrong and exactly the kind of undefendable number §7 bans.
   is set on the project; production does not set it. Run
   `python3 scripts/reindex_vectors.py` and read its docstring first: Pages
   only shows environment changes to _new_ deployments, so the order matters.
+- **Paper text is committed, not re-extracted.** `pdftotext` is not on the CI
+  runner and should not be: poppler versions disagree about whitespace, so the
+  same PDF would extract differently on two machines and the check would fail
+  over nothing. `rag/papers.lock.json` holds each PDF's sha256; without
+  `pdftotext` the build reuses the committed chunks while the hashes match, and
+  stops rather than guess when one has changed.
 - **The thesis is not in the corpus.** It lives in `_material/`, and whether
   the PDF is public is unsettled. The two papers under `public/papers/` are
   included, since they already ship.

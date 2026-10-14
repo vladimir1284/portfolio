@@ -15,8 +15,10 @@ content and the Pages Function serves it from the bundle.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -26,6 +28,8 @@ DATA = ROOT / "src" / "data"
 I18N = ROOT / "src" / "i18n"
 PAPERS = ROOT / "public" / "papers"
 OUT = ROOT / "rag" / "corpus.json"
+# Which PDF each committed paper chunk was extracted from, by content hash.
+LOCK = ROOT / "rag" / "papers.lock.json"
 
 LANGS = ("en", "es")
 
@@ -316,9 +320,38 @@ def guess_lang(text: str) -> str:
 
 
 def paper_chunks() -> list[dict]:
-    """Published PDFs only — the two under public/papers/, which anyone can open."""
-    chunks = []
+    """Published PDFs only — the two under public/papers/, which anyone can open.
+
+    `pdftotext` is not on the CI runner, and installing it there would be worse
+    than not having it: poppler versions disagree about whitespace, so the same
+    PDF would extract differently on two machines and `--check` would go red
+    over nothing. Instead the extracted text is committed inside corpus.json,
+    and `papers.lock.json` records the hash of the PDF each chunk came from. A
+    machine without pdftotext reuses the committed chunks when the hashes still
+    match, and refuses to guess when they do not.
+    """
+    lock = json.loads(LOCK.read_text(encoding="utf-8")) if LOCK.exists() else {}
+    previous = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else []
+    have_pdftotext = shutil.which("pdftotext") is not None
+
+    chunks: list[dict] = []
+    fresh_lock: dict[str, str] = {}
     for pdf in sorted(PAPERS.glob("*.pdf")):
+        digest = hashlib.sha256(pdf.read_bytes()).hexdigest()
+        fresh_lock[pdf.name] = digest
+        prefix = f"paper-{pdf.stem[:40]}-"
+
+        if not have_pdftotext:
+            if lock.get(pdf.name) != digest:
+                print(
+                    f"  ! {pdf.name} changed and pdftotext is missing — "
+                    "install poppler-utils and re-run",
+                    file=sys.stderr,
+                )
+                return []
+            chunks.extend(c for c in previous if c["id"].startswith(prefix))
+            continue
+
         try:
             raw = subprocess.run(
                 ["pdftotext", "-q", str(pdf), "-"],
@@ -329,6 +362,7 @@ def paper_chunks() -> list[dict]:
         except (OSError, subprocess.CalledProcessError) as err:
             print(f"  ! skipped {pdf.name}: {err}", file=sys.stderr)
             continue
+
         text = redact(re.sub(r"\s+", " ", raw).strip())
         lang = guess_lang(text)
         step = PAPER_WINDOW - PAPER_OVERLAP
@@ -338,7 +372,7 @@ def paper_chunks() -> list[dict]:
                 continue
             chunks.append(
                 {
-                    "id": f"paper-{pdf.stem[:40]}-{i}",
+                    "id": f"{prefix}{i}",
                     # A paper is citable from either language of the site.
                     "lang": "*",
                     "kind": "paper",
@@ -347,6 +381,11 @@ def paper_chunks() -> list[dict]:
                     "text": window,
                 }
             )
+
+    if have_pdftotext:
+        LOCK.write_text(
+            json.dumps(fresh_lock, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
+        )
     return chunks
 
 
@@ -388,6 +427,10 @@ def main() -> int:
         ("papers", paper_chunks),
     ):
         produced = fn()
+        if name == "papers" and not produced and any(PAPERS.glob("*.pdf")):
+            # paper_chunks() already said why. Writing a corpus with the papers
+            # silently missing would be worse than stopping.
+            return 1
         print(f"  {name:<14} {len(produced):>4}")
         chunks.extend(produced)
 

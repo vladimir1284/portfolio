@@ -14,6 +14,16 @@ pnpm corpus:check    # fail if corpus.json or vectors.json is stale (runs in `pn
 python3 scripts/reindex_vectors.py   # rebuild vectors.json — see below
 ```
 
+## Why the paper text is committed rather than re-extracted
+
+`pdftotext` is not on the CI runner, and putting it there would be worse than
+leaving it out: poppler versions disagree about whitespace, so the same PDF
+extracts differently on two machines and `pnpm corpus:check` would fail over
+nothing. The extracted text lives in `corpus.json`, and `papers.lock.json`
+records the hash of the PDF it came from. Without `pdftotext` the build reuses
+those chunks while the hashes match, and stops rather than guess when a PDF has
+changed.
+
 ## Why there is no vector database
 
 A hundred-odd chunks at 1024 dimensions is 108 KB of int8. The endpoint scores

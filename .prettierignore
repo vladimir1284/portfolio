@@ -16,3 +16,4 @@ _material/
 # `pnpm corpus:check` compare bytes it did not write.
 rag/corpus.json
 rag/vectors.json
+rag/papers.lock.json
