@@ -34,6 +34,10 @@ LOCK = ROOT / "rag" / "papers.lock.json"
 
 LANGS = ("en", "es")
 
+# The doctoral thesis is not a publication entry, so its citation title comes
+# from the Research heading instead.
+THESIS_PDF = "rodriguez-2022-buap-phd-thesis-reduct-computation.pdf"
+
 # Where each i18n key prefix lives on the page. A prefix that is not here is
 # chrome (nav labels, button text) and is not worth retrieving.
 ANCHORS = {
@@ -373,6 +377,25 @@ def guess_lang(text: str) -> str:
     return "es" if es > en else "en"
 
 
+def paper_title(pdf: Path) -> str:
+    """What a citation to this PDF should read as.
+
+    The stem is a filename, and a visitor reading `[1] rodriguez 2022 buap phd
+    thesis reduct computation` learns less than they would from the title the
+    work actually has. Both sources here are already the site's own: the
+    publication entry that links the PDF, and, for the thesis, the heading the
+    Research section prints.
+    """
+    url = f"/papers/{pdf.name}"
+    for entry in load("publications.json"):
+        if entry.get("pdf") == url:
+            return entry["title"]
+    if pdf.name == THESIS_PDF:
+        strings = json.loads((I18N / "en.json").read_text(encoding="utf-8"))
+        return f"{strings['research.thesis.name']} (PhD thesis)"
+    return pdf.stem.replace("-", " ")
+
+
 def paper_chunks() -> list[dict]:
     """Published PDFs only — the two under public/papers/, which anyone can open.
 
@@ -394,6 +417,7 @@ def paper_chunks() -> list[dict]:
         digest = hashlib.sha256(pdf.read_bytes()).hexdigest()
         fresh_lock[pdf.name] = digest
         prefix = f"paper-{pdf.stem[:40]}-"
+        title = paper_title(pdf)
 
         if not have_pdftotext:
             if lock.get(pdf.name) != digest:
@@ -417,21 +441,41 @@ def paper_chunks() -> list[dict]:
             print(f"  ! skipped {pdf.name}: {err}", file=sys.stderr)
             continue
 
-        text = redact(re.sub(r"\s+", " ", raw).strip())
+        # pdftotext separates pages with a form feed. Collapsing the whole
+        # document at once would throw that away, and a citation that points at
+        # a 105-page thesis with no page number is barely a citation at all.
+        # Collapsing page by page and joining with a single space gives exactly
+        # the same text, while leaving a map from offset to page behind.
+        offsets: list[tuple[int, int]] = []
+        parts: list[str] = []
+        at = 0
+        for number, page in enumerate(raw.split("\f"), start=1):
+            page = redact(re.sub(r"\s+", " ", page).strip())
+            if not page:
+                continue
+            offsets.append((at, number))
+            parts.append(page)
+            at += len(page) + 1
+        text = " ".join(parts)
+
         lang = guess_lang(text)
         step = PAPER_WINDOW - PAPER_OVERLAP
+        cursor = 0
         for i, start in enumerate(range(0, len(text), step)):
             window = text[start : start + PAPER_WINDOW]
             if len(window) < MIN_CHARS:
                 continue
+            while cursor + 1 < len(offsets) and offsets[cursor + 1][0] <= start:
+                cursor += 1
+            page = offsets[cursor][1] if offsets else 1
             chunks.append(
                 {
                     "id": f"{prefix}{i}",
                     # A paper is citable from either language of the site.
                     "lang": "*",
                     "kind": "paper",
-                    "title": pdf.stem.replace("-", " "),
-                    "url": f"/papers/{pdf.name}",
+                    "title": title,
+                    "url": f"/papers/{pdf.name}#page={page}",
                     "text": window,
                 }
             )

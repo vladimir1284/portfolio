@@ -64,6 +64,7 @@
   "research.type.journal": "Journal",
   "research.type.conference": "Conference",
   "research.thesis.repo": "BUAP institutional repository",
+  "research.thesis.pdf": "Full text (PDF, 105 pp.)",
   "research.group.core": "Reduct computation",
   "research.group.radar": "Radar data processing",
   "research.group.teaching": "Engineering education",

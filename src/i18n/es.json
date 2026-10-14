@@ -64,6 +64,7 @@
   "research.type.journal": "Revista",
   "research.type.conference": "Congreso",
   "research.thesis.repo": "Repositorio institucional BUAP",
+  "research.thesis.pdf": "Texto completo (PDF, 105 pp.)",
   "research.group.core": "Cómputo de reductos",
   "research.group.radar": "Procesamiento de datos de radar",
   "research.group.teaching": "Docencia en ingeniería",

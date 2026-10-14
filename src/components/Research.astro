@@ -10,6 +10,11 @@ const t = useTranslations(lang);
 const SCHOLAR_URL = "https://scholar.google.com/citations?user=tIVrnBwAAAAJ";
 const THESIS_URL =
   "https://repositorioinstitucional.buap.mx/items/a851e155-89f6-4b5f-92d7-a6d363365b4c/full";
+/* The same file BUAP serves, hosted here as well. Its repository answers in
+   twenty to forty seconds on a good day and 502s on a bad one, and the thesis
+   is open access, so a visitor should not have to wait on it to read the work
+   the site keeps citing. The record above stays as the link that proves it. */
+const THESIS_PDF = "/papers/rodriguez-2022-buap-phd-thesis-reduct-computation.pdf";
 
 /** Journal vs conference, shown as a tag on each entry. */
 const typeKey = (type: string): UIKey => `research.type.${type}` as UIKey;
@@ -37,7 +42,13 @@ const grouped = groups
       <p class="label">{t("research.thesis.title")}</p>
       <h3 class="mt-2 text-lg font-medium italic">{t("research.thesis.name")}</h3>
       <p class="prose-col mt-3 text-sm text-muted">{t("research.thesis.body")}</p>
-      <p class="mt-4">
+      <p class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+        <a
+          href={THESIS_PDF}
+          class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+        >
+          {t("research.thesis.pdf")} &darr;
+        </a>
         <a
           href={THESIS_URL}
           rel="noopener"
