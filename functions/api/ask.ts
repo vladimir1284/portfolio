@@ -105,7 +105,7 @@ async function answer(env: Env, question: string, lang: string, debug: boolean):
   const [queryVector] = await embed(env, [question]);
   if (!queryVector) return json({ ok: false, reason: "unavailable" });
 
-  const scored = search(queryVector, lang, TOP_K);
+  const scored = search(queryVector, lang, TOP_K, FLOOR);
   const trace = debug
     ? scored.map((h) => ({ id: h.chunk.id, score: Number(h.score.toFixed(3)) }))
     : undefined;
