@@ -104,9 +104,20 @@ def deploy(project: str) -> None:
     }
     # Wrangler lingers after reporting success; the deployment is already made.
     try:
-        subprocess.run(command, cwd=ROOT, env=environment, timeout=240, check=False)
+        finished = subprocess.run(command, cwd=ROOT, env=environment, timeout=240, check=False)
     except subprocess.TimeoutExpired:
         print("  (wrangler did not exit; the deployment was already submitted)")
+        return
+    # A deploy that did not happen is not a harmless step to skip: the secret is
+    # only visible to a *new* deployment, so /api/reindex would answer 404 from
+    # the one still serving, several minutes later and with no obvious cause.
+    if finished.returncode != 0:
+        sys.exit(
+            f"wrangler exited {finished.returncode} without deploying, so the running "
+            "deployment cannot see the secret. If the npm registry is unreachable from "
+            "here, point WRANGLER at a cached install and run this again:\n"
+            "  WRANGLER='node ~/.cache/pnpm/dlx/<hash>/pkg/node_modules/wrangler/bin/wrangler.js'"
+        )
 
 
 def reindex(origin: str, secret: str) -> dict:
