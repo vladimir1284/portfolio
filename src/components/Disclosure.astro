@@ -1,0 +1,38 @@
+---
+/*
+  A method, a caveat or a provenance note, folded away until asked for.
+
+  The site's rule is that no claim ships without the method that makes it
+  defensible (CLAUDE.md §7). Printing every method next to every claim honours
+  the rule and ruins the page: the reader gets a wall of qualification before
+  they have decided they care. Consultable satisfies the rule too — the
+  evidence is one tap away, on the page, in the markup, indexed, and in the
+  print stylesheet it is open.
+
+  A tooltip could not do this job: it needs hover, which phones do not have.
+  `<details>` is native, works with no JavaScript, is keyboard-operable, and
+  the open/close transition is pure CSS (`::details-content`, §5 timings) and
+  collapses to nothing under `prefers-reduced-motion`.
+*/
+interface Props {
+  /** Already-translated summary label. Keep it short — it is a `.label`. */
+  label: string;
+  /** Warn tone for a caveat or a limitation, muted for a method. */
+  tone?: "muted" | "warn";
+  /** Open on load. Use only where the note qualifies something risky. */
+  open?: boolean;
+  class?: string;
+}
+
+const { label, tone = "muted", open = false, class: className } = Astro.props;
+---
+
+<details class:list={["disclose", tone === "warn" && "disclose-warn", className]} open={open}>
+  <summary>
+    <span class="disclose-mark" aria-hidden="true"></span>
+    <span class="label">{label}</span>
+  </summary>
+  <div class="disclose-body">
+    <slot />
+  </div>
+</details>

@@ -1,5 +1,6 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import Disclosure from "./Disclosure.astro";
 import { STAGES } from "./lamula/stages";
 
 const lang = resolveLang(Astro.currentLocale);
@@ -99,10 +100,11 @@ const t = useTranslations(lang);
     <!--
       Provenance sits after the chain, not before it: the claim is worth reading
       first, and the qualification is worth reading before anyone acts on it.
+      Folded, because it qualifies the chain rather than describing it — the
+      reader who wants to know what LAMULA is today opens it.
     -->
-    <div class="panel mt-10 border-warn/40 p-6">
-      <p class="label text-warn">{t("system.status.title")}</p>
-      <div class="prose-col mt-3 text-sm text-muted" set:html={t("system.status.body")} />
-    </div>
+    <Disclosure label={t("system.status.title")} tone="warn" class="mt-10">
+      <div class="prose-col" set:html={t("system.status.body")} />
+    </Disclosure>
   </div>
 </section>

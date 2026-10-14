@@ -22,13 +22,11 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
     {t("hero.tagline")}
   </p>
 
-  <div class="prose-col mt-6 text-muted" set:html={t("hero.bio")} />
-
   <!--
-    The three layers named once, as labels. The bio argues them in prose; this
-    row is for the reader who will not read the prose. One accent for all three
-    ticks — colour-coding them would spend three signals on three things that
-    are not in opposition (DESIGN.md §1).
+    The three layers, named once and only here — the tagline says them as a
+    sentence, so repeating them in prose underneath would be the third telling.
+    One accent for all three: colour-coding would spend three signals on three
+    things that are not in opposition (DESIGN.md §1).
   -->
   <ul class="mt-7 flex flex-wrap gap-2">
     {
@@ -39,6 +37,8 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
       ))
     }
   </ul>
+
+  <p class="mt-6 max-w-2xl text-sm text-muted">{t("hero.bio")}</p>
 
   <div class="mt-9 flex flex-wrap items-center gap-3">
     <a

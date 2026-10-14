@@ -18,7 +18,14 @@
     "abstract": {
       "en": "Computes all the shortest reducts of a decision system using binary cumulative operations over a pairwise comparison matrix, with a fast candidate evaluation that avoids the costly operations most prior algorithms rely on.",
       "es": "Computa todos los reductos más cortos de un sistema de decisión mediante operaciones binarias acumulativas sobre una matriz de comparación por pares, con una evaluación rápida de candidatos que evita las operaciones costosas de las que dependen los algoritmos previos."
-    }
+    },
+    "rank": {
+      "quartile": 1,
+      "source": "SJR",
+      "year": 2025,
+      "category": "Computer Vision and Pattern Recognition"
+    },
+    "thumb": "/img/papers/rodriguez-2020-patrec-minreduct.webp"
   },
   {
     "group": "core",
@@ -38,7 +45,14 @@
     "abstract": {
       "en": "GCreduct: computes all reducts of a decision system using the pruning properties of gap elimination and attribute contribution, with simpler candidate-evaluation operations to cut runtime.",
       "es": "GCreduct: computa todos los reductos de un sistema de decisión aprovechando las propiedades de poda de la eliminación de brechas y la contribución de atributos, con operaciones de evaluación de candidatos más simples para reducir el tiempo de ejecución."
-    }
+    },
+    "rank": {
+      "quartile": 1,
+      "source": "SJR",
+      "year": 2025,
+      "category": "Artificial Intelligence"
+    },
+    "thumb": "/img/papers/rodriguez-2018-infsci-gcreduct.webp"
   },
   {
     "group": "core",
@@ -60,7 +74,14 @@
     "abstract": {
       "en": "A hardware/software co-designed FPGA platform for computing irreducible testors, following a pruning strategy that cuts the number of candidates evaluated — the algorithm and the silicon designed together.",
       "es": "Plataforma FPGA con co-diseño hardware/software para computar testores irreducibles, con una estrategia de poda que reduce el número de candidatos evaluados — el algoritmo y el silicio diseñados juntos."
-    }
+    },
+    "rank": {
+      "quartile": 1,
+      "source": "SJR",
+      "year": 2025,
+      "category": "Artificial Intelligence"
+    },
+    "thumb": "/img/papers/rodriguez-2015-eswa-hw-sw-testors.webp"
   },
   {
     "group": "core",
@@ -81,7 +102,8 @@
     "abstract": {
       "en": "Head-to-head evaluation of the two fastest published algorithms for computing all the shortest reducts, identifying which decision-system characteristics favour each.",
       "es": "Evaluación frente a frente de los dos algoritmos publicados más rápidos para computar todos los reductos más cortos, identificando qué características del sistema de decisión favorecen a cada uno."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2021-mcpr-milit-minreduct.webp"
   },
   {
     "group": "core",
@@ -101,7 +123,8 @@
     "abstract": {
       "en": "Experimental study of how the dimensions of the basic matrix affect algorithm runtime — evidence for choosing the right algorithm for a given dataset rather than assuming one dominates.",
       "es": "Estudio experimental de cómo las dimensiones de la matriz básica afectan el tiempo de ejecución — evidencia para elegir el algoritmo adecuado a cada conjunto de datos en vez de suponer que uno domina siempre."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2018-mcpr-basic-matrix.webp"
   },
   {
     "group": "core",
@@ -121,7 +144,8 @@
     "abstract": {
       "en": "Empirical comparison of the two fastest state-of-the-art algorithms for computing typical testors, over synthetic basic matrices with controlled characteristics and over standard UCI datasets.",
       "es": "Comparación empírica de los dos algoritmos más rápidos del estado del arte para computar testores típicos, sobre matrices básicas sintéticas de características controladas y sobre conjuntos de datos estándar del UCI."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2017-mcpr-fastbr-fastctext.webp"
   },
   {
     "group": "core",
@@ -143,7 +167,8 @@
     "abstract": {
       "en": "An FPGA architecture that filters irreducible testors in hardware, removing the step that dominated runtime in software implementations. The design that led to the hardware/software platform published the following year.",
       "es": "Arquitectura FPGA que filtra testores irreducibles en hardware, eliminando el paso que dominaba el tiempo de ejecución en las implementaciones en software. El diseño que condujo a la plataforma hardware/software publicada al año siguiente."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2014-reconfig-filtering-testors.webp"
   },
   {
     "group": "radar",
@@ -162,7 +187,8 @@
     "abstract": {
       "en": "A weather-radar simulator driven by a spatial reflectivity distribution, used to study how the scan pattern and the acquisition and processing scheme distort the perception of a meteorological target. The question that the whole LAMULA chain is a working answer to, asked fourteen years earlier.",
       "es": "Simulador de radar meteorológico alimentado por una distribución espacial de reflectividades, para estudiar cómo el patrón de barrido y el esquema de adquisición y procesamiento deforman la percepción del blanco meteorológico. La pregunta que la cadena LAMULA responde en la práctica, formulada catorce años antes."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2012-energetica-simulador-radar.webp"
   },
   {
     "group": "radar",
@@ -177,7 +203,8 @@
     "abstract": {
       "en": "A review of the weather-radar data processing chain presented at ERAD — the first published piece of the radar work, two years before the Camagüey Meteorological Centre.",
       "es": "Revisión de la cadena de procesamiento de datos de radar meteorológico presentada en ERAD — la primera pieza publicada del trabajo de radar, dos años antes del Centro Meteorológico de Camagüey."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2010-erad-data-processing-weather-radars.webp"
   },
   {
     "group": "teaching",
@@ -199,7 +226,8 @@
     "abstract": {
       "en": "A virtual instrument reachable both from the lab bench and over the network, so a control-engineering practical does not depend on a student being physically in front of the rig. The same problem ModbusLab solves today.",
       "es": "Instrumento virtual accesible tanto desde el puesto de laboratorio como por red, para que una práctica de Ingeniería del Control no dependa de que el estudiante esté físicamente frente al equipo. El mismo problema que hoy resuelve ModbusLab."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2015-rielac-instrumento-virtual.webp"
   },
   {
     "group": "teaching",
@@ -224,7 +252,8 @@
     "abstract": {
       "en": "Full automation of a bioproduct drying process — industrial automation applied to a real plant, the field the Industrial Automation course teaches.",
       "es": "Automatización integral de un proceso de secado de bioproductos — automatización industrial aplicada a una planta real, el terreno que enseña la asignatura de Automatización Industrial."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2015-rielac-secado-bioproductos.webp"
   },
   {
     "group": "teaching",
@@ -244,7 +273,8 @@
     "abstract": {
       "en": "Classical, adaptive and robust control compared on first-order systems whose parameters drift over time — the trade-off that decides which controller a plant actually gets.",
       "es": "Control clásico, adaptable y robusto comparados sobre sistemas de primer orden con parámetros que varían en el tiempo — el compromiso que decide qué controlador lleva realmente una planta."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2012-energetica-control-parametros-variables.webp"
   },
   {
     "group": "teaching",
@@ -259,6 +289,7 @@
     "abstract": {
       "en": "Software for processing synchronous-machine test data, written the year I graduated. The first thing I published, and already the same pattern: an instrument produces data, and the data needs a program.",
       "es": "Software para procesar los datos de los ensayos de la máquina sincrónica, escrito el año en que me gradué. Lo primero que publiqué, y ya el mismo patrón: un instrumento produce datos y los datos necesitan un programa."
-    }
+    },
+    "thumb": "/img/papers/rodriguez-2009-energetica-ensayos-maquina-sincronica.webp"
   }
 ]

@@ -40,10 +40,13 @@ export interface Position {
 /**
  * A journal ranking, shown as a four-segment quartile strip.
  *
- * It is optional and deliberately unpopulated: a quartile is a checkable
- * number, so it ships with the ranking system and the year it was taken
- * (`SJR`, `2020`) or it does not ship at all. Fill `rank` on an entry in
- * `publications.json` and the strip appears on that entry alone.
+ * A quartile is a checkable number, so it ships with everything needed to
+ * check it — the ranking system, the edition, and the category — or it does
+ * not ship at all. The category is not optional padding: a quartile only
+ * exists inside one. Pattern Recognition Letters is Q1 in Computer Vision and
+ * Pattern Recognition and Q2 in Artificial Intelligence, Signal Processing and
+ * Software in the same SJR edition, so "Q1" with no category named is a number
+ * the reader cannot verify and a claim that picked its own ground.
  */
 export interface Rank {
   quartile: 1 | 2 | 3 | 4;
@@ -51,6 +54,8 @@ export interface Rank {
   source: string;
   /** The edition the quartile was read from. Quartiles move between years. */
   year: number;
+  /** The subject category the quartile is in. Rendered verbatim. */
+  category: string;
 }
 
 export interface Publication {
@@ -65,4 +70,10 @@ export interface Publication {
   pdf?: string;
   abstract: Localized;
   rank?: Rank;
+  /**
+   * First page, rendered to WebP by `scripts/paper_thumbs.py`. Written by that
+   * script, not by hand: it only sets the field for a thumbnail it has actually
+   * produced, so the entry cannot point at a file that is not there.
+   */
+  thumb?: string;
 }

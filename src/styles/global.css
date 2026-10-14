@@ -33,6 +33,10 @@
     scroll-behavior: smooth;
     /* Fixed header offset for anchor navigation. */
     scroll-padding-top: 5rem;
+    /* Lets `height: auto` be a transition endpoint, which is what makes the
+       disclosure open at a measured speed instead of snapping. Ignored by
+       browsers that do not support it; they snap, which is also fine. */
+    interpolate-size: allow-keywords;
   }
 
   body {
@@ -218,5 +222,127 @@
     height: 0.4rem;
     flex: none;
     background-color: var(--color-accent);
+  }
+
+  /* Folded method / caveat / provenance note. Component: Disclosure.astro.
+     Summary is a hairline row with a tick that turns; the body animates on
+     `::details-content` and simply snaps where that is unsupported. */
+  .disclose {
+    border-top: 1px solid var(--color-border);
+  }
+  .disclose > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    /* 44px hit target (DESIGN.md §6) without a visible button. */
+    min-height: 2.75rem;
+    padding-block: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .disclose > summary::-webkit-details-marker {
+    display: none;
+  }
+  .disclose > summary:hover .label {
+    color: var(--color-text);
+  }
+  .disclose-warn > summary .label {
+    color: var(--color-warn);
+  }
+  .disclose-mark {
+    position: relative;
+    width: 0.55rem;
+    height: 0.55rem;
+    flex: none;
+  }
+  .disclose-mark::before,
+  .disclose-mark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    background-color: var(--color-accent);
+    transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .disclose-mark::before {
+    height: 1px;
+  }
+  .disclose-mark::after {
+    width: 1px;
+  }
+  .disclose-warn .disclose-mark::before,
+  .disclose-warn .disclose-mark::after {
+    background-color: var(--color-warn);
+  }
+  /* Plus turns into a minus: the vertical stroke collapses. */
+  .disclose[open] .disclose-mark::after {
+    transform: scaleY(0);
+  }
+  .disclose-body {
+    padding-bottom: 1rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .disclose::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 200ms cubic-bezier(0.2, 0, 0, 1),
+        content-visibility 200ms allow-discrete;
+    }
+    .disclose[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  /* On paper nothing is one tap away, so every note prints. */
+  @media print {
+    .disclose::details-content {
+      block-size: auto;
+      content-visibility: visible;
+    }
+  }
+
+  /* First page of a paper, beside its entry in the publication list.
+     An unmodified white page is the brightest thing on a near-black ground, so
+     it sits slightly back until the entry is hovered — the one bit of motion
+     the list has, at the 120ms state-change timing (DESIGN.md §5). */
+  .paper-thumb {
+    flex: none;
+    width: 4rem;
+    align-self: flex-start;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .paper-thumb {
+      width: 5.5rem;
+    }
+  }
+  .paper-thumb img {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0.82;
+    transition:
+      opacity 120ms cubic-bezier(0.2, 0, 0, 1),
+      transform 120ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  li:hover > .paper-thumb img,
+  li:focus-within > .paper-thumb img {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  li:hover > .paper-thumb,
+  li:focus-within > .paper-thumb {
+    border-color: var(--color-accent);
+  }
+  html.light .paper-thumb img {
+    opacity: 1;
   }
 }
