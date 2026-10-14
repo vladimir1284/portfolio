@@ -89,23 +89,6 @@ const t = useTranslations(lang);
                     </div>
                   )}
                 </dl>
-
-                {stage.shot && (
-                  <figure class="mt-6 overflow-hidden rounded border border-border">
-                    <img
-                      src={stage.shot.src}
-                      alt={t(stage.shot.alt)}
-                      width={stage.shot.width}
-                      height={stage.shot.height}
-                      loading="lazy"
-                      decoding="async"
-                      class="block w-full bg-bg"
-                    />
-                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
-                      {t(stage.shot.caption)}
-                    </figcaption>
-                  </figure>
-                )}
               </div>
             </div>
           </>

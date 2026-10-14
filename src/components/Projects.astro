@@ -33,6 +33,23 @@ const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
 
             <div class="prose-col mt-6 space-y-4 text-sm text-muted" set:html={p.body[lang]} />
 
+            {p.shot && (
+              <figure class="mt-8 overflow-hidden rounded border border-border">
+                <img
+                  src={p.shot.src}
+                  alt={p.shot.alt[lang]}
+                  width={p.shot.width}
+                  height={p.shot.height}
+                  loading="lazy"
+                  decoding="async"
+                  class="block w-full bg-bg"
+                />
+                <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
+                  {p.shot.caption[lang]}
+                </figcaption>
+              </figure>
+            )}
+
             {p.note && (
               <p class="panel prose-col mt-6 border-l-2 border-l-warn p-4 text-sm text-muted">
                 {p.note[lang]}

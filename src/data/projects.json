@@ -57,6 +57,47 @@
     ]
   },
   {
+    "id": "process",
+    "featured": true,
+    "years": "2026—",
+    "status": "active",
+    "title": {
+      "en": "Process — a radar analysis workbench that outlives its operating system",
+      "es": "Process — un banco de análisis de radar que sobrevive a su sistema operativo"
+    },
+    "summary": {
+      "en": "A rewrite of Vesta | Proceso, the analysis program of Cuba's radar network, freed from Delphi and from Windows: one codebase that runs on the desktop and in the browser, with no backend.",
+      "es": "Reescritura de Vesta | Proceso, el programa de análisis de la red de radares de Cuba, liberado de Delphi y de Windows: un mismo código que corre en el escritorio y en el navegador, sin backend."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> <strong>Vesta | Proceso</strong> is the processing and visualisation program of the Radar Centre at Cuba's Institute of Meteorology, written in Delphi/VCL by Wilfredo Pozas. Forecasters have used it for years, and it works — but it is tied to Windows and to a toolchain whose licence and future are outside the institution's control. A tool that outlives its platform has to be rewritten before the platform forces the issue, not after.</p><p><strong>The constraint that is not negotiable.</strong> It must keep ingesting <strong>raw radar data</strong>. Deriving products from already-derived Level III output would be cheaper to build and would quietly cap what the tool can ever answer: once a product is computed, the choices behind it — thresholds, interpolation, the elevation it came from — are no longer yours to revisit.</p><p><strong>The decision.</strong> One codebase, two targets. The same Pascal core compiles to a desktop application and runs in the browser, and the browser build carries <strong>no backend at all</strong> — the volume is read client-side. Nothing to deploy, nothing to keep running, nothing to pay for while it is idle. Reach, without an operations bill.</p><p><strong>Why it is not part of the LAMULA chain.</strong> It reads the same archive the chain writes, but it is a separate tool, not a stage. The chain ends at a viewer that consumes Level III products generated upstream; Process starts from the raw volume and computes its own. Shown as a stage it would suggest a dependency that does not exist in either direction.</p><p><strong>What it is not.</strong> An analytical instrument rather than a display: it opens empty, and shows something once an observation is loaded. The screenshot below is a real Level-II volume, named in the caption — the same file can be pulled from NOAA's archive and compared.</p>",
+      "es": "<p><strong>El problema.</strong> <strong>Vesta | Proceso</strong> es el programa de procesamiento y visualización del Centro de Radares del Instituto de Meteorología de Cuba, escrito en Delphi/VCL por Wilfredo Pozas. Los pronosticadores llevan años usándolo y funciona — pero está atado a Windows y a una cadena de herramientas cuya licencia y cuyo futuro no dependen de la institución. Una herramienta que va a sobrevivir a su plataforma hay que reescribirla antes de que la plataforma obligue, no después.</p><p><strong>La restricción que no se negocia.</strong> Tiene que seguir ingiriendo <strong>datos crudos de radar</strong>. Derivar productos a partir de una salida Level III ya derivada saldría más barato de construir y limitaría en silencio lo que la herramienta podrá preguntar nunca: una vez calculado el producto, las decisiones que hay detrás — umbrales, interpolación, de qué elevación salió — dejan de estar a tu alcance.</p><p><strong>La decisión.</strong> Un código, dos destinos. El mismo núcleo en Pascal compila a aplicación de escritorio y corre en el navegador, y la versión de navegador <strong>no lleva backend ninguno</strong>: el volumen se lee en el cliente. Nada que desplegar, nada que mantener en pie, nada que pagar mientras está ocioso. Alcance, sin factura de operación.</p><p><strong>Por qué no es parte de la cadena LAMULA.</strong> Lee el mismo archivo que la cadena escribe, pero es una herramienta aparte, no una etapa. La cadena termina en un visor que consume productos Level III generados aguas arriba; Process arranca del volumen crudo y calcula los suyos. Enseñarlo como etapa sugeriría una dependencia que no existe en ninguna de las dos direcciones.</p><p><strong>Lo que no es.</strong> Un instrumento analítico, no un visor: abre vacío y muestra algo cuando se le carga una observación. La captura de abajo es un volumen Level-II real, nombrado en el pie de foto — ese mismo fichero se baja del archivo de NOAA y se compara.</p>"
+    },
+    "shot": {
+      "src": "/img/projects/lamula-process.webp",
+      "width": 1600,
+      "height": 760,
+      "alt": {
+        "en": "Process with a NEXRAD Level-II volume loaded: on the left a reflectivity PPI over the Gulf coast, on the right a range-height cross-section along azimuth 241°.",
+        "es": "Process con un volumen NEXRAD Level-II cargado: a la izquierda un PPI de reflectividad sobre la costa del Golfo, a la derecha un corte vertical RHI en el azimut 241°."
+      },
+      "caption": {
+        "en": "Level-II volume AR2V0006.126 · KEOX, Alabama · 10 Oct 2026, 02:36 UTC · PPI and RHI at azimuth 241°.",
+        "es": "Volumen Level-II AR2V0006.126 · KEOX, Alabama · 10 oct 2026, 02:36 UTC · PPI y RHI en el azimut 241°."
+      }
+    },
+    "note": {
+      "en": "Successor to a program that is not mine. Vesta | Proceso was written by Wilfredo Pozas at the Radar Centre, and the rewrite starts from the behaviour his program defined.",
+      "es": "Sucesor de un programa que no es mío. Vesta | Proceso lo escribió Wilfredo Pozas en el Centro de Radares, y la reescritura parte del comportamiento que definió su programa."
+    },
+    "stack": ["Pascal", "Svelte", "NEXRAD Level-II", "desktop + browser"],
+    "links": {
+      "demo": "https://process.ladetec.com/",
+      "code": "",
+      "docs": "https://lamula-process-docs.ladetec.com/"
+    }
+  },
+  {
     "id": "commission",
     "featured": true,
     "years": "2026",

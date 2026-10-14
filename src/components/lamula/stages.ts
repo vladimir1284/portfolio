@@ -18,16 +18,6 @@ export interface Stage {
   docs?: readonly string[];
   /** Short monospace annotation shown on the node — a standard, interface or technology. */
   annotation?: string;
-  /** A screenshot of the stage's own software, when there is one worth showing. */
-  shot?: {
-    src: string;
-    width: number;
-    height: number;
-    /** i18n key for the alt text. */
-    alt: UIKey;
-    /** i18n key for the caption. It names the observation, so the image is checkable. */
-    caption: UIKey;
-  };
 }
 
 export const STAGES: readonly Stage[] = [
@@ -82,20 +72,5 @@ export const STAGES: readonly Stage[] = [
     body: "system.stage.viewer.body",
     repo: "https://github.com/vladimir1284/lamula-webviewer",
     annotation: "WebGL",
-  },
-  {
-    id: "process",
-    name: "system.stage.process.name",
-    body: "system.stage.process.body",
-    replaces: "Vesta | Proceso (Delphi/VCL, Windows-only)",
-    docs: ["https://lamula-process-docs.ladetec.com/"],
-    annotation: "desktop + web",
-    shot: {
-      src: "/img/projects/lamula-process.webp",
-      width: 1600,
-      height: 760,
-      alt: "system.stage.process.shot.alt",
-      caption: "system.stage.process.shot.caption",
-    },
   },
 ] as const;
