@@ -1,6 +1,17 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const year = new Date().getFullYear();
 ---
-<!-- Footer stub -->
+
+<footer class="border-t border-border">
+  <div
+    class="shell flex flex-col gap-2 py-10 text-xs text-muted sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p class="data">{t("footer.copyright", { year })}</p>
+    <p>{t("footer.built")}</p>
+  </div>
+</footer>

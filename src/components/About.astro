@@ -1,6 +1,48 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const interestKeys = [1, 2, 3, 4, 5, 6].map((n) => `about.interest.${n}` as UIKey);
 ---
-<!-- About stub -->
+
+<section id="about" class="section">
+  <div class="shell">
+    <p class="label">01</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("about.title")}
+    </h2>
+
+    <div class="mt-10 grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-14">
+      <div class="prose-col text-muted" set:html={t("about.body")} />
+
+      <aside>
+        <img
+          src="/img/avatar/vladimir.webp"
+          alt={t("about.photo.alt")}
+          width="480"
+          height="480"
+          loading="lazy"
+          decoding="async"
+          class="panel block w-full max-w-64 object-cover"
+        />
+
+        <h3 class="label mt-10">{t("about.interests.title")}</h3>
+        <ul class="mt-4 space-y-2.5 text-sm text-muted">
+          {
+            interestKeys.map((k) => (
+              <li class="flex gap-2.5">
+                <span class="text-accent" aria-hidden="true">
+                  &#8250;
+                </span>
+                <span>{t(k)}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,39 @@
+{
+  "name": "Vladímir Rodríguez-Diez",
+  "headline": {
+    "en": "Electrical engineer · PhD in Computer Science",
+    "es": "Ingeniero eléctrico · Doctor en Ciencias de la Computación"
+  },
+  "location": {
+    "en": "Mexico City, Mexico",
+    "es": "Ciudad de México, México"
+  },
+  "email": "vladimir@ladetec.com",
+  "links": [
+    { "key": "contact.links.github", "label": "GitHub", "url": "https://github.com/vladimir1284" },
+    {
+      "key": "contact.links.scholar",
+      "label": "Google Scholar",
+      "url": "https://scholar.google.com/citations?user=tIVrnBwAAAAJ"
+    },
+    {
+      "key": "contact.links.linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/vlad%C3%ADmir-rodr%C3%ADguez-diez-12a76649/"
+    },
+    {
+      "key": "contact.links.orcid",
+      "label": "ORCID",
+      "url": "https://orcid.org/0000-0003-0645-3716"
+    },
+    {
+      "key": "contact.links.researchgate",
+      "label": "ResearchGate",
+      "url": "https://www.researchgate.net/profile/Vladimir-Rodriguez-2"
+    }
+  ],
+  "languageNote": {
+    "en": "TOEFL 626 (2014)",
+    "es": "TOEFL 626 (2014)"
+  }
+}

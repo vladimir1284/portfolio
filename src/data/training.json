@@ -1,0 +1,29 @@
+[
+  {
+    "title": {
+      "en": "Advanced Workshop on Modern FPGA-Based Technology for Scientific Computing",
+      "es": "Advanced Workshop on Modern FPGA-Based Technology for Scientific Computing"
+    },
+    "org": "International Centre for Theoretical Physics (ICTP)",
+    "place": { "en": "Trieste, Italy", "es": "Trieste, Italia" },
+    "year": 2019
+  },
+  {
+    "title": {
+      "en": "Latin-American Advanced Course on FPGA Design for Scientific Instrumentation",
+      "es": "Latin-American Advanced Course on FPGA Design for Scientific Instrumentation"
+    },
+    "org": "International Centre for Theoretical Physics (ICTP)",
+    "place": { "en": "Havana, Cuba", "es": "La Habana, Cuba" },
+    "year": 2012
+  },
+  {
+    "title": {
+      "en": "Second Workshop on Distributed Laboratory Instrumentation Systems",
+      "es": "Second Workshop on Distributed Laboratory Instrumentation Systems"
+    },
+    "org": "International Centre for Theoretical Physics (ICTP)",
+    "place": { "en": "Valdivia, Chile", "es": "Valdivia, Chile" },
+    "year": 2008
+  }
+]

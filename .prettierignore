@@ -9,3 +9,4 @@ public/
 
 # minified
 *.min.*
+_material/

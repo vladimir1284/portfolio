@@ -1,6 +1,72 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const VIEWER_URL = "https://webviewer.ladetec.com/";
 ---
-<!-- Hero stub -->
+
+<section id="top" class="shell pt-32 pb-20 md:pt-40 md:pb-28">
+  <p class="label">{t("hero.greeting")}</p>
+
+  <h1 class="mt-4 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] font-bold tracking-tight">
+    {t("hero.name")}
+  </h1>
+
+  <p class="mt-5 max-w-3xl text-[clamp(1.125rem,2.2vw,1.5rem)] leading-snug text-text">
+    {t("hero.tagline")}
+  </p>
+
+  <div class="prose-col mt-6 text-muted" set:html={t("hero.bio")} />
+
+  <div class="mt-9 flex flex-wrap items-center gap-3">
+    <a
+      href={lang === "es" ? "/cv.es.pdf" : "/cv.pdf"}
+      class="t-fast rounded border border-accent bg-accent px-4 py-2.5 text-sm font-medium text-bg hover:border-accent-hover hover:bg-accent-hover"
+    >
+      {t("hero.cta.cv")}
+    </a>
+    <a
+      href="#system"
+      class="t-fast rounded border border-border px-4 py-2.5 text-sm font-medium text-text hover:border-accent hover:text-accent"
+    >
+      {t("hero.cta.system")}
+    </a>
+    <a href="#contact" class="t-fast px-2 py-2.5 text-sm text-muted hover:text-accent">
+      {t("hero.cta.contact")}
+    </a>
+  </div>
+
+  <!--
+    Radar panel. The portfolio must never depend on an external service to render:
+    the still frame below is a build-time asset, and the live viewer is a link out,
+    not an iframe. See DESIGN.md §7 and the plan's Fase 2b.
+  -->
+  <figure class="panel mt-14 overflow-hidden">
+    <div class="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5">
+      <span class="label flex items-center gap-2">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+        {t("hero.radar.label")}
+      </span>
+      <a href={VIEWER_URL} rel="noopener" class="data t-fast text-xs text-muted hover:text-accent">
+        {t("hero.radar.live")} &rarr;
+      </a>
+    </div>
+
+    <img
+      src="/img/radar-still.webp"
+      alt={t("hero.radar.alt")}
+      width="1600"
+      height="760"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      class="block w-full bg-bg"
+    />
+
+    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
+      {t("hero.radar.caption")}
+    </figcaption>
+  </figure>
+</section>

@@ -1,6 +1,46 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import profile from "../data/profile.json";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+// Contact details live in `data/profile.json` so the generated CV
+// (scripts/build_cv.py) and this section can never drift apart.
+const { email: EMAIL, links } = profile;
 ---
-<!-- Contact stub -->
+
+<section id="contact" class="section">
+  <div class="shell">
+    <p class="label">05</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("contact.title")}
+    </h2>
+
+    <p class="prose-col mt-5 text-muted">{t("contact.lede")}</p>
+
+    <div class="mt-9">
+      <p class="label">{t("contact.email.label")}</p>
+      <a
+        href={`mailto:${EMAIL}`}
+        class="data t-fast mt-1.5 inline-block text-lg text-accent underline underline-offset-4 hover:text-accent-hover"
+      >
+        {EMAIL}
+      </a>
+      <p class="data mt-4 text-sm text-muted">{profile.location[lang]}</p>
+    </div>
+
+    <ul class="mt-9 flex flex-wrap gap-3">
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.url} rel="noopener" class="tag t-fast hover:border-accent hover:text-accent">
+              {t(l.key as UIKey)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -7,7 +7,7 @@ import sitemap from "@astrojs/sitemap";
 // https://astro.build/config
 export default defineConfig({
   // canonical + hreflang URLs (getAbsoluteLocaleUrl) and og:url/og:image.
-  site: "https://YOUR_DOMAIN_HERE", // TODO: update before deploy
+  site: "https://vladimir.ladetec.com",
   i18n: {
     defaultLocale: "en",
     locales: ["en", "es"],

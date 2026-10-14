@@ -2,5 +2,12 @@
   "recurse": true,
   "silent": true,
   "retry": true,
-  "skip": ["^mailto:", "^tel:"]
+  "skip": [
+    "^mailto:",
+    "^tel:",
+    "^https://vladimir\\.ladetec\\.com",
+    "^https://www\\.researchgate\\.net/"
+  ],
+  "concurrency": 4,
+  "timeout": 30000
 }

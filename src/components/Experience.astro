@@ -1,6 +1,147 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import experience from "../data/experience.json";
+import type { Position } from "../data/types";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const { education, courses, teachingHighlights } = experience;
+
+// Typed through `types.ts` so the shape is declared in one place; the block
+// renders only when there is something to render.
+const positions = experience.positions as Position[];
 ---
-<!-- Experience stub -->
+
+<section id="experience" class="section">
+  <div class="shell">
+    <p class="label">04</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("experience.title")}
+    </h2>
+    <p class="prose-col mt-5 text-muted">{t("experience.lede")}</p>
+
+    {
+      positions.length > 0 && (
+        <>
+          <h3 class="label mt-12">{t("experience.roles.title")}</h3>
+          <ul class="mt-4 divide-y divide-border border-t border-border">
+            {positions.map((p) => (
+              <li class="py-6">
+                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span class="data text-sm text-muted">{p.dateLabel[lang]}</span>
+                  <h3 class="flex-1 text-base font-medium">{p.role[lang]}</h3>
+                </div>
+                <p class="mt-1 text-sm text-muted">
+                  {p.institution} &middot; {p.place[lang]}
+                </p>
+                {p.highlights && (
+                  <ul class="prose-col mt-3 space-y-1.5 text-sm text-muted">
+                    {p.highlights[lang].map((h) => (
+                      <li class="flex gap-2.5">
+                        <span class="text-accent" aria-hidden="true">
+                          &#8250;
+                        </span>
+                        <span set:html={h} />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {p.shot && (
+                  <figure class="mt-5 max-w-3xl overflow-hidden rounded border border-border">
+                    <img
+                      src={p.shot.src}
+                      alt={p.shot.alt[lang]}
+                      width={p.shot.width}
+                      height={p.shot.height}
+                      loading="lazy"
+                      decoding="async"
+                      class="block w-full bg-bg"
+                    />
+                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
+                      {p.shot.caption[lang]}
+                    </figcaption>
+                  </figure>
+                )}
+                {p.links && (
+                  <ul class="mt-4 flex flex-wrap gap-2">
+                    {p.links.map((l) => (
+                      <li>
+                        <a
+                          href={l.url}
+                          rel="noopener"
+                          class="tag t-fast hover:border-accent hover:text-accent"
+                        >
+                          {l.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+
+    <h3 class="label mt-12">{t("experience.teaching.title")}</h3>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {
+        courses.map((c) => (
+          <li class="tag">
+            {c[lang]}
+            {c.level[lang] && <span class="ml-2 opacity-60">{c.level[lang]}</span>}
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="label mt-12">{t("experience.highlight.title")}</h3>
+    {
+      teachingHighlights.map((h) => (
+        <article class="panel mt-4 p-6">
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <span class="data text-sm text-muted">{h.dateLabel[lang]}</span>
+            <h4 class="flex-1 text-base font-medium">{h.course[lang]}</h4>
+          </div>
+          <p class="mt-1 text-sm text-muted">
+            {h.institution} &middot; {h.unit[lang]}
+          </p>
+          <p class="prose-col mt-3 text-sm text-muted">{h.detail[lang]}</p>
+          <ul class="prose-col mt-4 space-y-2 text-sm text-muted">
+            {h.facts.map((f) => (
+              <li class="flex gap-2.5">
+                <span class="text-accent" aria-hidden="true">
+                  &#8250;
+                </span>
+                <span>{f[lang]}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+
+    <h3 class="label mt-12">{t("experience.education.title")}</h3>
+    <ul class="mt-4 divide-y divide-border border-t border-border">
+      {
+        education.map((e) => (
+          <li class="py-6">
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span class="data text-sm text-muted">{e.dateLabel[lang]}</span>
+              <h4 class="flex-1 text-base font-medium">{e.degree[lang]}</h4>
+            </div>
+            <p class="mt-1 text-sm text-muted">
+              {e.institution} &middot; {e.place[lang]}
+            </p>
+            {e.field[lang] && <p class="data mt-1 text-xs text-muted">{e.field[lang]}</p>}
+            {e.note[lang] && (
+              <p class="prose-col mt-2 text-sm text-muted" set:html={e.note[lang]} />
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

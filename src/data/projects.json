@@ -1,15 +1,181 @@
 [
   {
-    "title": { "en": "Example Project", "es": "Proyecto de ejemplo" },
-    "description": {
-      "en": "Short description of the project.",
-      "es": "Descripción corta del proyecto."
+    "id": "lamula",
+    "featured": true,
+    "years": "2021—",
+    "status": "poc",
+    "title": {
+      "en": "LAMULA — vendor-independent weather radar chain",
+      "es": "LAMULA — cadena de radar meteorológico sin dependencia de fabricante"
     },
-    "year": 2024,
-    "stack": ["Python", "TypeScript"],
+    "summary": {
+      "en": "The full processing chain of a commercial weather radar, rebuilt from the FPGA digital receiver to the WebGL product viewer.",
+      "es": "La cadena completa de procesamiento de un radar meteorológico comercial, reconstruida desde el receptor digital en FPGA hasta el visor de productos en WebGL."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> A weather radar whose control and processing software is a closed vendor suite is a radar you cannot maintain, extend or repair on your own terms. Spare parts and licences become a single point of failure for a national observation asset.</p><p><strong>The constraint that is not negotiable.</strong> The meteorological data must stay standard. Rebuilding the chain is worthless if the output stops being readable by the tools and archives the field already uses.</p><p><strong>The decision.</strong> Emulate the interface instead of licensing it. The control processor archives volume observations as NEXRAD Level-II and presents itself to ORPG as a WSR-88D RDA by implementing ICD 2620002 in full. The standard becomes the seam: everything behind it is ours, everything in front of it is unchanged.</p><p><strong>Where it stands.</strong> Open source, and today a proof of concept — not a system in operation. It descends from <strong>Vesta</strong>, the processing suite the team built at the Cuban meteorological service, which has run that network since 2014, a Gematronik radar among them. Parts of this chain start from Vesta code that was not all mine, and finishing it needs the whole team, not just me.</p><p><strong>What the design bought.</strong> A hardware abstraction layer with two interchangeable adapters — the real plant over Modbus TCP / Profibus, and a faithful simulator — so control logic is developed and tested without occupying the radar. Hard real-time stays in the FPGA and DSP; the orchestration layer is soft real-time Python and does not pretend otherwise.</p>",
+      "es": "<p><strong>El problema.</strong> Un radar meteorológico cuyo software de control y procesamiento es una suite cerrada del fabricante es un radar que no puedes mantener, extender ni reparar en tus términos. Los repuestos y las licencias se vuelven un punto único de fallo para un activo nacional de observación.</p><p><strong>La restricción que no se negocia.</strong> El dato meteorológico tiene que seguir siendo estándar. Reconstruir la cadena no vale nada si la salida deja de ser legible por las herramientas y los archivos que el campo ya usa.</p><p><strong>La decisión.</strong> Emular la interfaz en vez de licenciarla. El procesador de control archiva observaciones volumétricas en NEXRAD Level-II y se presenta ante ORPG como un RDA WSR-88D implementando por completo el ICD 2620002. El estándar se vuelve la costura: todo lo que queda detrás es nuestro, todo lo que queda delante no cambia.</p><p><strong>En qué punto está.</strong> Código abierto y, hoy, una prueba de concepto — no un sistema en explotación. Desciende de <strong>Vesta</strong>, la suite de procesamiento que el equipo construyó en el servicio meteorológico cubano y que sostiene esa red desde 2014, con un radar Gematronik entre ellos. Parte de esta cadena arranca de código de Vesta que no era todo mío, y terminarla requiere al equipo completo, no solo a mí.</p><p><strong>Qué permitió el diseño.</strong> Una capa de abstracción de hardware con dos adaptadores intercambiables — la planta real por Modbus TCP / Profibus y un simulador fiel — de modo que la lógica de control se desarrolla y se prueba sin ocupar el radar. El tiempo real duro se queda en el FPGA y el DSP; la capa de orquestación es Python en tiempo real blando y no pretende otra cosa.</p>"
+    },
+    "stack": [
+      "FPGA / Xilinx",
+      "C",
+      "Python",
+      "Vue 3",
+      "Nuxt 3",
+      "OpenLayers WebGL",
+      "Modbus TCP",
+      "Profibus",
+      "Docker Swarm",
+      "PostgreSQL"
+    ],
+    "links": {
+      "demo": "https://webviewer.ladetec.com/",
+      "code": "https://github.com/vladimir1284/lamula-rcp",
+      "docs": "https://lamula-rcp-docs.ladetec.com/"
+    },
+    "repos": [
+      {
+        "name": "DRX",
+        "url": "https://github.com/vladimir1284/DRX"
+      },
+      {
+        "name": "lamula-dsp",
+        "url": "https://github.com/vladimir1284/lamula-dsp"
+      },
+      {
+        "name": "lamula-rcp",
+        "url": "https://github.com/vladimir1284/lamula-rcp"
+      },
+      {
+        "name": "nexrad-l3-pipeline",
+        "url": "https://github.com/vladimir1284/nexrad-l3-pipeline"
+      },
+      {
+        "name": "lamula-webviewer",
+        "url": "https://github.com/vladimir1284/lamula-webviewer"
+      }
+    ]
+  },
+  {
+    "id": "commission",
+    "featured": true,
+    "years": "2026",
+    "status": "production",
+    "title": {
+      "en": "Replacing a 20-year-old commission engine",
+      "es": "Sustituir un motor de comisiones de 20 años"
+    },
+    "summary": {
+      "en": "A money-critical MLM commission engine, replaced on a cold cutover with no parallel run — and the four months of reconciliation that followed.",
+      "es": "Un motor de comisiones MLM crítico para el dinero, sustituido en un corte en frío sin ejecución en paralelo — y los cuatro meses de conciliación que vinieron después."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> Twenty years of commission rules living in accumulated SQL, with nested conditionals whose execution path depended on the year a plan had been configured. The source was readable; the intent was not. The person who designed it was unavailable.</p><p><strong>The constraint that was not negotiable.</strong> A cold cutover. The old engine was switched off at 23:59 on the 20th of the month and the new one went live the same night, with no parallel run — so the first two biweekly periods were part old engine, which could no longer be queried, and part new engine, which did not yet encode every rule.</p><p><strong>What did not work.</strong> Reading the old SQL to recover the rules. We stopped writing code and sat with the client's finance department to define the terms instead: what a generation is, what makes a director active, what happens when someone changes level mid-month. The hardest case was multi-level commissions paid to directors over successive generations below them, on a hierarchy that changes over time — a slowly changing dimension, with almost no clean history to validate against.</p><p><strong>The outcome, stated honestly.</strong> About four months of cycles with errors, reconciled with finance, each discrepancy traced to a specific plan rule rather than written off as a system fault. Residual error at the end: on the order of <span class=\"data\">$100</span> in total, across payments summing to hundreds of thousands of dollars distributed among thousands of consultants. Written four-handed with Alejandro Cespón.</p>",
+      "es": "<p><strong>El problema.</strong> Veinte años de reglas de comisión viviendo en SQL acumulado, con condicionales anidados cuya ruta de ejecución dependía del año en que se había configurado el plan. El código era legible; la intención no. Quien lo diseñó no estaba disponible.</p><p><strong>La restricción que no se negociaba.</strong> Un corte en frío. El motor viejo se apagó a las 23:59 del día 20 del mes y el nuevo entró esa misma noche, sin ejecución en paralelo — así que los dos primeros periodos quincenales fueron en parte del motor viejo, que ya no se podía consultar, y en parte del nuevo, que todavía no codificaba todas las reglas.</p><p><strong>Qué no funcionó.</strong> Leer el SQL viejo para recuperar las reglas. Dejamos de escribir código y nos sentamos con el departamento financiero del cliente a definir los términos: qué es una generación, qué hace que un director esté activo, qué pasa cuando alguien cambia de nivel a mitad de mes. El caso más duro fueron las comisiones multinivel que cobran los directores sobre generaciones sucesivas por debajo, sobre una jerarquía que cambia en el tiempo — una dimensión de cambio lento, casi sin histórico limpio contra el que validar.</p><p><strong>El resultado, dicho con honestidad.</strong> Unos cuatro meses de ciclos con errores, conciliados con finanzas, con cada discrepancia rastreada hasta una regla concreta del plan en lugar de darla por fallo genérico del sistema. Error residual al final: del orden de <span class=\"data\">100 USD</span> en total, sobre pagos que suman cientos de miles de dólares repartidos entre miles de consultores. Escrito a cuatro manos con Alejandro Cespón.</p>"
+    },
+    "stack": ["Python", "SQL", "Recursive CTEs", "BigCommerce", "Kill Bill"],
     "links": {
       "demo": "",
-      "code": "https://github.com/vladimir1284/"
+      "code": "",
+      "docs": "https://nitza.dev/blog/commission-engine/"
+    },
+    "note": {
+      "en": "The number worth quoting here is not the one that sounds good. Four months of errors is the honest headline; the ~$100 residual is what the four months bought.",
+      "es": "La cifra que vale citar aquí no es la que suena bien. Cuatro meses con errores es el titular honesto; los ~100 USD residuales son lo que compraron esos cuatro meses."
+    }
+  },
+  {
+    "id": "siting",
+    "featured": true,
+    "years": "2026—",
+    "status": "scaffolding",
+    "title": {
+      "en": "Radar Siting Toolkit",
+      "es": "Radar Siting Toolkit"
+    },
+    "summary": {
+      "en": "Open-source QGIS plugin answering where weather radars should be sited, and what each configuration would actually see.",
+      "es": "Plugin QGIS de código abierto que responde dónde emplazar radares meteorológicos y qué vería realmente cada configuración."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> Siting a radar network is an investment decision made by a government or a donor. It needs reproducible geometric evidence, not a pretty coverage picture.</p><p><strong>The decision that matters.</strong> For each azimuth the terrain is sampled along the ray at native DEM resolution, accumulating the maximum horizon angle seen up to each range, corrected for earth curvature by an effective-radius factor. Minimum clear elevation and minimum visible height fall out directly — a single <span class=\"data\">O(N)</span> pass per ray, with no discrete elevation-angle loop.</p><p><strong>A detail that is easy to get wrong.</strong> Partial beam blockage is published as the range-cumulative maximum, never as raw per-bin PBB. Publishing per-bin values produces wrong maps across the entire sector behind an obstacle.</p><p><strong>A dependency refused on purpose.</strong> Implemented in plain numpy. wradlib would pull in scipy, matplotlib, xarray and xradar and recommends a conda install — which cannot be installed from the QGIS Plugin Manager, where the users actually are. wradlib is used offline, as a validation reference only.</p>",
+      "es": "<p><strong>El problema.</strong> Emplazar una red de radares es una decisión de inversión que toma un gobierno o un donante. Necesita evidencia geométrica reproducible, no una imagen bonita de cobertura.</p><p><strong>La decisión que importa.</strong> Por cada azimut se muestrea el terreno a lo largo del rayo a la resolución nativa del DEM, acumulando el ángulo máximo de horizonte visto hasta cada rango, corregido por curvatura terrestre mediante un factor de radio efectivo. La elevación mínima despejada y la altura mínima visible salen directo — una sola pasada <span class=\"data\">O(N)</span> por rayo, sin bucle discreto de ángulos de elevación.</p><p><strong>Un detalle fácil de hacer mal.</strong> El bloqueo parcial del haz se publica como máximo acumulado en rango, nunca como PBB crudo por bin. Publicar valores por bin produce mapas equivocados en todo el sector detrás de un obstáculo.</p><p><strong>Una dependencia rechazada a propósito.</strong> Implementado en numpy puro. wradlib arrastraría scipy, matplotlib, xarray y xradar, y recomienda instalación por conda — que no se puede instalar desde el Gestor de Complementos de QGIS, que es donde están los usuarios. wradlib se usa fuera de línea, solo como referencia de validación.</p>"
+    },
+    "stack": ["Python", "numpy", "QGIS", "GDAL", "Jupyter"],
+    "links": {
+      "demo": "",
+      "code": "https://github.com/vladimir1284/radar-siting-toolkit",
+      "docs": ""
+    },
+    "outOfScope": {
+      "en": [
+        "Rain attenuation and frequency-band selection",
+        "Real anomalous propagation — only the effective earth-radius factor is parameterised",
+        "Sea clutter, ground clutter, RF interference, spectrum compatibility",
+        "Quantitative precipitation estimation and nowcasting",
+        "Tower structure, radome, wind load, electrical resilience",
+        "Cost, lifecycle and staffing"
+      ],
+      "es": [
+        "Atenuación por lluvia y selección de banda de frecuencia",
+        "Propagación anómala real — solo se parametriza el factor de radio terrestre efectivo",
+        "Clutter de mar, clutter de suelo, interferencia de RF, compatibilidad espectral",
+        "Estimación cuantitativa de precipitación y nowcasting",
+        "Estructura de torre, radomo, carga de viento, resiliencia eléctrica",
+        "Costo, ciclo de vida y personal"
+      ]
+    },
+    "note": {
+      "en": "This toolkit covers roughly 15% of a full siting study. Saying so is the point: the number that is defensible is worth more than the number that is impressive.",
+      "es": "Este toolkit cubre aproximadamente el 15% de un estudio completo de emplazamiento. Decirlo es justamente el punto: la cifra defendible vale más que la cifra impresionante."
+    }
+  },
+  {
+    "id": "modbuslab",
+    "featured": true,
+    "years": "2012 · 2026",
+    "status": "production",
+    "title": {
+      "en": "ModbusLab — virtual industrial automation laboratory",
+      "es": "ModbusLab — laboratorio virtual de automatización industrial"
+    },
+    "summary": {
+      "en": "A Modbus teaching lab built as a PyQt desktop application in 2012, abandoned when the hardware it still needed became unavailable, and rebuilt in 2026 with no hardware at all.",
+      "es": "Laboratorio docente de Modbus construido como aplicación de escritorio en PyQt en 2012, abandonado cuando dejó de haber el hardware que todavía necesitaba, y reconstruido en 2026 sin hardware alguno."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> Industrial automation is taught on equipment that is expensive, scarce, and sitting in one room. A student with an hour of lab time a week does not get to make the mistakes that teach the subject.</p><p><strong>The first answer, in 2012.</strong> A PyQt desktop application driving the lab's Modbus devices. It ran for two or three course cycles and then stopped being used — because it had not actually removed the constraint. The software was on the student's machine, but the PLC and the power analyser were still in the laboratory, and when that hardware stopped being available the tool went with it.</p><p><strong>The second answer, fourteen years later.</strong> The same idea rebuilt with the devices themselves simulated: a virtual Master-K120S PLC and a virtual WM14 power analyser served over the web, speaking Modbus. Nothing physical is required, so the laboratory is wherever the student is. My students are using it now.</p><p><strong>What it demonstrates.</strong> Not persistence — diagnosis. The 2012 version failed for a reason I could name, and the rebuild is aimed at that reason rather than at the technology that had moved on in the meantime.</p>",
+      "es": "<p><strong>El problema.</strong> La automatización industrial se enseña sobre equipamiento caro, escaso y que está en un solo salón. Un estudiante con una hora de laboratorio a la semana no llega a cometer los errores que enseñan la materia.</p><p><strong>La primera respuesta, en 2012.</strong> Una aplicación de escritorio en PyQt que manejaba los dispositivos Modbus del laboratorio. Se usó dos o tres cursos y dejó de usarse — porque en realidad no había quitado la restricción. El software estaba en la máquina del estudiante, pero el PLC y el analizador de red seguían en el laboratorio, y cuando ese hardware dejó de estar disponible la herramienta se fue con él.</p><p><strong>La segunda respuesta, catorce años después.</strong> La misma idea reconstruida con los propios dispositivos simulados: un PLC Master-K120S virtual y un analizador WM14 virtual servidos por web, hablando Modbus. No hace falta nada físico, así que el laboratorio está donde esté el estudiante. Mis estudiantes lo están usando ahora.</p><p><strong>Qué demuestra.</strong> No constancia — diagnóstico. La versión de 2012 falló por una razón que puedo nombrar, y la reconstrucción apunta a esa razón y no a la tecnología que mientras tanto había cambiado.</p>"
+    },
+    "stack": ["SvelteKit", "TypeScript", "Cloudflare Workers", "Modbus RTU/TCP", "Python", "PyQt"],
+    "links": {
+      "demo": "",
+      "code": "https://github.com/vladimir1284/modbuslab-web",
+      "docs": "https://modbuslab-doc.ladetec.com/"
+    }
+  },
+  {
+    "id": "reducts",
+    "featured": true,
+    "years": "2015—2022",
+    "status": "archived",
+    "title": {
+      "en": "Reduct computation: from the algorithm to the FPGA",
+      "es": "Cómputo de reductos: del algoritmo al FPGA"
+    },
+    "summary": {
+      "en": "Doctoral work on an NP-hard combinatorial problem, attacked simultaneously in algorithm design and in hardware.",
+      "es": "Trabajo doctoral sobre un problema combinatorio NP-duro, atacado a la vez en diseño de algoritmos y en hardware."
+    },
+    "body": {
+      "en": "<p><strong>The problem.</strong> Computing all reducts of a decision system — the minimal attribute subsets that preserve its discernibility — is NP-hard. The naive approach enumerates the power set, and the cost is not something you optimise your way out of with better code.</p><p><strong>Two fronts at once.</strong> On the algorithmic side, GCreduct prunes the search space using gap elimination and attribute contribution; MinReduct computes all the shortest reducts without enumerating the rest. On the hardware side, a co-designed FPGA platform accelerates the computation of irreducible testors.</p><p><strong>Why it still matters here.</strong> It is the same instinct that produced everything else on this page: when a computation is expensive, the answer is rarely a bigger machine. It is a better algorithm, the right place to run it, and the willingness to design both.</p>",
+      "es": "<p><strong>El problema.</strong> Computar todos los reductos de un sistema de decisión — los subconjuntos mínimos de atributos que preservan su capacidad de discernimiento — es NP-duro. El enfoque ingenuo enumera el conjunto potencia, y de ese costo no se sale escribiendo mejor código.</p><p><strong>Dos frentes a la vez.</strong> Del lado algorítmico, GCreduct poda el espacio de búsqueda mediante eliminación de brechas y contribución de atributos; MinReduct computa todos los reductos más cortos sin enumerar el resto. Del lado del hardware, una plataforma FPGA co-diseñada acelera el cómputo de testores irreducibles.</p><p><strong>Por qué sigue importando aquí.</strong> Es el mismo instinto que produjo todo lo demás en esta página: cuando un cómputo es caro, la respuesta rara vez es una máquina más grande. Es un algoritmo mejor, el lugar correcto donde correrlo, y la disposición a diseñar ambos.</p>"
+    },
+    "stack": ["FPGA", "VHDL", "C", "Rough set theory"],
+    "links": {
+      "demo": "",
+      "code": "",
+      "docs": ""
     }
   }
 ]

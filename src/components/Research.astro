@@ -1,6 +1,121 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import publications from "../data/publications.json";
+import training from "../data/training.json";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+const SCHOLAR_URL = "https://scholar.google.com/citations?user=tIVrnBwAAAAJ";
+const THESIS_URL =
+  "https://repositorioinstitucional.buap.mx/items/a851e155-89f6-4b5f-92d7-a6d363365b4c/full";
+
+/** Journal vs conference, shown as a tag on each entry. */
+const typeKey = (type: string): UIKey => `research.type.${type}` as UIKey;
+
+/** Publication groups, in the order they should be read. Empty groups are skipped. */
+const groups = ["core", "radar", "teaching"] as const;
+const grouped = groups
+  .map((g) => ({
+    id: g,
+    label: `research.group.${g}` as UIKey,
+    items: publications.filter((p) => p.group === g).sort((a, b) => b.year - a.year),
+  }))
+  .filter((g) => g.items.length > 0);
 ---
-<!-- Research stub -->
+
+<section id="research" class="section">
+  <div class="shell">
+    <p class="label">02</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("research.title")}
+    </h2>
+    <p class="prose-col mt-5 text-muted">{t("research.lede")}</p>
+
+    <div class="panel mt-10 p-6">
+      <p class="label">{t("research.thesis.title")}</p>
+      <h3 class="mt-2 text-lg font-medium italic">{t("research.thesis.name")}</h3>
+      <p class="prose-col mt-3 text-sm text-muted">{t("research.thesis.body")}</p>
+      <p class="mt-4">
+        <a
+          href={THESIS_URL}
+          rel="noopener"
+          class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+        >
+          {t("research.thesis.repo")} &rarr;
+        </a>
+      </p>
+    </div>
+
+    <h3 class="label mt-14">{t("research.publications.title")}</h3>
+
+    {
+      grouped.map((group) => (
+        <div class="mt-8">
+          <p class="data text-xs text-accent">{t(group.label)}</p>
+          <ul class="mt-4 divide-y divide-border border-t border-border">
+            {group.items.map((p) => (
+              <li class="py-5">
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span class="data text-sm text-muted">{p.year}</span>
+                  <h4 class="flex-1 text-base font-medium">{p.title}</h4>
+                  <span class="tag">{t(typeKey(p.type))}</span>
+                </div>
+                <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
+                <p class="mt-1 text-sm text-muted">
+                  <span class="italic">{p.venue}</span>
+                  {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
+                </p>
+                <p class="prose-col mt-2.5 text-sm text-muted">{p.abstract[lang]}</p>
+                {(p.doi || p.pdf) && (
+                  <p class="mt-3 flex gap-4">
+                    {p.doi && (
+                      <a
+                        class="data t-fast text-xs text-accent hover:text-accent-hover"
+                        href={p.doi}
+                      >
+                        {t("research.doi")}
+                      </a>
+                    )}
+                    {p.pdf && (
+                      <a
+                        class="data t-fast text-xs text-accent hover:text-accent-hover"
+                        href={p.pdf}
+                      >
+                        {t("research.pdf")}
+                      </a>
+                    )}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+
+    <p class="mt-8">
+      <a
+        href={SCHOLAR_URL}
+        rel="noopener"
+        class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+      >
+        {t("research.scholar")} &rarr;
+      </a>
+    </p>
+
+    <h3 class="label mt-14">{t("research.training.title")}</h3>
+    <ul class="mt-4 divide-y divide-border border-t border-border">
+      {
+        training.map((c) => (
+          <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4">
+            <span class="data text-sm text-muted">{c.year}</span>
+            <span class="flex-1 text-sm">{c.title[lang]}</span>
+            <span class="data text-xs text-muted">{c.place[lang]}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,14 +1,264 @@
 [
   {
-    "title": "Example Publication Title",
-    "authors": ["Rodríguez, V.", "Co-author, A."],
-    "venue": "Journal / Conference Name",
-    "year": 2024,
+    "group": "core",
+    "type": "journal",
+    "title": "MinReduct: A new algorithm for computing the shortest reducts",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "J. Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés",
+      "J. Arturo Olvera-López"
+    ],
+    "venue": "Pattern Recognition Letters",
+    "detail": "vol. 138, pp. 177–184",
+    "year": 2020,
+    "doi": "https://doi.org/10.1016/j.patrec.2020.07.004",
+    "pdf": "",
+    "abstract": {
+      "en": "Computes all the shortest reducts of a decision system using binary cumulative operations over a pairwise comparison matrix, with a fast candidate evaluation that avoids the costly operations most prior algorithms rely on.",
+      "es": "Computa todos los reductos más cortos de un sistema de decisión mediante operaciones binarias acumulativas sobre una matriz de comparación por pares, con una evaluación rápida de candidatos que evita las operaciones costosas de las que dependen los algoritmos previos."
+    }
+  },
+  {
+    "group": "core",
+    "type": "journal",
+    "title": "A new algorithm for reduct computation based on gap elimination and attribute contribution",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "Jesús A. Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés"
+    ],
+    "venue": "Information Sciences",
+    "detail": "vol. 435, pp. 111–123",
+    "year": 2018,
+    "doi": "https://doi.org/10.1016/j.ins.2017.12.027",
+    "pdf": "",
+    "abstract": {
+      "en": "GCreduct: computes all reducts of a decision system using the pruning properties of gap elimination and attribute contribution, with simpler candidate-evaluation operations to cut runtime.",
+      "es": "GCreduct: computa todos los reductos de un sistema de decisión aprovechando las propiedades de poda de la eliminación de brechas y la contribución de atributos, con operaciones de evaluación de candidatos más simples para reducir el tiempo de ejecución."
+    }
+  },
+  {
+    "group": "core",
+    "type": "journal",
+    "title": "A fast hardware software platform for computing irreducible testors",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Francisco Martínez-Trinidad",
+      "Jesús Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés",
+      "Claudia Feregrino-Uribe",
+      "René Cumplido"
+    ],
+    "venue": "Expert Systems with Applications",
+    "detail": "vol. 42, pp. 9612–9619",
+    "year": 2015,
+    "doi": "https://doi.org/10.1016/j.eswa.2015.07.037",
+    "pdf": "",
+    "abstract": {
+      "en": "A hardware/software co-designed FPGA platform for computing irreducible testors, following a pruning strategy that cuts the number of candidates evaluated — the algorithm and the silicon designed together.",
+      "es": "Plataforma FPGA con co-diseño hardware/software para computar testores irreducibles, con una estrategia de poda que reduce el número de candidatos evaluados — el algoritmo y el silicio diseñados juntos."
+    }
+  },
+  {
+    "group": "core",
+    "type": "conference",
+    "title": "A Comparative Study of Two Algorithms for Computing the Shortest Reducts: MiLIT and MinReduct",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "J. Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés",
+      "J. Arturo Olvera-López"
+    ],
+    "venue": "Mexican Conference on Pattern Recognition (MCPR), LNCS",
+    "detail": "pp. 57–67",
+    "year": 2021,
+    "doi": "https://doi.org/10.1007/978-3-030-77004-4_6",
+    "pdf": "",
+    "abstract": {
+      "en": "Head-to-head evaluation of the two fastest published algorithms for computing all the shortest reducts, identifying which decision-system characteristics favour each.",
+      "es": "Evaluación frente a frente de los dos algoritmos publicados más rápidos para computar todos los reductos más cortos, identificando qué características del sistema de decisión favorecen a cada uno."
+    }
+  },
+  {
+    "group": "core",
+    "type": "conference",
+    "title": "The Impact of Basic Matrix Dimension on the Performance of Algorithms for Computing Typical Testors",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "Jesús Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés"
+    ],
+    "venue": "Mexican Conference on Pattern Recognition (MCPR), LNCS",
+    "detail": "pp. 41–50",
+    "year": 2018,
+    "doi": "https://doi.org/10.1007/978-3-319-92198-3_5",
+    "pdf": "",
+    "abstract": {
+      "en": "Experimental study of how the dimensions of the basic matrix affect algorithm runtime — evidence for choosing the right algorithm for a given dataset rather than assuming one dominates.",
+      "es": "Estudio experimental de cómo las dimensiones de la matriz básica afectan el tiempo de ejecución — evidencia para elegir el algoritmo adecuado a cada conjunto de datos en vez de suponer que uno domina siempre."
+    }
+  },
+  {
+    "group": "core",
+    "type": "conference",
+    "title": "Fast-BR vs. Fast-CT_EXT: An Empirical Performance Study",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "J. Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés"
+    ],
+    "venue": "Mexican Conference on Pattern Recognition (MCPR), LNCS",
+    "detail": "pp. 127–136",
+    "year": 2017,
+    "doi": "https://doi.org/10.1007/978-3-319-59226-8_13",
+    "pdf": "",
+    "abstract": {
+      "en": "Empirical comparison of the two fastest state-of-the-art algorithms for computing typical testors, over synthetic basic matrices with controlled characteristics and over standard UCI datasets.",
+      "es": "Comparación empírica de los dos algoritmos más rápidos del estado del arte para computar testores típicos, sobre matrices básicas sintéticas de características controladas y sobre conjuntos de datos estándar del UCI."
+    }
+  },
+  {
+    "group": "core",
+    "type": "conference",
+    "title": "A hardware architecture for filtering irreducible testors",
+    "authors": [
+      "Vladímir Rodríguez-Diez",
+      "José Fco. Martínez-Trinidad",
+      "J. Ariel Carrasco-Ochoa",
+      "Manuel S. Lazo-Cortés",
+      "René Cumplido",
+      "Claudia Feregrino-Uribe"
+    ],
+    "venue": "International Conference on ReConFigurable Computing and FPGAs (ReConFig)",
+    "detail": "pp. 1–4",
+    "year": 2014,
+    "doi": "https://doi.org/10.1109/ReConFig.2014.7032526",
+    "pdf": "",
+    "abstract": {
+      "en": "An FPGA architecture that filters irreducible testors in hardware, removing the step that dominated runtime in software implementations. The design that led to the hardware/software platform published the following year.",
+      "es": "Arquitectura FPGA que filtra testores irreducibles en hardware, eliminando el paso que dominaba el tiempo de ejecución en las implementaciones en software. El diseño que condujo a la plataforma hardware/software publicada al año siguiente."
+    }
+  },
+  {
+    "group": "radar",
+    "type": "journal",
+    "title": "Simulador de radar meteorológico basado en modelo de reflectividades en el espacio",
+    "authors": [
+      "Vladímir Rodríguez Diez",
+      "Orlando L. Rodríguez González",
+      "Milagros Diez Rodríguez"
+    ],
+    "venue": "Ingeniería Energética",
+    "detail": "vol. XXXIII, n.º 2, pp. 103–112",
+    "year": 2012,
+    "doi": "",
+    "pdf": "https://dialnet.unirioja.es/descarga/articulo/3961094.pdf",
+    "abstract": {
+      "en": "A weather-radar simulator driven by a spatial reflectivity distribution, used to study how the scan pattern and the acquisition and processing scheme distort the perception of a meteorological target. The question that the whole LAMULA chain is a working answer to, asked fourteen years earlier.",
+      "es": "Simulador de radar meteorológico alimentado por una distribución espacial de reflectividades, para estudiar cómo el patrón de barrido y el esquema de adquisición y procesamiento deforman la percepción del blanco meteorológico. La pregunta que la cadena LAMULA responde en la práctica, formulada catorce años antes."
+    }
+  },
+  {
+    "group": "radar",
+    "type": "conference",
+    "title": "Data processing in weather radars revisited",
+    "authors": ["Vladímir Rodríguez Diez", "Orlando L. Rodríguez González"],
+    "venue": "ERAD — Sixth European Conference on Radar in Meteorology and Hydrology",
+    "detail": "Sibiu, Romania",
+    "year": 2010,
+    "doi": "",
+    "pdf": "/papers/rodriguez-2010-erad-data-processing-weather-radars.pdf",
+    "abstract": {
+      "en": "A review of the weather-radar data processing chain presented at ERAD — the first published piece of the radar work, two years before the Camagüey Meteorological Centre.",
+      "es": "Revisión de la cadena de procesamiento de datos de radar meteorológico presentada en ERAD — la primera pieza publicada del trabajo de radar, dos años antes del Centro Meteorológico de Camagüey."
+    }
+  },
+  {
+    "group": "teaching",
+    "type": "journal",
+    "title": "Instrumento virtual con acceso local y remoto para prácticas de Ingeniería del Control",
+    "authors": [
+      "Orlando Regalón Anias",
+      "Vladímir Rodríguez Diez",
+      "Milagros Diez Rodríguez",
+      "Raúl Báez Prieto",
+      "Leisis López Rodríguez",
+      "Francisco Pacheco Ballagas"
+    ],
+    "venue": "RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones",
+    "detail": "vol. XXXVI, n.º 3, pp. 69–79",
+    "year": 2015,
+    "doi": "",
+    "pdf": "https://dialnet.unirioja.es/descarga/articulo/5695796.pdf",
+    "abstract": {
+      "en": "A virtual instrument reachable both from the lab bench and over the network, so a control-engineering practical does not depend on a student being physically in front of the rig. The same problem ModbusLab solves today.",
+      "es": "Instrumento virtual accesible tanto desde el puesto de laboratorio como por red, para que una práctica de Ingeniería del Control no dependa de que el estudiante esté físicamente frente al equipo. El mismo problema que hoy resuelve ModbusLab."
+    }
+  },
+  {
+    "group": "teaching",
+    "type": "journal",
+    "title": "Automatización integral del proceso de secado de bioproductos",
+    "authors": [
+      "Orlando Regalón Anias",
+      "Josué García Parrado",
+      "Danny Echevarría Báez",
+      "Francisco Herrera Fernández",
+      "Yunier Paneque Díaz",
+      "Santiago Bardanca Consuegra",
+      "Jesús Zamora Sánchez",
+      "Vladímir Rodríguez Diez",
+      "Leisis López Rodríguez"
+    ],
+    "venue": "RIELAC — Revista de Ingeniería Electrónica, Automática y Comunicaciones",
+    "detail": "vol. XXXVI, n.º 2, pp. 1–14",
+    "year": 2015,
+    "doi": "",
+    "pdf": "https://dialnet.unirioja.es/descarga/articulo/5695784.pdf",
+    "abstract": {
+      "en": "Full automation of a bioproduct drying process — industrial automation applied to a real plant, the field the Industrial Automation course teaches.",
+      "es": "Automatización integral de un proceso de secado de bioproductos — automatización industrial aplicada a una planta real, el terreno que enseña la asignatura de Automatización Industrial."
+    }
+  },
+  {
+    "group": "teaching",
+    "type": "journal",
+    "title": "Aplicación de algoritmos de control clásico, adaptable y robusto a sistemas dinámicos de parámetros variables",
+    "authors": [
+      "Orlando Regalón Anias",
+      "Vladímir Rodríguez Diez",
+      "Milagros Diez Rodríguez",
+      "Raúl Báez Prieto"
+    ],
+    "venue": "Ingeniería Energética",
+    "detail": "vol. XXXIII, n.º 3, pp. 184–195",
+    "year": 2012,
+    "doi": "",
+    "pdf": "https://www.redalyc.org/pdf/3291/329127751002.pdf",
+    "abstract": {
+      "en": "Classical, adaptive and robust control compared on first-order systems whose parameters drift over time — the trade-off that decides which controller a plant actually gets.",
+      "es": "Control clásico, adaptable y robusto comparados sobre sistemas de primer orden con parámetros que varían en el tiempo — el compromiso que decide qué controlador lleva realmente una planta."
+    }
+  },
+  {
+    "group": "teaching",
+    "type": "journal",
+    "title": "Software para el procesamiento de los ensayos de la máquina sincrónica",
+    "authors": ["Orlando L. Rodríguez González", "Vladímir Rodríguez Diez"],
+    "venue": "Ingeniería Energética",
+    "detail": "vol. XXX, n.º 1, pp. 30–36",
+    "year": 2009,
     "doi": "",
     "pdf": "",
     "abstract": {
-      "en": "Short abstract in English.",
-      "es": "Resumen corto en español."
+      "en": "Software for processing synchronous-machine test data, written the year I graduated. The first thing I published, and already the same pattern: an instrument produces data, and the data needs a program.",
+      "es": "Software para procesar los datos de los ensayos de la máquina sincrónica, escrito el año en que me gradué. Lo primero que publiqué, y ya el mismo patrón: un instrumento produce datos y los datos necesitan un programa."
     }
   }
 ]

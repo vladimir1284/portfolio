@@ -27,3 +27,10 @@ pnpm-debug.log*
 
 # Misc
 .wrangler/
+
+# Material auxiliar de trabajo (insumo, no contenido publicable)
+_material/
+
+# Notas de trabajo. Nunca se commitea: el repo es público y este archivo cita
+# cifras del cliente que están deliberadamente difuminadas en las capturas.
+PREGUNTAS.md

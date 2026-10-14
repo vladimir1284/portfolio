@@ -1,6 +1,162 @@
 ---
-import { resolveLang, useTranslations } from "../i18n/utils";
+import { resolveLang, useTranslations, otherLang } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import { localeCode } from "../i18n/ui";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+const other = otherLang(lang);
+const otherHref = getRelativeLocaleUrl(other, "");
+
+const sections = [
+  "about",
+  "system",
+  "research",
+  "projects",
+  "experience",
+  "contact",
+] as const satisfies readonly string[];
+
+/** `nav.<section>` keys exist for every section; assert once here, not at each call site. */
+const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
 ---
-<!-- Header stub -->
+
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-surface focus:px-4 focus:py-2 focus:text-text"
+>
+  {t("nav.skip")}
+</a>
+
+<header class="fixed inset-x-0 top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
+  <div class="shell flex h-16 items-center justify-between gap-4">
+    <a href="#top" class="data t-fast text-sm font-medium tracking-tight hover:text-accent">
+      VRD<span class="text-accent">.</span>
+    </a>
+
+    <nav aria-label={t("nav.about")} class="hidden md:block">
+      <ul class="flex items-center gap-6">
+        {
+          sections.map((s) => (
+            <li>
+              <a href={`#${s}`} class="t-fast text-sm text-muted hover:text-text">
+                {t(navKey(s))}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1">
+      <a
+        href={otherHref}
+        class="data t-fast rounded px-2 py-1.5 text-xs text-muted hover:text-accent"
+        aria-label={t("nav.lang.switch")}
+      >
+        {localeCode[other]}
+      </a>
+
+      <button
+        type="button"
+        id="theme-toggle"
+        class="t-fast rounded p-2 text-muted hover:text-accent"
+        aria-label={t("nav.theme.toggle")}
+      >
+        <svg
+          class="hidden h-4 w-4 dark:block"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+          ></path>
+        </svg>
+        <svg
+          class="block h-4 w-4 dark:hidden"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        id="menu-toggle"
+        class="t-fast rounded p-2 text-muted hover:text-accent md:hidden"
+        aria-label={t("nav.menu.open")}
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-label-open={t("nav.menu.open")}
+        data-label-close={t("nav.menu.close")}
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-nav" hidden class="border-t border-border md:hidden" aria-label={t("nav.about")}>
+    <ul class="shell flex flex-col py-2">
+      {
+        sections.map((s) => (
+          <li>
+            <a href={`#${s}`} class="t-fast block py-2.5 text-sm text-muted hover:text-text">
+              {t(navKey(s))}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
+    const toDark = !root.classList.contains("dark");
+    root.classList.toggle("dark", toDark);
+    root.classList.toggle("light", !toDark);
+    try {
+      localStorage.setItem("theme", toDark ? "dark" : "light");
+    } catch {
+      /* private mode / blocked storage — theme still applies for this visit */
+    }
+  });
+
+  const menuBtn = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-nav");
+  /** Keep `aria-expanded`, the accessible name and visibility in one place. */
+  function setMenu(open: boolean) {
+    if (!menuBtn) return;
+    menuBtn.setAttribute("aria-expanded", String(open));
+    const label = open ? menuBtn.dataset.labelClose : menuBtn.dataset.labelOpen;
+    if (label) menuBtn.setAttribute("aria-label", label);
+    if (menu) menu.hidden = !open;
+  }
+
+  menuBtn?.addEventListener("click", () => {
+    setMenu(menuBtn.getAttribute("aria-expanded") !== "true");
+  });
+  menu?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).tagName === "A") setMenu(false);
+  });
+</script>

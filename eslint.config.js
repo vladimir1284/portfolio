@@ -7,8 +7,10 @@ import globals from "globals";
 // arrays. Exporting the array directly avoids the deprecated `tseslint.config()`
 // overload (ts 6387) while keeping identical lint behavior.
 export default [
-  // never lint build output / generated / deps
-  { ignores: ["dist/", ".astro/", "node_modules/"] },
+  // never lint build output / generated / deps, nor the gitignored working
+  // material (`_material/` holds saved web pages, so it carries vendor JS).
+  // Flat config ignores `.eslintignore`, so the list has to live here.
+  { ignores: ["dist/", ".astro/", "node_modules/", "_material/"] },
 
   js.configs.recommended,
   ...tseslint.configs.recommended,

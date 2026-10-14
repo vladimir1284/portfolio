@@ -1,7 +1,7 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
-import { ogLocale, localeCode } from "../i18n/ui";
-import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from "astro:i18n";
+import { ogLocale } from "../i18n/ui";
+import { getAbsoluteLocaleUrl } from "astro:i18n";
 import "../styles/global.css";
 
 const lang = resolveLang(Astro.currentLocale);

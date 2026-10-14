@@ -19,7 +19,8 @@
     "verify:links": "linkinator ./dist --config .linkinatorrc.json",
     "verify:links:full": "linkinator ./dist --config .linkinatorrc.full.json",
     "verify": "pnpm lint && pnpm format:check && pnpm check && pnpm build && pnpm verify:links",
-    "verify:full": "pnpm lint && pnpm format:check && pnpm check && pnpm build && pnpm verify:links:full"
+    "verify:full": "pnpm lint && pnpm format:check && pnpm check && pnpm build && pnpm verify:links:full",
+    "build:cv": "python3 scripts/build_cv.py && python3 scripts/build_cv.py --lang es -o public/cv.es.pdf"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

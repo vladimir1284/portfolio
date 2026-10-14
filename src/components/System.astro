@@ -1,0 +1,125 @@
+---
+import { resolveLang, useTranslations } from "../i18n/utils";
+import { STAGES } from "./lamula/stages";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<section id="system" class="section">
+  <div class="shell">
+    <p class="label">00</p>
+    <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+      {t("system.title")}
+    </h2>
+    <p class="prose-col mt-5 text-muted">{t("system.lede")}</p>
+
+    <!--
+      Zero JavaScript by design. A native radio group already gives exactly the
+      behaviour this needs: one tab stop for the whole chain, arrow keys moving
+      between stages, and the selection driving which panel shows via `peer`.
+      Adding a script here would mean re-implementing — and degrading — what the
+      platform does correctly for free.
+    -->
+    <fieldset class="mt-12 flex flex-wrap items-stretch gap-2">
+      <legend class="sr-only">{t("system.title")}</legend>
+      {
+        STAGES.map((stage, i) => (
+          <>
+            <input
+              type="radio"
+              name="lamula-stage"
+              id={`stage-${stage.id}`}
+              class="peer sr-only"
+              checked={i === 0}
+            />
+            <label
+              for={`stage-${stage.id}`}
+              class="panel t-fast flex min-w-28 flex-1 cursor-pointer flex-col justify-between gap-2 p-3 text-muted peer-checked:border-accent peer-checked:text-text peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent hover:border-accent/60"
+            >
+              <span class="data text-[0.65rem] tracking-wider uppercase opacity-70">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="text-xs leading-snug font-medium">{t(stage.name)}</span>
+              {stage.annotation && (
+                <span class="data text-[0.65rem] text-accent">{stage.annotation}</span>
+              )}
+            </label>
+
+            <div class="order-last hidden w-full peer-checked:block">
+              <div class="panel mt-6 p-6">
+                <h3 class="text-lg font-medium tracking-tight">{t(stage.name)}</h3>
+                <div class="prose-col mt-3 text-sm text-muted" set:html={t(stage.body)} />
+
+                <dl class="mt-5 flex flex-wrap gap-x-10 gap-y-3">
+                  {stage.replaces && (
+                    <div>
+                      <dt class="label">{t("system.replaces")}</dt>
+                      <dd class="data mt-1 text-sm text-warn">{stage.replaces}</dd>
+                    </div>
+                  )}
+                  {stage.repo && (
+                    <div>
+                      <dt class="label">{t("system.repo")}</dt>
+                      <dd class="mt-1">
+                        <a
+                          href={stage.repo}
+                          rel="noopener"
+                          class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+                        >
+                          {stage.repo.replace("https://github.com/", "")} &rarr;
+                        </a>
+                      </dd>
+                    </div>
+                  )}
+                  {stage.docs && (
+                    <div>
+                      <dt class="label">{t("system.docs")}</dt>
+                      <dd class="mt-1 flex flex-wrap gap-x-5 gap-y-1">
+                        {stage.docs.map((url) => (
+                          <a
+                            href={url}
+                            rel="noopener"
+                            class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+                          >
+                            {new URL(url).hostname.replace(".ladetec.com", "")} &rarr;
+                          </a>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+
+                {stage.shot && (
+                  <figure class="mt-6 overflow-hidden rounded border border-border">
+                    <img
+                      src={stage.shot.src}
+                      alt={t(stage.shot.alt)}
+                      width={stage.shot.width}
+                      height={stage.shot.height}
+                      loading="lazy"
+                      decoding="async"
+                      class="block w-full bg-bg"
+                    />
+                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
+                      {t(stage.shot.caption)}
+                    </figcaption>
+                  </figure>
+                )}
+              </div>
+            </div>
+          </>
+        ))
+      }
+    </fieldset>
+
+    <!--
+      Provenance sits after the chain, not before it: the claim is worth reading
+      first, and the qualification is worth reading before anyone acts on it.
+    -->
+    <div class="panel mt-10 border-warn/40 p-6">
+      <p class="label text-warn">{t("system.status.title")}</p>
+      <div class="prose-col mt-3 text-sm text-muted" set:html={t("system.status.body")} />
+    </div>
+  </div>
+</section>
