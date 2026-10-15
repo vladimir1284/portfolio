@@ -113,7 +113,7 @@
   "experience.highlight.title": "Un curso en detalle",
   "experience.training.title": "Formación avanzada",
   "ask.title": "Pregunta a este sitio",
-  "ask.lede": "Un modelo de recuperación sobre esta página, los casos de estudio y los artículos publicados. Responde con cita y enlace, o no responde — no tiene acceso a nada que no esté en este sitio.",
+  "ask.lede": "Un modelo de recuperación sobre esta página, los casos de estudio y los artículos publicados.",
   "ask.disclaimer": "Las respuestas son generadas. Sigue el enlace y lee la fuente antes de citar nada de esto.",
   "ask.placeholder": "¿Qué sustituyó en la cadena de radar?",
   "ask.label": "Tu pregunta",

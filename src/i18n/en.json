@@ -113,7 +113,7 @@
   "experience.highlight.title": "Course in depth",
   "experience.training.title": "Advanced training",
   "ask.title": "Ask this site",
-  "ask.lede": "A retrieval model over this page, the case studies and the published papers. It answers with a citation and a link, or it does not answer — it has no access to anything that is not on this site.",
+  "ask.lede": "A retrieval model over this page, the case studies and the published papers.",
   "ask.disclaimer": "Answers are generated. Follow the link and read the source before quoting any of it.",
   "ask.placeholder": "What did he replace in the radar chain?",
   "ask.label": "Your question",
