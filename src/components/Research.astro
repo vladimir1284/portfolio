@@ -65,8 +65,22 @@ const asOf = new Date(`${citations.asOf}T00:00:00Z`).toLocaleDateString(
   lang === "es" ? "es-ES" : "en-GB",
   { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" }
 );
-/** Height unit in rem. The plot area is 6rem tall. */
-const citationUnit = 6 / maxCitations;
+/*
+  The bar heights are data, so they cannot be Tailwind utilities — and a `style`
+  attribute is not an option either: the CSP in scripts/build_headers.py carries
+  no 'unsafe-hashes', which bars style attributes outright, so the bars shipped
+  in b2e5d1c with no height at all. An inline <style> *element* is a different
+  thing: build_headers.py hashes it exactly like the theme script, so the policy
+  stays strict and the chart still draws. `style-src-attr 'unsafe-inline'` would
+  have been the smaller change and is not used — Firefox ignores the directive
+  and would have kept the bars invisible there.
+
+  Heights are a percentage of the plot area, which `h-24` gives a definite 6rem,
+  so the rules depend only on the counts.
+*/
+const barHeights = perYear
+  .map((c) => `.cit-bar-${c.year}{height:${((c.count / maxCitations) * 100).toFixed(2)}%}`)
+  .join("");
 ---
 
 <section id="research" class="section">
@@ -113,18 +127,16 @@ const citationUnit = 6 / maxCitations;
         </p>
       </div>
 
+      <style is:inline set:html={barHeights}></style>
       <div class="mt-6 flex items-end gap-1 sm:gap-1.5" aria-hidden="true">
         {
           perYear.map((c) => (
             <div class="flex min-w-0 flex-1 flex-col items-center gap-2">
               <div
-                class="flex w-full max-w-10 flex-col justify-end gap-px"
-                style="height: 6rem"
+                class="flex h-24 w-full max-w-10 flex-col justify-end gap-px"
                 title={t("research.citations.bar", { count: c.count, year: c.year })}
               >
-                {c.count > 0 && (
-                  <div class="w-full bg-accent" style={`height: ${c.count * citationUnit}rem`} />
-                )}
+                {c.count > 0 && <div class={`w-full bg-accent cit-bar-${c.year}`} />}
               </div>
               <span class="data text-[0.625rem] text-muted">{String(c.year).slice(2)}</span>
             </div>

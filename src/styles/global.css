@@ -219,6 +219,21 @@
     display: inline-block;
     text-align: right;
   }
+  /* Reserves the final figure's width so the count-up does not reflow the row.
+     Written per digit count because the width has to come from a stylesheet:
+     the CSP blocks `style` attributes, so an inline min-width never applied. */
+  .figure-count[data-digits="1"] {
+    min-width: 1ch;
+  }
+  .figure-count[data-digits="2"] {
+    min-width: 2ch;
+  }
+  .figure-count[data-digits="3"] {
+    min-width: 3ch;
+  }
+  .figure-count[data-digits="4"] {
+    min-width: 4ch;
+  }
   /* The space before `→` is part of the string, so it has to survive. */
   .figure-suffix {
     white-space: pre;
