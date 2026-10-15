@@ -142,6 +142,44 @@
     white-space: nowrap;
   }
 
+  /* Courses taught: a list on a phone, chips from `sm` up. `.tag` is built for
+     a stack name and keeps it on one line; a course title is a phrase, so a
+     chip holding one wraps to two lines and breaks the column's rhythm — and
+     at 390 px its `nowrap` width set the min-content width of the whole
+     Experience grid and pushed the section past the viewport. Wrapping stays
+     allowed in the chip too: in the narrow `lg` column the longest titles are
+     wider than the track. */
+  .course-item {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    padding-block: 0.5rem;
+    color: var(--color-muted);
+  }
+  /* The semester sits under the title on a phone, the way `field` does in the
+     education list beside it: inline, it pushed half the titles onto a second
+     line for a detail nobody scans the list for. In the chip it goes back
+     inline — a chip is one token, not two lines. */
+  .course-level {
+    display: block;
+    margin-top: 0.15rem;
+    opacity: 0.6;
+  }
+  @media (min-width: 640px) {
+    .course-item {
+      display: inline-block;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.25rem;
+    }
+    .course-level {
+      display: inline;
+      margin-top: 0;
+      margin-left: 0.5rem;
+    }
+  }
+
   /* Caveat badge — honest status, never decorative. */
   .badge-warn {
     display: inline-block;

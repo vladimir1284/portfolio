@@ -160,12 +160,14 @@ const positions = experience.positions as Position[];
         </ul>
 
         <h3 class="label mt-10">{t("experience.teaching.title")}</h3>
-        <ul class="mt-4 flex flex-wrap gap-2">
+        <ul
+          class="mt-4 divide-y divide-border border-t border-border sm:flex sm:flex-wrap sm:gap-2 sm:divide-y-0 sm:border-t-0"
+        >
           {
             courses.map((c) => (
-              <li class="tag">
+              <li class="course-item">
                 {c[lang]}
-                {c.level[lang] && <span class="ml-2 opacity-60">{c.level[lang]}</span>}
+                {c.level[lang] && <span class="course-level">{c.level[lang]}</span>}
               </li>
             ))
           }
