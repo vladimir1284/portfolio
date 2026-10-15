@@ -102,16 +102,26 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
       </a>
     </div>
 
-    <img
-      src="/img/radar-still.webp"
-      alt={t("hero.radar.alt")}
-      width="1600"
-      height="760"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      class="block w-full bg-bg"
-    />
+    <!--
+      The loop is the product of the chain, so it animates — but animation is
+      not negotiable against DESIGN.md §5: under `prefers-reduced-motion` the
+      `<source>` wins and the browser fetches the last frame instead, never the
+      GIF. `<picture>` is what makes that a fetch decision rather than a hidden
+      element, and it needs no script.
+    -->
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcset="/img/radar-loop-still.webp" />
+      <img
+        src="/img/radar-loop.gif"
+        alt={t("hero.radar.alt")}
+        width="960"
+        height="484"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="block w-full bg-bg"
+      />
+    </picture>
 
     <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
       {t("hero.radar.caption")}

@@ -16,6 +16,22 @@
       "en": "<p><strong>The problem.</strong> A weather radar whose control and processing software is a closed vendor suite is a radar you cannot maintain, extend or repair on your own terms. Spare parts and licences become a single point of failure for a national observation asset.</p><p><strong>The constraint that is not negotiable.</strong> The meteorological data must stay standard. Rebuilding the chain is worthless if the output stops being readable by the tools and archives the field already uses.</p><p><strong>The decision.</strong> Emulate the interface instead of licensing it. The control processor archives volume observations as NEXRAD Level-II and presents itself to ORPG as a WSR-88D RDA by implementing ICD 2620002 in full. The standard becomes the seam: everything behind it is ours, everything in front of it is unchanged.</p><p><strong>Where it stands.</strong> Open source, and today a proof of concept — not a system in operation. It descends from <strong>Vesta</strong>, the processing suite the team built at the Cuban meteorological service, which has run that network since 2014, a Gematronik radar among them. Parts of this chain start from Vesta code that was not all mine, and finishing it needs the whole team, not just me.</p><p><strong>What the design bought.</strong> A hardware abstraction layer with two interchangeable adapters — the real plant over Modbus TCP / Profibus, and a faithful simulator — so control logic is developed and tested without occupying the radar. Hard real-time stays in the FPGA and DSP; the orchestration layer is soft real-time Python and does not pretend otherwise.</p>",
       "es": "<p><strong>El problema.</strong> Un radar meteorológico cuyo software de control y procesamiento es una suite cerrada del fabricante es un radar que no puedes mantener, extender ni reparar en tus términos. Los repuestos y las licencias se vuelven un punto único de fallo para un activo nacional de observación.</p><p><strong>La restricción que no se negocia.</strong> El dato meteorológico tiene que seguir siendo estándar. Reconstruir la cadena no vale nada si la salida deja de ser legible por las herramientas y los archivos que el campo ya usa.</p><p><strong>La decisión.</strong> Emular la interfaz en vez de licenciarla. El procesador de control archiva observaciones volumétricas en NEXRAD Level-II y se presenta ante ORPG como un RDA WSR-88D implementando por completo el ICD 2620002. El estándar se vuelve la costura: todo lo que queda detrás es nuestro, todo lo que queda delante no cambia.</p><p><strong>En qué punto está.</strong> Código abierto y, hoy, una prueba de concepto — no un sistema en explotación. Desciende de <strong>Vesta</strong>, la suite de procesamiento que el equipo construyó en el servicio meteorológico cubano y que sostiene esa red desde 2014, con un radar Gematronik entre ellos. Parte de esta cadena arranca de código de Vesta que no era todo mío, y terminarla requiere al equipo completo, no solo a mí.</p><p><strong>Qué permitió el diseño.</strong> Una capa de abstracción de hardware con dos adaptadores intercambiables — la planta real por Modbus TCP / Profibus y un simulador fiel — de modo que la lógica de control se desarrolla y se prueba sin ocupar el radar. El tiempo real duro se queda en el FPGA y el DSP; la capa de orquestación es Python en tiempo real blando y no pretende otra cosa.</p>"
     },
+    "shots": [
+      {
+        "src": "/img/radar-still.webp",
+        "width": 1600,
+        "height": 760,
+        "coverOnly": true,
+        "alt": {
+          "en": "LAMULA WebViewer showing base reflectivity from the KEOX radar: a large precipitation system over the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs.",
+          "es": "LAMULA WebViewer mostrando reflectividad base del radar KEOX: un gran sistema de precipitación sobre la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie."
+        },
+        "caption": {
+          "en": "The last stage of the chain, the WebViewer. KEOX, base reflectivity (N0B), VCP 212, elevation 0.5° — 9 October 2026, 21:53 GMT−4. NEXRAD Level III decoded, regridded and rendered by the stages described above. Basemap © OpenStreetMap contributors.",
+          "es": "La última etapa de la cadena, el WebViewer. KEOX, reflectividad base (N0B), VCP 212, elevación 0,5° — 9 de octubre de 2026, 21:53 GMT−4. NEXRAD Level III decodificado, regrillado y renderizado por las etapas descritas arriba. Mapa base © colaboradores de OpenStreetMap."
+        }
+      }
+    ],
     "stack": [
       "FPGA / Xilinx",
       "C",
@@ -73,19 +89,21 @@
       "en": "<p><strong>The problem.</strong> <strong>Vesta | Proceso</strong> is the processing and visualisation program of the Radar Centre at Cuba's Institute of Meteorology, written in Delphi/VCL by Wilfredo Pozas. Forecasters have used it for years, and it works — but it is tied to Windows and to a toolchain whose licence and future are outside the institution's control. A tool that outlives its platform has to be rewritten before the platform forces the issue, not after.</p><p><strong>The constraint that is not negotiable.</strong> It must keep ingesting <strong>raw radar data</strong>. Deriving products from already-derived Level III output would be cheaper to build and would quietly cap what the tool can ever answer: once a product is computed, the choices behind it — thresholds, interpolation, the elevation it came from — are no longer yours to revisit.</p><p><strong>The decision.</strong> One codebase, two targets. The same Pascal core compiles to a desktop application and runs in the browser, and the browser build carries <strong>no backend at all</strong> — the volume is read client-side. Nothing to deploy, nothing to keep running, nothing to pay for while it is idle. Reach, without an operations bill.</p><p><strong>Why it is not part of the LAMULA chain.</strong> It reads the same archive the chain writes, but it is a separate tool, not a stage. The chain ends at a viewer that consumes Level III products generated upstream; Process starts from the raw volume and computes its own. Shown as a stage it would suggest a dependency that does not exist in either direction.</p><p><strong>What it is not.</strong> An analytical instrument rather than a display: it opens empty, and shows something once an observation is loaded. The screenshot below is a real Level-II volume, named in the caption — the same file can be pulled from NOAA's archive and compared.</p>",
       "es": "<p><strong>El problema.</strong> <strong>Vesta | Proceso</strong> es el programa de procesamiento y visualización del Centro de Radares del Instituto de Meteorología de Cuba, escrito en Delphi/VCL por Wilfredo Pozas. Los pronosticadores llevan años usándolo y funciona — pero está atado a Windows y a una cadena de herramientas cuya licencia y cuyo futuro no dependen de la institución. Una herramienta que va a sobrevivir a su plataforma hay que reescribirla antes de que la plataforma obligue, no después.</p><p><strong>La restricción que no se negocia.</strong> Tiene que seguir ingiriendo <strong>datos crudos de radar</strong>. Derivar productos a partir de una salida Level III ya derivada saldría más barato de construir y limitaría en silencio lo que la herramienta podrá preguntar nunca: una vez calculado el producto, las decisiones que hay detrás — umbrales, interpolación, de qué elevación salió — dejan de estar a tu alcance.</p><p><strong>La decisión.</strong> Un código, dos destinos. El mismo núcleo en Pascal compila a aplicación de escritorio y corre en el navegador, y la versión de navegador <strong>no lleva backend ninguno</strong>: el volumen se lee en el cliente. Nada que desplegar, nada que mantener en pie, nada que pagar mientras está ocioso. Alcance, sin factura de operación.</p><p><strong>Por qué no es parte de la cadena LAMULA.</strong> Lee el mismo archivo que la cadena escribe, pero es una herramienta aparte, no una etapa. La cadena termina en un visor que consume productos Level III generados aguas arriba; Process arranca del volumen crudo y calcula los suyos. Enseñarlo como etapa sugeriría una dependencia que no existe en ninguna de las dos direcciones.</p><p><strong>Lo que no es.</strong> Un instrumento analítico, no un visor: abre vacío y muestra algo cuando se le carga una observación. La captura de abajo es un volumen Level-II real, nombrado en el pie de foto — ese mismo fichero se baja del archivo de NOAA y se compara.</p>"
     },
-    "shot": {
-      "src": "/img/projects/lamula-process.webp",
-      "width": 1600,
-      "height": 760,
-      "alt": {
-        "en": "Process with a NEXRAD Level-II volume loaded: on the left a reflectivity PPI over the Gulf coast, on the right a range-height cross-section along azimuth 241°.",
-        "es": "Process con un volumen NEXRAD Level-II cargado: a la izquierda un PPI de reflectividad sobre la costa del Golfo, a la derecha un corte vertical RHI en el azimut 241°."
-      },
-      "caption": {
-        "en": "Level-II volume AR2V0006.126 · KEOX, Alabama · 10 Oct 2026, 02:36 UTC · PPI and RHI at azimuth 241°.",
-        "es": "Volumen Level-II AR2V0006.126 · KEOX, Alabama · 10 oct 2026, 02:36 UTC · PPI y RHI en el azimut 241°."
+    "shots": [
+      {
+        "src": "/img/projects/lamula-process.webp",
+        "width": 1600,
+        "height": 760,
+        "alt": {
+          "en": "Process with a NEXRAD Level-II volume loaded: on the left a reflectivity PPI over the Gulf coast, on the right a range-height cross-section along azimuth 241°.",
+          "es": "Process con un volumen NEXRAD Level-II cargado: a la izquierda un PPI de reflectividad sobre la costa del Golfo, a la derecha un corte vertical RHI en el azimut 241°."
+        },
+        "caption": {
+          "en": "Level-II volume AR2V0006.126 · KEOX, Alabama · 10 Oct 2026, 02:36 UTC · PPI and RHI at azimuth 241°.",
+          "es": "Volumen Level-II AR2V0006.126 · KEOX, Alabama · 10 oct 2026, 02:36 UTC · PPI y RHI en el azimut 241°."
+        }
       }
-    },
+    ],
     "note": {
       "en": "Successor to a program that is not mine. Vesta | Proceso was written by Wilfredo Pozas at the Radar Centre, and the rewrite starts from the behaviour his program defined.",
       "es": "Sucesor de un programa que no es mío. Vesta | Proceso lo escribió Wilfredo Pozas en el Centro de Radares, y la reescritura parte del comportamiento que definió su programa."
@@ -114,6 +132,34 @@
       "en": "<p><strong>The problem.</strong> Twenty years of commission rules living in accumulated SQL, with nested conditionals whose execution path depended on the year a plan had been configured. The source was readable; the intent was not. The person who designed it was unavailable.</p><p><strong>The constraint that was not negotiable.</strong> A cold cutover. The old engine was switched off at 23:59 on the 20th of the month and the new one went live the same night, with no parallel run — so the first two biweekly periods were part old engine, which could no longer be queried, and part new engine, which did not yet encode every rule.</p><p><strong>What did not work.</strong> Reading the old SQL to recover the rules. We stopped writing code and sat with the client's finance department to define the terms instead: what a generation is, what makes a director active, what happens when someone changes level mid-month. The hardest case was multi-level commissions paid to directors over successive generations below them, on a hierarchy that changes over time — a slowly changing dimension, with almost no clean history to validate against.</p><p><strong>The outcome, stated honestly.</strong> About four months of cycles with errors, reconciled with finance, each discrepancy traced to a specific plan rule rather than written off as a system fault. Residual error at the end: on the order of <span class=\"data\">$100</span> in total, across payments summing to hundreds of thousands of dollars distributed among thousands of consultants. Written four-handed with Alejandro Cespón.</p>",
       "es": "<p><strong>El problema.</strong> Veinte años de reglas de comisión viviendo en SQL acumulado, con condicionales anidados cuya ruta de ejecución dependía del año en que se había configurado el plan. El código era legible; la intención no. Quien lo diseñó no estaba disponible.</p><p><strong>La restricción que no se negociaba.</strong> Un corte en frío. El motor viejo se apagó a las 23:59 del día 20 del mes y el nuevo entró esa misma noche, sin ejecución en paralelo — así que los dos primeros periodos quincenales fueron en parte del motor viejo, que ya no se podía consultar, y en parte del nuevo, que todavía no codificaba todas las reglas.</p><p><strong>Qué no funcionó.</strong> Leer el SQL viejo para recuperar las reglas. Dejamos de escribir código y nos sentamos con el departamento financiero del cliente a definir los términos: qué es una generación, qué hace que un director esté activo, qué pasa cuando alguien cambia de nivel a mitad de mes. El caso más duro fueron las comisiones multinivel que cobran los directores sobre generaciones sucesivas por debajo, sobre una jerarquía que cambia en el tiempo — una dimensión de cambio lento, casi sin histórico limpio contra el que validar.</p><p><strong>El resultado, dicho con honestidad.</strong> Unos cuatro meses de ciclos con errores, conciliados con finanzas, con cada discrepancia rastreada hasta una regla concreta del plan en lugar de darla por fallo genérico del sistema. Error residual al final: del orden de <span class=\"data\">100 USD</span> en total, sobre pagos que suman cientos de miles de dólares repartidos entre miles de consultores. Escrito a cuatro manos con Alejandro Cespón.</p>"
     },
+    "shots": [
+      {
+        "src": "/img/projects/commission-cycle.webp",
+        "width": 1600,
+        "height": 816,
+        "alt": {
+          "en": "The commission engine's cycle screen: three steps — process, reverse and submit a cycle — over a table of end-of-period runs listing stage, cycle number, begin and end dates, status and the date each was run.",
+          "es": "Pantalla de ciclo del motor de comisiones: tres pasos — procesar, revertir y enviar un ciclo — sobre una tabla de corridas de fin de periodo con etapa, número de ciclo, fechas de inicio y fin, estado y fecha de ejecución."
+        },
+        "caption": {
+          "en": "Cycle control and the end-of-period run history — the rows reading “Commit failed” are part of the record, not an exception hidden from it. Nothing on this screen is client data: no names, no amounts, no contact details.",
+          "es": "Control de ciclo e historial de corridas de fin de periodo — las filas que dicen «Commit failed» son parte del registro, no una excepción que se le esconda. Nada en esta pantalla es dato de cliente: ni nombres, ni importes, ni datos de contacto."
+        }
+      },
+      {
+        "src": "/img/projects/commission-breaking-rank.webp",
+        "width": 1440,
+        "height": 880,
+        "alt": {
+          "en": "Breaking-rank evaluation diagram: a director at the root with breaking rank EM, and three branches of the downline. A branch is drawn solid and ticked while each rank stays below the breaking rank, and dashed with a cross from the first rank that equals or exceeds it.",
+          "es": "Diagrama de evaluación de rango de corte: un director en la raíz con rango de corte EM y tres ramas de la red descendente. La rama se dibuja sólida y marcada mientras cada rango se mantiene por debajo del rango de corte, y discontinua con una cruz desde el primer rango que lo iguala o lo supera."
+        },
+        "caption": {
+          "en": "The rule that took finance to define, not the old SQL to read: a rank below the breaking rank passes, a rank equal to or above it stops the branch. Drawn for the rewrite.",
+          "es": "La regla que hubo que definir con finanzas y no leer del SQL viejo: un rango por debajo del rango de corte pasa, uno igual o superior detiene la rama. Dibujado para la reescritura."
+        }
+      }
+    ],
     "stack": ["Python", "SQL", "Recursive CTEs", "BigCommerce", "Kill Bill"],
     "links": {
       "demo": "",
@@ -142,6 +188,21 @@
       "en": "<p><strong>The problem.</strong> Siting a radar network is an investment decision made by a government or a donor. It needs reproducible geometric evidence, not a pretty coverage picture.</p><p><strong>The decision that matters.</strong> For each azimuth the terrain is sampled along the ray at native DEM resolution, accumulating the maximum horizon angle seen up to each range, corrected for earth curvature by an effective-radius factor. Minimum clear elevation and minimum visible height fall out directly — a single <span class=\"data\">O(N)</span> pass per ray, with no discrete elevation-angle loop.</p><p><strong>A detail that is easy to get wrong.</strong> Partial beam blockage is published as the range-cumulative maximum, never as raw per-bin PBB. Publishing per-bin values produces wrong maps across the entire sector behind an obstacle.</p><p><strong>A dependency refused on purpose.</strong> Implemented in plain numpy. wradlib would pull in scipy, matplotlib, xarray and xradar and recommends a conda install — which cannot be installed from the QGIS Plugin Manager, where the users actually are. wradlib is used offline, as a validation reference only.</p>",
       "es": "<p><strong>El problema.</strong> Emplazar una red de radares es una decisión de inversión que toma un gobierno o un donante. Necesita evidencia geométrica reproducible, no una imagen bonita de cobertura.</p><p><strong>La decisión que importa.</strong> Por cada azimut se muestrea el terreno a lo largo del rayo a la resolución nativa del DEM, acumulando el ángulo máximo de horizonte visto hasta cada rango, corregido por curvatura terrestre mediante un factor de radio efectivo. La elevación mínima despejada y la altura mínima visible salen directo — una sola pasada <span class=\"data\">O(N)</span> por rayo, sin bucle discreto de ángulos de elevación.</p><p><strong>Un detalle fácil de hacer mal.</strong> El bloqueo parcial del haz se publica como máximo acumulado en rango, nunca como PBB crudo por bin. Publicar valores por bin produce mapas equivocados en todo el sector detrás de un obstáculo.</p><p><strong>Una dependencia rechazada a propósito.</strong> Implementado en numpy puro. wradlib arrastraría scipy, matplotlib, xarray y xradar, y recomienda instalación por conda — que no se puede instalar desde el Gestor de Complementos de QGIS, que es donde están los usuarios. wradlib se usa fuera de línea, solo como referencia de validación.</p>"
     },
+    "shots": [
+      {
+        "src": "/img/projects/radar-siting-toolkit.webp",
+        "width": 1600,
+        "height": 846,
+        "alt": {
+          "en": "The toolkit running inside QGIS: the “Evaluate candidate sites” dialog with its execution log over a hillshaded GLO-30 elevation model of Jamaica, the plugin's four algorithms in the processing toolbox on the right, and the output layers — per-azimuth blockage, PPI-style sector and range blockage, and site summary — in the layer panel on the left.",
+          "es": "El toolkit corriendo dentro de QGIS: el diálogo «Evaluate candidate sites» con su registro de ejecución sobre un modelo de elevación GLO-30 sombreado de Jamaica, los cuatro algoritmos del plugin en la caja de herramientas de la derecha, y las capas de salida — bloqueo por azimut, sector y rango tipo PPI, y resumen por sitio — en el panel de capas de la izquierda."
+        },
+        "caption": {
+          "en": "A run over Jamaica: 1° azimuth step, 1° beamwidth, 0.5° elevation, effective earth-radius factor k = 1.333. The help panel on the right is the tool saying in its own interface what the run does not include — merit scores weighted by importance need an area-of-interest grid, which this algorithm does not build.",
+          "es": "Una corrida sobre Jamaica: paso de azimut 1°, ancho de haz 1°, elevación 0,5°, factor de radio terrestre efectivo k = 1,333. El panel de ayuda de la derecha es la herramienta diciendo en su propia interfaz lo que la corrida no incluye — las puntuaciones de mérito ponderadas por importancia necesitan una rejilla de área de interés que este algoritmo no construye."
+        }
+      }
+    ],
     "stack": ["Python", "numpy", "QGIS", "GDAL", "Jupyter"],
     "links": {
       "demo": "",
@@ -188,6 +249,34 @@
       "en": "<p><strong>The problem.</strong> Industrial automation is taught on equipment that is expensive, scarce, and sitting in one room. A student with an hour of lab time a week does not get to make the mistakes that teach the subject.</p><p><strong>The first answer, in 2012.</strong> A PyQt desktop application driving the lab's Modbus devices. It ran for two or three course cycles and then stopped being used — because it had not actually removed the constraint. The software was on the student's machine, but the PLC and the power analyser were still in the laboratory, and when that hardware stopped being available the tool went with it.</p><p><strong>The second answer, fourteen years later.</strong> The same idea rebuilt with the devices themselves simulated: a virtual Master-K120S PLC and a virtual WM14 power analyser served over the web, speaking Modbus. Nothing physical is required, so the laboratory is wherever the student is. My students are using it now.</p><p><strong>What it demonstrates.</strong> Not persistence — diagnosis. The 2012 version failed for a reason I could name, and the rebuild is aimed at that reason rather than at the technology that had moved on in the meantime.</p>",
       "es": "<p><strong>El problema.</strong> La automatización industrial se enseña sobre equipamiento caro, escaso y que está en un solo salón. Un estudiante con una hora de laboratorio a la semana no llega a cometer los errores que enseñan la materia.</p><p><strong>La primera respuesta, en 2012.</strong> Una aplicación de escritorio en PyQt que manejaba los dispositivos Modbus del laboratorio. Se usó dos o tres cursos y dejó de usarse — porque en realidad no había quitado la restricción. El software estaba en la máquina del estudiante, pero el PLC y el analizador de red seguían en el laboratorio, y cuando ese hardware dejó de estar disponible la herramienta se fue con él.</p><p><strong>La segunda respuesta, catorce años después.</strong> La misma idea reconstruida con los propios dispositivos simulados: un PLC Master-K120S virtual y un analizador WM14 virtual servidos por web, hablando Modbus. No hace falta nada físico, así que el laboratorio está donde esté el estudiante. Mis estudiantes lo están usando ahora.</p><p><strong>Qué demuestra.</strong> No constancia — diagnóstico. La versión de 2012 falló por una razón que puedo nombrar, y la reconstrucción apunta a esa razón y no a la tecnología que mientras tanto había cambiado.</p>"
     },
+    "shots": [
+      {
+        "src": "/img/projects/modbuslab-editor.webp",
+        "width": 1600,
+        "height": 812,
+        "alt": {
+          "en": "ModbusLab in the browser: a Modbus message editor with station, function, address and data fields, link settings for framing, response delay and timeout, a frame console, and a monitor of the virtual Master-K120S PLC showing eighteen digital inputs and twelve coils with their register addresses.",
+          "es": "ModbusLab en el navegador: editor de mensajes Modbus con campos de estación, función, dirección y datos, configuración del enlace con encuadre, retardo de respuesta y timeout, una consola de tramas, y el monitor del PLC Master-K120S virtual con dieciocho entradas digitales y doce bobinas con sus direcciones de registro."
+        },
+        "caption": {
+          "en": "The student composes the frame field by field against a virtual Master-K120S. The task panel on the left is the graded exercise, per-student variant, and it opens at 0 of 9.",
+          "es": "El estudiante compone la trama campo a campo contra un Master-K120S virtual. El panel de tareas de la izquierda es el ejercicio evaluado, con variante por estudiante, y abre en 0 de 9."
+        }
+      },
+      {
+        "src": "/img/projects/modbuslab-analyzer.webp",
+        "width": 1600,
+        "height": 1404,
+        "alt": {
+          "en": "ModbusLab frame console listing request and response frames in hex with their turnaround time, above the monitor of a virtual Carlo Gavazzi WM14 power analyser with line voltage and neutral current gauges, active and reactive power, power factor, and a three-phase bank of switchable loads.",
+          "es": "Consola de tramas de ModbusLab con las tramas de petición y respuesta en hexadecimal y su tiempo de respuesta, sobre el monitor de un analizador de red Carlo Gavazzi WM14 virtual con agujas de tensión de línea y corriente de neutro, potencia activa y reactiva, factor de potencia y un banco trifásico de cargas conmutables."
+        },
+        "caption": {
+          "en": "Every exchange is readable as bytes — fn 04 polling at registers 0280h, 0298h and 02B0h, 40 ms apart — and the loads the student switches move the analyser that answers them. Both devices are simulated; nothing physical is involved.",
+          "es": "Cada intercambio se lee como bytes — sondeo fn 04 en los registros 0280h, 0298h y 02B0h, cada 40 ms — y las cargas que conmuta el estudiante mueven el analizador que responde. Ambos dispositivos están simulados; no interviene nada físico."
+        }
+      }
+    ],
     "stack": ["SvelteKit", "TypeScript", "Cloudflare Workers", "Modbus RTU/TCP", "Python", "PyQt"],
     "links": {
       "demo": "",
@@ -212,6 +301,35 @@
       "en": "<p><strong>The problem.</strong> Computing all reducts of a decision system — the minimal attribute subsets that preserve its discernibility — is NP-hard. The naive approach enumerates the power set, and the cost is not something you optimise your way out of with better code.</p><p><strong>Two fronts at once.</strong> On the algorithmic side, GCreduct prunes the search space using gap elimination and attribute contribution; MinReduct computes all the shortest reducts without enumerating the rest. On the hardware side, a co-designed FPGA platform accelerates the computation of irreducible testors.</p><p><strong>Why it still matters here.</strong> It is the same instinct that produced everything else on this page: when a computation is expensive, the answer is rarely a bigger machine. It is a better algorithm, the right place to run it, and the willingness to design both.</p>",
       "es": "<p><strong>El problema.</strong> Computar todos los reductos de un sistema de decisión — los subconjuntos mínimos de atributos que preservan su capacidad de discernimiento — es NP-duro. El enfoque ingenuo enumera el conjunto potencia, y de ese costo no se sale escribiendo mejor código.</p><p><strong>Dos frentes a la vez.</strong> Del lado algorítmico, GCreduct poda el espacio de búsqueda mediante eliminación de brechas y contribución de atributos; MinReduct computa todos los reductos más cortos sin enumerar el resto. Del lado del hardware, una plataforma FPGA co-diseñada acelera el cómputo de testores irreducibles.</p><p><strong>Por qué sigue importando aquí.</strong> Es el mismo instinto que produjo todo lo demás en esta página: cuando un cómputo es caro, la respuesta rara vez es una máquina más grande. Es un algoritmo mejor, el lugar correcto donde correrlo, y la disposición a diseñar ambos.</p>"
     },
+    "shots": [
+      {
+        "src": "/img/projects/reducts-candidate-generator.webp",
+        "width": 1600,
+        "height": 985,
+        "alt": {
+          "en": "Block diagram of the Candidate Generator module: the super-reduct and contributes inputs feeding a selector, three blocks E1A, E2A and A whose outputs reach three multiplexers, registers holding the current candidate, the previous candidate and J, and a comparator against all-zeros that raises the done signal.",
+          "es": "Diagrama de bloques del módulo Generador de Candidatos: las entradas super-reduct y contributes alimentando un selector, tres bloques E1A, E2A y A cuyas salidas llegan a tres multiplexores, registros que guardan el candidato actual, el candidato anterior y J, y un comparador contra todo ceros que levanta la señal done."
+        },
+        "caption": {
+          "en": "Figure 4.5 of the thesis, hardware architecture chapter: the module that generates the next candidate. The search order is wired, not interpreted — which is the whole reason the computation moves to an FPGA.",
+          "es": "Figura 4.5 de la tesis, capítulo de arquitectura hardware: el módulo que genera el siguiente candidato. El orden de búsqueda está cableado, no interpretado — que es justo la razón por la que el cómputo se mueve a un FPGA."
+        }
+      },
+      {
+        "src": "/img/projects/reducts-runtime-density.webp",
+        "width": 1200,
+        "height": 1183,
+        "plot": true,
+        "alt": {
+          "en": "Line chart of runtime in seconds against the mean density of 1's, from 0.22 to 0.78, with a standard-deviation bar on every point. The three curves rise to a peak and fall to near zero by 0.70. fast-BR peaks highest, around 200 s near 0.26; fast-CT-EXT around 145 s near 0.34; GCreduct lowest, around 105 s near 0.34. GCreduct runs below both of the others up to about 0.36, past which fast-BR becomes the fastest of the three, and GCreduct stays below fast-CT-EXT across the whole range.",
+          "es": "Gráfico de líneas del tiempo de ejecución en segundos frente a la densidad media de 1's, de 0,22 a 0,78, con una barra de desviación estándar en cada punto. Las tres curvas suben hasta un máximo y caen casi a cero en 0,70. fast-BR alcanza el máximo más alto, unos 200 s cerca de 0,26; fast-CT-EXT unos 145 s cerca de 0,34; GCreduct el más bajo, unos 105 s cerca de 0,34. GCreduct corre por debajo de los otros dos hasta cerca de 0,36, a partir de donde fast-BR pasa a ser el más rápido de los tres, y GCreduct se mantiene por debajo de fast-CT-EXT en todo el rango."
+        },
+        "caption": {
+          "en": "Figure 5.1 of the thesis, chapter 5, page 61: average runtime over 500 randomly generated basic matrices of 2000 rows and 30 columns, grouped into 15 density bins of about 33 matrices each; the bars are the standard deviation within each bin. Java implementations — the authors' own for fast-CT-EXT and fast-BR — timed on an Intel Core i7-5820K at 3.30 GHz with 32 GB of RAM under GNU/Linux. The result is the rule the chapter closes on: GCreduct is the fastest below a density of 0.36, fast-BR between 0.36 and 0.66, and above that the choice stops mattering. The legend spells it CGreduct, which is an error in the thesis figure itself; it is reproduced as defended rather than repainted here.",
+          "es": "Figura 5.1 de la tesis, capítulo 5, página 61: tiempo de ejecución promedio sobre 500 matrices básicas generadas al azar de 2000 filas y 30 columnas, agrupadas en 15 bins de densidad de unas 33 matrices cada uno; las barras son la desviación estándar dentro de cada bin. Implementaciones en Java — las de los propios autores para fast-CT-EXT y fast-BR — cronometradas en un Intel Core i7-5820K a 3,30 GHz con 32 GB de RAM bajo GNU/Linux. El resultado es la regla con que cierra el capítulo: GCreduct es el más rápido por debajo de una densidad de 0,36, fast-BR entre 0,36 y 0,66, y por encima de ahí la elección deja de importar. La leyenda escribe CGreduct, que es una errata de la propia figura de la tesis; se reproduce tal como se defendió, no repintada aquí."
+        }
+      }
+    ],
     "stack": ["FPGA", "VHDL", "C", "Rough set theory"],
     "links": {
       "demo": "",

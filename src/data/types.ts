@@ -19,8 +19,52 @@ export interface Shot {
   height: number;
   /** Phone-shaped capture. Rendered narrow so it does not tower over a desktop one. */
   portrait?: boolean;
+  /**
+   * A plot or a diagram rather than a capture of a running screen.
+   *
+   * Square figures are the reason this exists: set full width, the runtime
+   * plot is a thousand pixels of white taller than the prose beside it. It is
+   * centred and capped instead — wide enough that the axis ticks still read,
+   * which `portrait` would not be.
+   */
+  plot?: boolean;
+  /**
+   * Index card only — the case itself does not print it again.
+   *
+   * For the frame the hero already carries: printed in the hero, cropped on
+   * the projects card and shown a third time inside the case, one screenshot
+   * would be doing the same work three times on one page. Drop the flag as
+   * soon as the case has a capture of its own.
+   */
+  coverOnly?: boolean;
   alt: Localized;
   caption: Localized;
+}
+
+/**
+ * A portfolio case (`projects.json`).
+ *
+ * The file is imported as JSON, where entries that omit an optional key infer
+ * a union whose members disagree about it; the interface is what lets the
+ * component read `shots` or `note` on every entry instead of narrowing six
+ * times. `shots` is a list because a case is argued with more than one
+ * capture — the first one is also the image the index card carries.
+ */
+export interface Project {
+  id: string;
+  featured?: boolean;
+  years: string;
+  status: string;
+  title: Localized;
+  summary: Localized;
+  /** Rendered with `set:html`. Folded away behind a disclosure. */
+  body: Localized;
+  stack: string[];
+  links: { demo?: string; code?: string; docs?: string };
+  repos?: { name: string; url: string }[];
+  shots?: Shot[];
+  note?: Localized;
+  outOfScope?: Localized<string[]>;
 }
 
 export interface Position {

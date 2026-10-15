@@ -366,6 +366,74 @@
     }
   }
 
+  /* Projects index (Projects.astro) — a front page built on the captures each
+     case ships, rather than a row per title.
+
+     The cover and the thumbnail are fixed aspects with `object-fit: cover`, so
+     a 16:9 desktop capture and a 4:3 one do not produce two differently shaped
+     cards. Cropping is safe here precisely because it is an index: the same
+     capture is printed whole, with its caption, in the case below. The crop is
+     anchored to the top — a screenshot carries its subject under the title bar,
+     never at the bottom edge. */
+  .proj-cover {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: top;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+  }
+  .proj-thumb {
+    flex: none;
+    width: 5rem;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+  }
+  @media (min-width: 640px) {
+    .proj-thumb {
+      width: 6.5rem;
+    }
+  }
+
+  /* A case with no capture yet. It says so instead of faking one: an etched
+     panel with the case's index, which is honest and still gives the card the
+     shape the rest of the index has. */
+  .proj-ph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    text-align: center;
+  }
+  .proj-ph-n {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    opacity: 0.55;
+  }
+
+  .proj-title {
+    transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .proj-lead:hover .proj-title,
+  .proj-lead:focus-visible .proj-title,
+  .proj-row:hover .proj-title,
+  .proj-row:focus-visible .proj-title {
+    color: var(--color-accent);
+  }
+  .proj-lead:hover .proj-cover,
+  .proj-lead:focus-visible .proj-cover,
+  .proj-row:hover .proj-thumb,
+  .proj-row:focus-visible .proj-thumb {
+    border-color: var(--color-accent);
+  }
+
   /* First page of a paper, beside its entry in the publication list.
      An unmodified white page is the brightest thing on a near-black ground, so
      it sits slightly back until the entry is hovered — the one bit of motion

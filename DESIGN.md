@@ -127,6 +127,33 @@ publishes its numbers as a visually hidden `<table>` with the bars marked
 in the plot: the thin stretch while the doctorate was the priority is part of
 the measurement, and dropping those columns would make the shape decoration.
 
+### The projects front page
+
+`Projects.astro` opens on an index built around the captures, not a row per
+title: the lead case takes a 16:9 cover, the next two a thumbnail each, and the
+remainder a numbered list. Covers and thumbnails are cropped (`object-fit:
+cover`, anchored to the top — a screenshot carries its subject under the title
+bar). Cropping is only acceptable because the index is a pointer: the same
+capture is printed whole, with its caption, inside the case below.
+
+A case with no capture yet gets an etched panel carrying its index and
+`projects.shot.pending`, not a stand-in image. The empty panel is the honest
+state and it is meant to be temporary.
+
+A capture marked `coverOnly` is the card's image and nothing else: the LAMULA
+case borrows the frame the hero already prints, and printing it a third time
+inside the case would be one screenshot doing the same work three times on one
+page. Drop the flag the moment that case has a capture of its own.
+
+Under `lg` the grid is one column — cover, lead case, the two rows, then the
+numbered list — and the column rule disappears.
+
+The argument of each case (four to five paragraphs, plus its out-of-scope list)
+is folded into a `Disclosure`. The claim, the status and the evidence stay
+visible; the reasoning is one tap away, still in the markup and still open in
+the print stylesheet. The captures sit **above** the fold, before the prose: a
+reader who scrolled to a case has already chosen it and wants to see it.
+
 ---
 
 ## 5. Motion

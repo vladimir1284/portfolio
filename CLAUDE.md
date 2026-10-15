@@ -191,6 +191,30 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 - **A screenshot is evidence, so it carries the same burden as a figure.** Client pricing, margins, names and contact details are blurred before the image is converted, and the untouched original stays in `_material/originales/capturas/`. The caption says what was obscured and why — hiding the redaction would be worse than not shipping the screenshot. Seeded or demo data is not evidence and does not ship at all.
 - **Nothing carrying a phone number or a third party's personal data goes in the repo root** — it is published. `_material/originales/` holds the sources Vladímir supplied.
 
+### Pending
+
+- **`pnpm optimize:images` does not run in the dev container.** Pillow is not
+  installed and pip refuses to install it (PEP 668, externally managed). The
+  WebP conversions shipped so far were done with ImageMagick
+  (`convert <in> -resize 1600x1600\> -quality 80 <out>`), which is equivalent
+  for static images. Fix by adding Pillow to `ghcr.io/vladimir1284/vscode-swarm-env`
+  rather than by rewriting the script.
+- **`public/img/radar-loop.gif` is unoptimised** — 2.0 MB, 960×484, 12 frames,
+  and it is the hero's eager image, so it is the LCP (DESIGN.md §7 budget:
+  < 1.5 s on simulated 4G). Two things to do when the toolchain is back:
+  re-export the loop at ~1600 px wide, and convert it to animated WebP
+  (`cwebp`/`img2webp`, not ImageMagick, which rebuilds the animation badly).
+  The reduced-motion fallback `radar-loop-still.webp` is the GIF's last frame
+  and already carries the right dimensions; update `Hero.astro` when the path
+  changes.
+- **The legend of the runtime-vs-density plot is wrong, and stays wrong.** The
+  figure is `public/img/projects/reducts-runtime-density.webp` (Figure 5.1 of the
+  thesis, chapter 5, page 61). Its legend spells `CGreduct`; the correct name is
+  **`GCreduct`**, as the thesis body, the site and `publications.json` all have
+  it. Confirmed by Vladímir as an error in the figure. It ships as defended and
+  the caption says the legend is wrong — repainting a defended figure to look
+  tidier would be the worse of the two options.
+
 ---
 
 ## 8. Quality Gate (`pnpm verify`)
@@ -381,9 +405,11 @@ is both wrong and exactly the kind of undefendable number §7 bans.
   over nothing. `rag/papers.lock.json` holds each PDF's sha256; without
   `pdftotext` the build reuses the committed chunks while the hashes match, and
   stops rather than guess when one has changed.
-- **The thesis is not in the corpus.** It lives in `_material/`, and whether
-  the PDF is public is unsettled. The two papers under `public/papers/` are
-  included, since they already ship.
+- **Everything under `public/papers/` is in the corpus, the thesis included.**
+  That is three PDFs and 148 of the 228 chunks, 126 of them the thesis — it
+  ships, so it is indexed, and `/api/ask` cites it by page. Nothing in
+  `_material/` is ever indexed: it does not ship, so a citation into it would
+  point at a file no reader can open.
 
 ### Budget, on the free allowance
 

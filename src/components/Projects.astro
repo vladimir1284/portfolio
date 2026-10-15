@@ -1,12 +1,37 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
-import projects from "../data/projects.json";
+import type { Project } from "../data/types";
+import Disclosure from "./Disclosure.astro";
+import projectsData from "../data/projects.json";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
+const projects = projectsData as Project[];
+
 const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
+const num = (i: number) => String(i + 1).padStart(2, "0");
+
+/*
+  The index is a front page, not a contents list.
+
+  Six cases at full depth is a long read, and the previous index — a flat row
+  per project — gave a visitor nothing to choose on but the title. A screenshot
+  is the fastest thing to read on the page, so the index is built around the
+  ones that exist: the lead case takes the large image, the next two take a
+  thumbnail each, and the remainder stay a numbered list. Everything below is
+  unabridged, with the long argument folded (see the disclosure).
+*/
+const [lead, ...others] = projects;
+const seconds = others.slice(0, 2);
+const rest = others.slice(2);
+
+/** First capture of a case, or nothing — the card falls back typographically. */
+const cover = (p: Project) => p.shots?.[0];
+
+/** What the case itself prints: everything the index card is not carrying alone. */
+const figures = (p: Project) => p.shots?.filter((s) => !s.coverOnly) ?? [];
 ---
 
 <section id="projects" class="section">
@@ -17,50 +42,134 @@ const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
     </h2>
     <p class="prose-col mt-5 text-muted">{t("projects.lede")}</p>
 
-    <!--
-      The index. Six projects at full depth is a long read, and a visitor who
-      wants one of them should not have to scroll past the other five to find
-      out they are there. It is a contents list, not a summary: year, name,
-      status, and a jump. The depth stays below, unabridged.
-    -->
-    <nav class="mt-10" aria-labelledby="projects-index-title">
-      <p class="label" id="projects-index-title">{t("projects.index.title")}</p>
-      <ul class="mt-4 divide-y divide-border border-t border-b border-border">
-        {
-          projects.map((p) => (
-            <li>
-              <a
-                href={`#project-${p.id}`}
-                class="t-fast flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3 hover:text-accent"
-              >
-                <span class="data w-24 shrink-0 text-xs text-muted">{p.years}</span>
-                <span class="min-w-0 flex-1 text-sm font-medium">{p.title[lang]}</span>
-                <span class="data text-xs text-muted">{t(statusKey(p.status))}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+    <div class="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-12">
+      <!-- The lead case. Image, status, title, summary — and nothing else. -->
+      <article class="lg:col-span-7">
+        <a href={`#project-${lead.id}`} class="proj-lead t-fast block">
+          {
+            cover(lead) ? (
+              <img
+                src={cover(lead)!.src}
+                alt={cover(lead)!.alt[lang]}
+                width={cover(lead)!.width}
+                height={cover(lead)!.height}
+                loading="lazy"
+                decoding="async"
+                class="proj-cover"
+              />
+            ) : (
+              <span class="proj-cover proj-ph">
+                <span class="data proj-ph-n" aria-hidden="true">
+                  {num(0)}
+                </span>
+                <span class="label">{t("projects.shot.pending")}</span>
+              </span>
+            )
+          }
 
-    <div class="mt-16 space-y-16">
+          <span class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span class="label">{t(statusKey(lead.status))}</span>
+            <span class="data text-xs text-muted">{lead.years}</span>
+          </span>
+
+          <h3
+            class="proj-title mt-3 text-[clamp(1.375rem,2.4vw,1.875rem)] leading-tight font-semibold tracking-tight"
+          >
+            {lead.title[lang]}
+          </h3>
+
+          <span class="prose-col mt-4 block text-muted">{lead.summary[lang]}</span>
+
+          <span class="data mt-5 inline-block text-sm text-accent">
+            {t("projects.read")} &rarr;
+          </span>
+        </a>
+      </article>
+
+      <!-- The column beside it: two cases with a thumbnail, the rest numbered. -->
+      <div class="lg:col-span-5 lg:border-l lg:border-border lg:pl-10">
+        <ul class="divide-y divide-border border-t border-b border-border">
+          {
+            seconds.map((p, i) => (
+              <li>
+                <a href={`#project-${p.id}`} class="proj-row t-fast flex gap-4 py-5">
+                  {cover(p) ? (
+                    <img
+                      src={cover(p)!.src}
+                      alt=""
+                      width={cover(p)!.width}
+                      height={cover(p)!.height}
+                      loading="lazy"
+                      decoding="async"
+                      class="proj-thumb"
+                    />
+                  ) : (
+                    <span class="proj-thumb proj-ph">
+                      <span class="data proj-ph-n" aria-hidden="true">
+                        {num(i + 1)}
+                      </span>
+                    </span>
+                  )}
+                  <span class="min-w-0 flex-1">
+                    <span class="label block">{t(statusKey(p.status))}</span>
+                    <span class="proj-title mt-1.5 block leading-snug font-medium">
+                      {p.title[lang]}
+                    </span>
+                    <span class="data mt-1.5 block text-xs text-muted">{p.years}</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        {
+          rest.length > 0 && (
+            <nav class="mt-8" aria-labelledby="projects-more-title">
+              <p class="label" id="projects-more-title">
+                {t("projects.more.title")}
+              </p>
+              <ul class="mt-2">
+                {rest.map((p, i) => (
+                  <li>
+                    <a
+                      href={`#project-${p.id}`}
+                      class="proj-row t-fast flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3"
+                    >
+                      <span class="data text-xs text-accent">{num(i + 3)}</span>
+                      <span class="proj-title min-w-0 flex-1 text-sm">{p.title[lang]}</span>
+                      <span class="data text-xs text-muted">{p.years}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="mt-16 space-y-16 lg:mt-20">
       {
         projects.map((p, i) => (
           <article id={`project-${p.id}`} class="scroll-mt-24 border-t border-border pt-8">
-            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+            {/* Years and status on their own line, title under them. Held on
+                one row, the title was squeezed into whatever the badge left —
+                four words a line on a phone. */}
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
               <span class="data text-sm text-muted">{p.years}</span>
-              <h3
-                class:list={[
-                  "flex-1 font-semibold tracking-tight",
-                  i === 0 ? "text-[clamp(1.375rem,2.2vw,1.75rem)]" : "text-xl",
-                ]}
-              >
-                {p.title[lang]}
-              </h3>
               <span class={["scaffolding", "poc"].includes(p.status) ? "badge-warn" : "tag"}>
                 {t(statusKey(p.status))}
               </span>
             </div>
+            <h3
+              class:list={[
+                "mt-3 font-semibold tracking-tight",
+                i === 0 ? "text-[clamp(1.375rem,2.2vw,1.75rem)]" : "text-xl",
+              ]}
+            >
+              {p.title[lang]}
+            </h3>
 
             {/* The lead project carries the argument of the section, so its
                 summary is set at reading size rather than body size. */}
@@ -68,43 +177,63 @@ const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
               {p.summary[lang]}
             </p>
 
-            <div class="prose-col mt-6 space-y-4 text-sm text-muted" set:html={p.body[lang]} />
-
-            {p.shot && (
-              <figure class="mt-8 overflow-hidden rounded border border-border">
-                <img
-                  src={p.shot.src}
-                  alt={p.shot.alt[lang]}
-                  width={p.shot.width}
-                  height={p.shot.height}
-                  loading="lazy"
-                  decoding="async"
-                  class="block w-full bg-bg"
-                />
-                <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
-                  {p.shot.caption[lang]}
-                </figcaption>
-              </figure>
+            {/* The captures come before the argument: a reader who scrolls
+                here has already chosen the case and wants to see it, not read
+                four more paragraphs first. */}
+            {figures(p).length > 0 && (
+              <div class="mt-8 space-y-6">
+                {figures(p).map((s) => (
+                  <figure
+                    class:list={[
+                      "overflow-hidden rounded border border-border",
+                      s.portrait && "mx-auto max-w-sm",
+                      s.plot && "mx-auto max-w-xl",
+                    ]}
+                  >
+                    <img
+                      src={s.src}
+                      alt={s.alt[lang]}
+                      width={s.width}
+                      height={s.height}
+                      loading="lazy"
+                      decoding="async"
+                      class="block w-full bg-bg"
+                    />
+                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
+                      {s.caption[lang]}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
             )}
+
+            {/* Four paragraphs of argument per case is the section's substance
+                and also what made it a wall. Folded, it stays in the markup,
+                in the print stylesheet and in the page's own index — one tap
+                from anyone who wants it, out of the way of anyone who does
+                not. */}
+            <Disclosure label={t("projects.fold")} class="mt-6">
+              <div class="prose-col space-y-4" set:html={p.body[lang]} />
+
+              {p.outOfScope && (
+                <div class="mt-6">
+                  <p class="label">{t("projects.scope.title")}</p>
+                  <ul class="mt-3 grid gap-1.5 sm:grid-cols-2">
+                    {p.outOfScope[lang].map((s) => (
+                      <li class="flex gap-2">
+                        <span aria-hidden="true">&#215;</span>
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Disclosure>
 
             {p.note && (
               <p class="panel prose-col mt-6 border-l-2 border-l-warn p-4 text-sm text-muted">
                 {p.note[lang]}
               </p>
-            )}
-
-            {p.outOfScope && (
-              <div class="mt-6">
-                <p class="label">{t("projects.scope.title")}</p>
-                <ul class="mt-3 grid gap-1.5 text-sm text-muted sm:grid-cols-2">
-                  {p.outOfScope[lang].map((s) => (
-                    <li class="flex gap-2">
-                      <span aria-hidden="true">&#215;</span>
-                      <span>{s}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             )}
 
             <ul class="mt-6 flex flex-wrap gap-2">

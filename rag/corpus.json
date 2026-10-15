@@ -5,7 +5,7 @@
   "kind": "section",
   "title": "Vladímir Rodríguez Diez",
   "url": "/#top",
-  "text": "Vladímir Rodríguez Diez. Teaching Electrical Engineering since 2008, writing weather-radar software since 2012, leading remote development teams since 2022. KEOX, base reflectivity (N0B), VCP 212, elevation 0.5° — 9 October 2026, 21:53 GMT−4. NEXRAD Level III decoded, regridded and rendered by the chain described below. Basemap © OpenStreetMap contributors. LAMULA WebViewer showing base reflectivity from the KEOX radar: a large precipitation system over the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs."
+  "text": "Vladímir Rodríguez Diez. Teaching Electrical Engineering since 2008, writing weather-radar software since 2012, leading remote development teams since 2022. KEOX, base reflectivity (N0B) — twelve volumes, 19:04 to 19:54 EDT on 9 October 2026. NEXRAD Level III decoded, regridded and rendered by the chain described below; where motion is reduced, the last frame is shown instead of the loop. Basemap © OpenStreetMap contributors. LAMULA WebViewer looping twelve base-reflectivity volumes from the KEOX radar: a large precipitation system crossing the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs."
  },
  {
   "id": "ui-about-en",
@@ -93,7 +93,7 @@
   "kind": "section",
   "title": "Vladímir Rodríguez Diez",
   "url": "/es/#top",
-  "text": "Vladímir Rodríguez Diez. Profesor de Ingeniería Eléctrica desde 2008, software de radar meteorológico desde 2012, líder de desarrollo de equipos remotos desde 2022. KEOX, reflectividad base (N0B), VCP 212, elevación 0,5° — 9 de octubre de 2026, 21:53 GMT−4. NEXRAD Level III decodificado, regrillado y renderizado por la cadena que se describe abajo. Mapa base © colaboradores de OpenStreetMap. LAMULA WebViewer mostrando reflectividad base del radar KEOX: un gran sistema de precipitación sobre la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie."
+  "text": "Vladímir Rodríguez Diez. Profesor de Ingeniería Eléctrica desde 2008, software de radar meteorológico desde 2012, líder de desarrollo de equipos remotos desde 2022. KEOX, reflectividad base (N0B) — doce volúmenes, de 19:04 a 19:54 EDT del 9 de octubre de 2026. NEXRAD Level III decodificado, regrillado y renderizado por la cadena que se describe abajo; con movimiento reducido se muestra el último cuadro en vez del bucle. Mapa base © colaboradores de OpenStreetMap. LAMULA WebViewer recorriendo en bucle doce volúmenes de reflectividad base del radar KEOX: un gran sistema de precipitación cruzando la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie."
  },
  {
   "id": "ui-about-es",
