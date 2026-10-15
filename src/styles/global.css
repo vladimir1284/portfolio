@@ -187,6 +187,15 @@
     background-color: var(--color-bg);
     padding: 1.125rem 1rem;
   }
+  /* One mark per cell, so the band reads as six claims and not one number
+     row. Muted, not accent — six accents would spend the colour (DESIGN.md
+     §1). */
+  .fact-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-bottom: 0.6rem;
+    color: var(--color-muted);
+  }
 
   /* A measured figure. Always mono, always followed by its method. */
   .figure-n {
@@ -197,6 +206,22 @@
     line-height: 1.1;
     letter-spacing: -0.02em;
     color: var(--color-text);
+  }
+  /* Flex, so the whitespace-only text nodes the markup puts between the digits
+     and the suffix are dropped — `2008 →` and not `2008  →`. */
+  .facts .figure-n {
+    display: flex;
+    align-items: baseline;
+  }
+  /* Reserves the final digit count and right-aligns inside it, so the
+     count-up in `Facts.astro` cannot move the suffix or the cell beside it. */
+  .figure-count {
+    display: inline-block;
+    text-align: right;
+  }
+  /* The space before `→` is part of the string, so it has to survive. */
+  .figure-suffix {
+    white-space: pre;
   }
   .figure-method {
     margin-top: 0.4rem;

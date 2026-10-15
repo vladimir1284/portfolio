@@ -1,6 +1,9 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
-import publications from "../data/publications.json";
+import type { Publication } from "../data/types";
+import publicationsData from "../data/publications.json";
+
+const publications = publicationsData as Publication[];
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
@@ -17,38 +20,183 @@ const t = useTranslations(lang);
   the page, which is a long way to scroll for the thing meant to save you the
   scroll. Claim first, evidence under it.
 
-  Three of the six are counted from the data at build time, so they cannot
-  drift from the sections below. The other three are claims Vladímir already
-  makes in `experience.json`, with the same wording and the same caveats —
-  `~300` and `~10` keep their tilde because they are estimates and saying so
-  is the point.
-*/
-const journal = publications.filter((p) => p.type === "journal").length;
-const conference = publications.filter((p) => p.type === "conference").length;
+  The publication figures are counted from the data at build time, so they
+  cannot drift from the Research section below. The other three are claims
+  Vladímir already makes in `experience.json`, with the same wording and the
+  same caveats — `300+` and `10+` are floors on estimates, not measurements,
+  and the method line says what the estimate rests on.
 
-const facts = [
-  { figure: "2008 →", method: t("facts.teaching") },
-  { figure: "~300", method: t("facts.students") },
-  { figure: "2", method: t("facts.doctorates") },
+  Each cell carries an icon so the band reads as six distinct claims rather
+  than a row of numbers, and the figure counts up once when the band first
+  reaches the viewport (see the script at the bottom).
+*/
+
+/* The doctoral core, counted out of the full list: the Q1 journal articles and
+   the conference papers that led to them. The quartile is the one each entry
+   carries in `publications.json`, which is SJR — the fact says "Q1" and the
+   Research section below prints the ranking and the edition beside it. */
+const core = publications.filter((p) => p.group === "core");
+const q1 = core.filter((p) => p.type === "journal" && p.rank?.quartile === 1).length;
+const coreConference = core.filter((p) => p.type === "conference").length;
+
+/* GCreduct and MinReduct. Not derivable from the publication list — the two
+   algorithms span three journal articles between them. */
+const ALGORITHMS = 2;
+
+type Fact = {
+  /* Rendered as-is, and the source of truth when JS never runs. */
+  figure: string;
+  /* The numeric part to count up to, and what trails it. Split here rather
+     than parsed in the browser so the script stays dumb. Any leading space in
+     the suffix is literal — `.figure-suffix` is `white-space: pre`. */
+  count: number;
+  suffix?: string;
+  method: string;
+  icon: string;
+};
+
+/* Icons are inline so they cost no request and inherit `currentColor`. Each is
+   a 24-grid stroke path, matching the set already in `Header.astro`. */
+const icons = {
+  teaching:
+    "M22 9.5 12 5 2 9.5l10 4.5 10-4.5zM6 11.8V16c0 1.4 2.7 2.7 6 2.7s6-1.3 6-2.7v-4.2M20 10.5V15",
+  students:
+    "M9 11a3.2 3.2 0 1 0 0-6.4A3.2 3.2 0 0 0 9 11zM2.5 19.5a6.5 6.5 0 0 1 13 0M16.5 11.4a2.8 2.8 0 1 0 0-5.6M18 14.2a5.6 5.6 0 0 1 3.5 5.3",
+  algorithms:
+    "M9.5 3.5H8A2.5 2.5 0 0 0 5.5 6v3.5A2.5 2.5 0 0 1 3 12a2.5 2.5 0 0 1 2.5 2.5V18A2.5 2.5 0 0 0 8 20.5h1.5M14.5 3.5H16A2.5 2.5 0 0 1 18.5 6v3.5A2.5 2.5 0 0 0 21 12a2.5 2.5 0 0 0-2.5 2.5V18a2.5 2.5 0 0 1-2.5 2.5h-1.5",
+  papers:
+    "M7 3h7l4 4v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM14 3v4h4M8.5 12h7M8.5 15.5h4.5",
+  radar:
+    "M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4",
+  team: "M12 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4M6 16.3a2 2 0 1 0 0 4 2 2 0 0 0 0-4M18 16.3a2 2 0 1 0 0 4 2 2 0 0 0 0-4M12 7.5v3M6 16.3v-2a1.5 1.5 0 0 1 1.5-1.5h9a1.5 1.5 0 0 1 1.5 1.5v2",
+};
+
+const facts: Fact[] = [
+  {
+    figure: "2008 →",
+    count: 2008,
+    suffix: " →",
+    method: t("facts.teaching"),
+    icon: icons.teaching,
+  },
+  {
+    figure: "300+",
+    count: 300,
+    suffix: "+",
+    method: t("facts.students"),
+    icon: icons.students,
+  },
+  {
+    figure: String(ALGORITHMS),
+    count: ALGORITHMS,
+    method: t("facts.algorithms"),
+    icon: icons.algorithms,
+  },
   {
     figure: String(publications.length),
-    method: t("facts.publications", { journal, conference }),
+    count: publications.length,
+    method: t("facts.publications", { q1, conference: coreConference }),
+    icon: icons.papers,
   },
-  { figure: "2014 →", method: t("facts.vesta") },
-  { figure: "~10", method: t("facts.team") },
+  {
+    figure: "2012 →",
+    count: 2012,
+    suffix: " →",
+    method: t("facts.radar"),
+    icon: icons.radar,
+  },
+  { figure: "10+", count: 10, suffix: "+", method: t("facts.team"), icon: icons.team },
 ];
 ---
 
 <section aria-labelledby="facts-title" class="mt-14">
   <h2 id="facts-title" class="sr-only">{t("facts.title")}</h2>
-  <dl class="facts">
+  <dl class="facts" data-facts>
     {
       facts.map((f) => (
         <div>
-          <dt class="figure-n">{f.figure}</dt>
+          <svg
+            class="fact-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d={f.icon} />
+          </svg>
+          {/* `.figure-n` is a flex row, which drops the whitespace-only text
+              nodes this markup would otherwise put around the suffix. */}
+          <dt class="figure-n">
+            <span
+              class="figure-count"
+              data-count={f.count}
+              style={`min-width:${String(f.count).length}ch`}
+            >
+              {f.count}
+            </span>
+            {f.suffix && <span class="figure-suffix">{f.suffix}</span>}
+          </dt>
           <dd class="figure-method">{f.method}</dd>
         </div>
       ))
     }
   </dl>
 </section>
+
+<script>
+  /*
+    The figures count up once, when the band first reaches the viewport. The
+    final value is already in the DOM from the server, so this is strictly an
+    embellishment: no JavaScript, or an observer that never fires, and the
+    reader still sees the right number — which is the rule in DESIGN.md §7.
+
+    DESIGN.md §5 bans entrance animation on text because content must be
+    readable the instant it paints. A figure is not prose, and a counter
+    settling reads as an instrument taking a reading rather than as a reveal,
+    so the band is the one place that relaxes the rule — a 1s settle with a
+    70ms stagger, long enough that the digits read as counting rather than as
+    a flicker. That is over the 300ms ceiling the rest of the site keeps; a
+    counter is the one thing here whose duration is the content.
+
+    `prefers-reduced-motion: reduce` skips the whole thing rather than
+    shortening it; there is nothing to show, the number is already correct.
+    Each cell reserves its digit width in `ch` and right-aligns, so counting
+    through fewer digits cannot shift the layout around it.
+  */
+  const DURATION = 1000;
+  const STAGGER = 70;
+
+  const band = document.querySelector<HTMLElement>("[data-facts]");
+  const cells = band ? Array.from(band.querySelectorAll<HTMLElement>(".figure-count")) : [];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (band && cells.length > 0 && !reduced.matches) {
+    const ease = (p: number) => 1 - Math.pow(1 - p, 3);
+
+    const run = (cell: HTMLElement, delay: number) => {
+      const target = Number(cell.dataset.count);
+      if (!Number.isFinite(target)) return;
+      cell.textContent = "0";
+      const start = performance.now() + delay;
+      const step = (now: number) => {
+        const p = Math.min(1, Math.max(0, (now - start) / DURATION));
+        cell.textContent = String(Math.round(ease(p) * target));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        observer.disconnect();
+        cells.forEach((cell, i) => run(cell, i * STAGGER));
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(band);
+  }
+</script>

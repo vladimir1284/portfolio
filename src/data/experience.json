@@ -236,7 +236,7 @@
           "Built <strong>TowitLinks</strong>, a VoIP platform from scratch with web, Android and iOS clients; and <strong>Gestor</strong>, a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team.",
           "Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend.",
           "A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing.",
-          "Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, around 10 developers under my supervision."
+          "Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, more than 10 developers led or helped into the work."
         ],
         "es": [
           "Lideré el equipo detrás de <strong>PzHub</strong>, la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill.",
@@ -244,7 +244,7 @@
           "Construí <strong>TowitLinks</strong>, una plataforma VoIP desde cero con clientes web, Android e iOS; y <strong>Gestor</strong>, un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo.",
           "Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3.",
           "Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D.",
-          "Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, unos 10 programadores bajo mi supervisión."
+          "Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse."
         ]
       },
       "stack": [
@@ -344,13 +344,13 @@
           "<strong>Profesor Titular</strong> — the highest academic rank in Cuban higher education.",
           "Six courses taught across the degree, from classical control to FPGA design; four core, two electives I proposed and wrote myself.",
           "Currently: Automated Electric Drives one semester, Industrial Automation the next, around 20 students per group.",
-          "Roughly 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority."
+          "More than 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority."
         ],
         "es": [
           "<strong>Profesor Titular</strong> — la categoría docente más alta de la educación superior cubana.",
           "Seis asignaturas impartidas a lo largo de la carrera, del control clásico al diseño con FPGA; cuatro del currículo base y dos optativas que propuse y escribí yo.",
           "Ahora mismo: Accionamiento Eléctrico Automatizado un semestre, Automatización Industrial el otro, con grupos de unos 20 estudiantes.",
-          "Unos 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
+          "Más de 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
         ]
       }
     }
