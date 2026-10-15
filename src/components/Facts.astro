@@ -130,11 +130,11 @@ const facts: Fact[] = [
           {/* `.figure-n` is a flex row, which drops the whitespace-only text
               nodes this markup would otherwise put around the suffix. */}
           <dt class="figure-n">
-            <span
-              class="figure-count"
-              data-count={f.count}
-              style={`min-width:${String(f.count).length}ch`}
-            >
+            {/* The width is reserved through a data attribute rather than a
+                `style` attribute: the CSP has no 'unsafe-hashes', so a style
+                attribute is dropped and the counter shifts the layout as it
+                settles. The rules live in global.css, keyed on this value. */}
+            <span class="figure-count" data-count={f.count} data-digits={String(f.count).length}>
               {f.count}
             </span>
             {f.suffix && <span class="figure-suffix">{f.suffix}</span>}

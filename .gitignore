@@ -28,6 +28,10 @@ pnpm-debug.log*
 # Misc
 .wrangler/
 
+# Agent tooling. It checks git worktrees out under .claude/worktrees/, which are
+# copies of this repo and must never be committed into it.
+.claude/
+
 # Material auxiliar de trabajo (insumo, no contenido publicable)
 _material/
 
