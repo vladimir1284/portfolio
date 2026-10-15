@@ -32,8 +32,15 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
 
 <header class="fixed inset-x-0 top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
   <div class="shell flex h-16 items-center justify-between gap-4">
-    <a href="#top" class="data t-fast text-sm font-medium tracking-tight hover:text-accent">
-      VRD<span class="text-accent">.</span>
+    <a href="#top" class="group flex items-center" aria-label={t("nav.home")}>
+      <img
+        src="/img/avatar/vladimir-3d.webp"
+        alt=""
+        width="256"
+        height="256"
+        decoding="async"
+        class="t-fast panel block h-8 w-8 object-cover group-hover:border-accent"
+      />
     </a>
 
     <nav aria-label={t("nav.about")} class="hidden md:block">

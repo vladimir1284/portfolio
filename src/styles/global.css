@@ -205,25 +205,6 @@
     color: var(--color-muted);
   }
 
-  /* Hero layer marker: one accent, used as a tick rather than a colour code. */
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.7rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.25rem;
-    font-size: 0.8125rem;
-    color: var(--color-muted);
-  }
-  .chip::before {
-    content: "";
-    width: 0.4rem;
-    height: 0.4rem;
-    flex: none;
-    background-color: var(--color-accent);
-  }
-
   /* Folded method / caveat / provenance note. Component: Disclosure.astro.
      Summary is a hairline row with a tick that turns; the body animates on
      `::details-content` and simply snaps where that is unsupported. */

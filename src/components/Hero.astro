@@ -12,50 +12,71 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
 ---
 
 <section id="top" class="shell pt-32 pb-20 md:pt-40 md:pb-28">
-  <p class="label">{t("hero.greeting")}</p>
+  <div class="grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-14">
+    <div>
+      <p class="label">{t("hero.greeting")}</p>
 
-  <h1 class="mt-4 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] font-bold tracking-tight">
-    {t("hero.name")}
-  </h1>
+      <h1 class="mt-4 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] font-bold tracking-tight">
+        {t("hero.name")}
+      </h1>
 
-  <p class="mt-5 max-w-3xl text-[clamp(1.125rem,2.2vw,1.5rem)] leading-snug text-text">
-    {t("hero.tagline")}
-  </p>
+      <p class="mt-5 text-[clamp(1.125rem,2.2vw,1.5rem)] leading-snug text-text">
+        {t("hero.tagline")}
+      </p>
 
-  <!--
-    The three layers, named once and only here — the tagline says them as a
-    sentence, so repeating them in prose underneath would be the third telling.
-    One accent for all three: colour-coding would spend three signals on three
-    things that are not in opposition (DESIGN.md §1).
-  -->
-  <ul class="mt-7 flex flex-wrap gap-2">
-    {
-      layerKeys.map((k) => (
-        <li class="chip">
-          <span>{t(k)}</span>
-        </li>
-      ))
-    }
-  </ul>
+      <p class="mt-6 text-sm text-muted">{t("hero.bio")}</p>
 
-  <p class="mt-6 max-w-2xl text-sm text-muted">{t("hero.bio")}</p>
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href={lang === "es" ? "/cv.es.pdf" : "/cv.pdf"}
+          class="t-fast rounded border border-accent bg-accent px-4 py-2.5 text-sm font-medium text-bg hover:border-accent-hover hover:bg-accent-hover"
+        >
+          {t("hero.cta.cv")}
+        </a>
+        <a
+          href="#system"
+          class="t-fast rounded border border-border px-4 py-2.5 text-sm font-medium text-text hover:border-accent hover:text-accent"
+        >
+          {t("hero.cta.system")}
+        </a>
+        <a href="#contact" class="t-fast px-2 py-2.5 text-sm text-muted hover:text-accent">
+          {t("hero.cta.contact")}
+        </a>
+      </div>
+    </div>
 
-  <div class="mt-9 flex flex-wrap items-center gap-3">
-    <a
-      href={lang === "es" ? "/cv.es.pdf" : "/cv.pdf"}
-      class="t-fast rounded border border-accent bg-accent px-4 py-2.5 text-sm font-medium text-bg hover:border-accent-hover hover:bg-accent-hover"
-    >
-      {t("hero.cta.cv")}
-    </a>
-    <a
-      href="#system"
-      class="t-fast rounded border border-border px-4 py-2.5 text-sm font-medium text-text hover:border-accent hover:text-accent"
-    >
-      {t("hero.cta.system")}
-    </a>
-    <a href="#contact" class="t-fast px-2 py-2.5 text-sm text-muted hover:text-accent">
-      {t("hero.cta.contact")}
-    </a>
+    <!--
+      Same shape as the About aside: portrait, then a label and a ticked list.
+      The three layers are named once and only here — the tagline says them as
+      a sentence, so repeating them in prose underneath would be the third
+      telling. One accent for all three: colour-coding would spend three
+      signals on three things that are not in opposition (DESIGN.md §1).
+    -->
+    <aside>
+      <img
+        src="/img/avatar/vladimir-3d.webp"
+        alt={t("hero.avatar.alt")}
+        width="256"
+        height="256"
+        loading="eager"
+        decoding="async"
+        class="panel hidden w-full max-w-64 object-cover md:block"
+      />
+
+      <h2 class="label md:mt-10">{t("hero.layers.title")}</h2>
+      <ul class="mt-4 space-y-2.5 text-sm text-muted">
+        {
+          layerKeys.map((k) => (
+            <li class="flex gap-2.5">
+              <span class="text-accent" aria-hidden="true">
+                &#8250;
+              </span>
+              <span>{t(k)}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
   </div>
 
   <Facts />
