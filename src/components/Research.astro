@@ -206,10 +206,19 @@ const barHeights = perYear
     }
     <fieldset class="pub-tabs mt-6 min-w-0">
       <legend class="sr-only">{t("research.publications.title")}</legend>
+      {
+        /*
+        The strip scrolls rather than wrapping. A shrinking label put "Docencia
+        en ingeniería" on two lines at 320 px and still did not fit — the row
+        grew to 62 px and overflowed anyway, so the wrap bought nothing. With
+        `shrink-0 whitespace-nowrap` each tab stays one line and the overflow
+        is handled where it belongs, by the scroll container.
+      */
+      }
       <div class="flex gap-2 overflow-x-auto border-b border-border sm:gap-6">
         {
           grouped.map((group, idx) => (
-            <label class="pub-tab-label data flex cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 pb-3 text-xs font-medium transition-colors sm:text-sm">
+            <label class="pub-tab-label data relative flex shrink-0 cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 pb-3 text-xs font-medium whitespace-nowrap transition-colors sm:text-sm">
               <input
                 type="radio"
                 name="publication-tab"

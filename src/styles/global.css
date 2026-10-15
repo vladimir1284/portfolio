@@ -429,9 +429,12 @@
     border-color: var(--color-accent);
     color: var(--color-accent);
   }
+  /* The ring goes inside the box, not around it: the strip scrolls on `x`,
+     which makes it clip on `y` too, so an outward offset was cut off above
+     and below and left a keyboard user with two vertical stubs. */
   .pub-tab-label:has(.pub-tab-input:focus-visible) {
     outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    outline-offset: -2px;
   }
 
   /* The LAMULA chain advances on its own until the reader takes over (see
