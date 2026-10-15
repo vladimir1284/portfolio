@@ -33,38 +33,33 @@ const grouped = groups
   .filter((g) => g.items.length > 0);
 
 /*
-  Output per year, built at render time from the same array the list below
-  renders — the chart cannot disagree with the entries under it, because it is
-  the entries under it. Empty years are kept: the thinner stretch while the
-  doctorate was the priority is part of the record, and dropping those columns
-  would make the shape a decoration instead of a measurement.
+  Citations per year plot.
+  Data:
+  2015: 1, 2016: 3, 2017: 3, 2018: 9, 2019: 2, 2020: 8,
+  2021: 14, 2022: 10, 2023: 16, 2024: 7, 2025: 4, 2026: 4
 
   It is plain markup with no script. The bars are hidden from assistive
   technology and the same numbers are given as a table, which is the readable
   form of a bar chart anyway.
-
-  The two series are told apart by fill *and* by stroke — journal solid,
-  conference outlined — rather than by two tints of the accent. A 35% tint of
-  the light-theme accent lands at 2.4:1 against the page, under the 3:1 a
-  meaningful graphic owes the reader (DESIGN.md §2); the outline carries the
-  accent at full strength, so the bar is legible in both themes and the
-  difference survives being printed or read by someone who misses the tint.
 */
-const years = publications.map((p) => p.year);
-const firstYear = Math.min(...years);
-const lastYear = Math.max(...years);
-const histogram = Array.from({ length: lastYear - firstYear + 1 }, (_, i) => {
-  const year = firstYear + i;
-  const items = publications.filter((p) => p.year === year);
-  return {
-    year,
-    journal: items.filter((p) => p.type === "journal").length,
-    conference: items.filter((p) => p.type === "conference").length,
-  };
-});
-const tallest = Math.max(...histogram.map((h) => h.journal + h.conference));
-/** Height of one publication, in rem. The plot area is 6rem tall. */
-const unit = 6 / tallest;
+const citationsData = [
+  { year: 2015, count: 1 },
+  { year: 2016, count: 3 },
+  { year: 2017, count: 3 },
+  { year: 2018, count: 9 },
+  { year: 2019, count: 2 },
+  { year: 2020, count: 8 },
+  { year: 2021, count: 14 },
+  { year: 2022, count: 10 },
+  { year: 2023, count: 16 },
+  { year: 2024, count: 7 },
+  { year: 2025, count: 4 },
+  { year: 2026, count: 4 },
+];
+const maxCitations = Math.max(...citationsData.map((c) => c.count));
+const totalCitations = citationsData.reduce((sum, c) => sum + c.count, 0);
+/** Height unit in rem. The plot area is 6rem tall. */
+const citationUnit = 6 / maxCitations;
 ---
 
 <section id="research" class="section">
@@ -98,58 +93,45 @@ const unit = 6 / tallest;
 
     <figure class="panel mt-6 p-4 sm:p-6">
       <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-        <figcaption class="label">{t("research.output.title")}</figcaption>
-        <p class="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-muted">
-          <span class="flex items-center gap-2">
-            <span class="inline-block h-2.5 w-2.5 bg-accent" aria-hidden="true"></span>
-            {t("research.type.journal")}
-          </span>
-          <span class="flex items-center gap-2">
-            <span
-              class="inline-block h-2.5 w-2.5 border border-accent bg-accent/20"
-              aria-hidden="true"></span>
-            {t("research.type.conference")}
-          </span>
+        <figcaption class="label">{t("research.citations.title")}</figcaption>
+        <p class="data text-xs text-muted">
+          {t("research.citations.total", { total: totalCitations })}
         </p>
       </div>
 
       <div class="mt-6 flex items-end gap-1 sm:gap-1.5" aria-hidden="true">
         {
-          histogram.map((h) => (
+          citationsData.map((c) => (
             <div class="flex min-w-0 flex-1 flex-col items-center gap-2">
-              <div class="flex w-full max-w-10 flex-col justify-end gap-px" style="height: 6rem">
-                {h.conference > 0 && (
-                  <div
-                    class="w-full border border-accent bg-accent/20"
-                    style={`height: ${h.conference * unit}rem`}
-                  />
-                )}
-                {h.journal > 0 && (
-                  <div class="w-full bg-accent" style={`height: ${h.journal * unit}rem`} />
+              <div
+                class="flex w-full max-w-10 flex-col justify-end gap-px"
+                style="height: 6rem"
+                title={`${c.count} citations in ${c.year}`}
+              >
+                {c.count > 0 && (
+                  <div class="w-full bg-accent" style={`height: ${c.count * citationUnit}rem`} />
                 )}
               </div>
-              <span class="data text-[0.625rem] text-muted">{String(h.year).slice(2)}</span>
+              <span class="data text-[0.625rem] text-muted">{String(c.year).slice(2)}</span>
             </div>
           ))
         }
       </div>
 
       <table class="sr-only">
-        <caption>{t("research.output.title")}</caption>
+        <caption>{t("research.citations.title")}</caption>
         <thead>
           <tr>
-            <th scope="col">{t("research.output.year")}</th>
-            <th scope="col">{t("research.type.journal")}</th>
-            <th scope="col">{t("research.type.conference")}</th>
+            <th scope="col">{t("research.citations.year")}</th>
+            <th scope="col">{t("research.citations.count")}</th>
           </tr>
         </thead>
         <tbody>
           {
-            histogram.map((h) => (
+            citationsData.map((c) => (
               <tr>
-                <th scope="row">{h.year}</th>
-                <td>{h.journal}</td>
-                <td>{h.conference}</td>
+                <th scope="row">{c.year}</th>
+                <td>{c.count}</td>
               </tr>
             ))
           }
@@ -159,106 +141,163 @@ const unit = 6 / tallest;
 
     <h3 class="label mt-14">{t("research.publications.title")}</h3>
 
-    {
-      grouped.map((group) => (
-        <div class="mt-8">
-          <p class="data text-xs text-accent">{t(group.label)}</p>
-          <ul class="mt-4 divide-y divide-border border-t border-border">
-            {group.items.map((p) => {
-              const rank = p.rank;
-              return (
-                <li class="flex gap-4 py-5 sm:gap-5">
-                  {/*
-                  First page of the paper. It is the cheapest evidence the list
-                  can carry, and it gives a column of metadata something to look
-                  at. Decorative to assistive tech — the title and the link
-                  beside it say everything the picture does — so it carries an
-                  empty alt and is skipped by the keyboard, with the DOI/PDF
-                  link under the entry as the real target.
-                */}
-                  {p.thumb && (
-                    <a class="paper-thumb" href={p.doi || p.pdf} tabindex="-1" aria-hidden="true">
-                      <img
-                        src={p.thumb}
-                        alt=""
-                        width="320"
-                        height="414"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </a>
-                  )}
-                  <div class="min-w-0 flex-1">
-                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span class="data text-sm text-muted">{p.year}</span>
-                      <h4 class="flex-1 text-base font-medium">{p.title}</h4>
-                      <span class="tag">{t(typeKey(p.type))}</span>
+    <div class="pub-tabs mt-6">
+      <div class="flex gap-2 overflow-x-auto border-b border-border sm:gap-6" role="tablist">
+        {
+          grouped.map((group, idx) => (
+            <label class="pub-tab-label data flex cursor-pointer items-center gap-2 border-b-2 border-transparent px-1 pb-3 text-xs font-medium transition-colors sm:text-sm">
+              <input
+                type="radio"
+                name="publication-tab"
+                value={group.id}
+                checked={idx === 0}
+                class="pub-tab-input sr-only"
+              />
+              <span>{t(group.label)}</span>
+              <span class="pub-tab-count rounded-full border border-border bg-surface px-2 py-0.5 text-[0.65rem] text-muted">
+                {group.items.length}
+              </span>
+            </label>
+          ))
+        }
+      </div>
+
+      {
+        grouped.map((group) => (
+          <div class="pub-tab-panel mt-6" data-group={group.id}>
+            <ul class="divide-y divide-border border-t border-border">
+              {group.items.map((p) => {
+                const rank = p.rank;
+                return (
+                  <li class="flex gap-4 py-5 sm:gap-5">
+                    {/*
+                    First page of the paper. It is the cheapest evidence the list
+                    can carry, and it gives a column of metadata something to look
+                    at. Decorative to assistive tech — the title and the link
+                    beside it say everything the picture does — so it carries an
+                    empty alt and is skipped by the keyboard, with the DOI/PDF
+                    link under the entry as the real target.
+                  */}
+                    {p.thumb && (
+                      <a class="paper-thumb" href={p.doi || p.pdf} tabindex="-1" aria-hidden="true">
+                        <img
+                          src={p.thumb}
+                          alt=""
+                          width="320"
+                          height="414"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </a>
+                    )}
+                    <div class="min-w-0 flex-1">
+                      <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
+                        <div class="flex min-w-0 flex-1 items-baseline gap-3">
+                          <span class="data shrink-0 text-sm text-muted">{p.year}</span>
+                          <h4 class="text-base font-medium">{p.title}</h4>
+                        </div>
+                        <div class="flex shrink-0 flex-col items-start gap-1.5 sm:items-end">
+                          {p.type === "journal" ? (
+                            <span class="inline-flex items-center gap-1.5 rounded border border-accent/50 bg-accent/15 px-2.5 py-1 font-mono text-xs font-medium text-accent">
+                              <svg
+                                class="h-3.5 w-3.5 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                              </svg>
+                              {t(typeKey(p.type))}
+                            </span>
+                          ) : (
+                            <span class="inline-flex items-center gap-1.5 rounded border border-warn/50 bg-warn/15 px-2.5 py-1 font-mono text-xs font-medium text-warn">
+                              <svg
+                                class="h-3.5 w-3.5 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                              </svg>
+                              {t(typeKey(p.type))}
+                            </span>
+                          )}
+                          {p.doi && (
+                            <a
+                              class="data t-fast text-xs text-accent underline underline-offset-2 hover:text-accent-hover"
+                              href={p.doi}
+                            >
+                              {t("research.doi")} &rarr;
+                            </a>
+                          )}
+                          {!p.doi && p.pdf && (
+                            <a
+                              class="data t-fast text-xs text-accent underline underline-offset-2 hover:text-accent-hover"
+                              href={p.pdf}
+                            >
+                              {t("research.pdf")} &rarr;
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
+                      <p class="mt-1 text-sm text-muted">
+                        <span class="italic">{p.venue}</span>
+                        {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
+                      </p>
+
+                      {/*
+                    The quartile strip. It renders only for an entry that carries
+                    a `rank`, and it always prints the ranking, the edition and
+                    the category beside it — a quartile with no year is a number
+                    a reader cannot check, and one with no category is a number
+                    that chose its own ground (types.ts, `Rank`).
+                  */}
+                      {rank && (
+                        <p class="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                          <span class="flex gap-0.5" aria-hidden="true">
+                            {[1, 2, 3, 4].map((q) => (
+                              <span
+                                class={`inline-block h-1.5 w-5 ${
+                                  q <= 5 - rank.quartile ? "bg-accent" : "bg-border"
+                                }`}
+                              />
+                            ))}
+                          </span>
+                          <span class="data text-xs text-muted">
+                            Q{rank.quartile} &middot; {rank.source} {rank.year}
+                          </span>
+                          <span class="text-xs text-muted">{rank.category}</span>
+                        </p>
+                      )}
+                      {/*
+                    The abstract is the evidence, not the headline. Folded, the
+                    list reads as a list; open, nothing has been withheld
+                    (Disclosure.astro).
+                  */}
+                      <Disclosure label={t("research.abstract")} class="mt-3">
+                        <p class="prose-col">{p.abstract[lang]}</p>
+                      </Disclosure>
                     </div>
-                    <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
-                    <p class="mt-1 text-sm text-muted">
-                      <span class="italic">{p.venue}</span>
-                      {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
-                    </p>
-                    {/*
-                  The quartile strip. It renders only for an entry that carries
-                  a `rank`, and it always prints the ranking, the edition and
-                  the category beside it — a quartile with no year is a number
-                  a reader cannot check, and one with no category is a number
-                  that chose its own ground (types.ts, `Rank`).
-                */}
-                    {rank && (
-                      <p class="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                        <span class="flex gap-0.5" aria-hidden="true">
-                          {[1, 2, 3, 4].map((q) => (
-                            <span
-                              class={`inline-block h-1.5 w-5 ${
-                                q <= 5 - rank.quartile ? "bg-accent" : "bg-border"
-                              }`}
-                            />
-                          ))}
-                        </span>
-                        <span class="data text-xs text-muted">
-                          Q{rank.quartile} &middot; {rank.source} {rank.year}
-                        </span>
-                        <span class="text-xs text-muted">{rank.category}</span>
-                      </p>
-                    )}
-                    {/*
-                  The abstract is the evidence, not the headline. Folded, the
-                  list reads as a list; open, nothing has been withheld
-                  (Disclosure.astro).
-                */}
-                    <Disclosure label={t("research.abstract")} class="mt-3">
-                      <p class="prose-col">{p.abstract[lang]}</p>
-                    </Disclosure>
-                    {(p.doi || p.pdf) && (
-                      <p class="mt-3 flex gap-4">
-                        {p.doi && (
-                          <a
-                            class="data t-fast text-xs text-accent hover:text-accent-hover"
-                            href={p.doi}
-                          >
-                            {t("research.doi")}
-                          </a>
-                        )}
-                        {p.pdf && (
-                          <a
-                            class="data t-fast text-xs text-accent hover:text-accent-hover"
-                            href={p.pdf}
-                          >
-                            {t("research.pdf")}
-                          </a>
-                        )}
-                      </p>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))
-    }
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
 
     <p class="mt-8">
       <a
