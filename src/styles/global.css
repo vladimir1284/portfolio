@@ -352,6 +352,280 @@
     opacity: 1;
   }
 
+  /* A publication entry (Research.astro), in two layouts from one DOM.
+
+     Under 40rem it is the card: the year and its tags beside the first page of
+     the paper, then the title set larger, authors, venue, the quartile strip
+     fenced by hairlines, and two 48px controls side by side — open the paper,
+     or open the abstract. At 40rem and up it is the row the section has always
+     had: thumbnail left, year beside the title, type tag and link top-right.
+
+     Grid areas do the moving. Rendering the entry twice and hiding one copy
+     would have been shorter to write and would have put every title, every
+     author list and every abstract in the page twice, for a screen reader to
+     walk through twice. The one element that does exist twice is the quartile
+     caption, because the card prints it as a chip and the row prints it beside
+     the bars; exactly one of the two is ever displayed. */
+  .pub-item {
+    display: grid;
+    align-items: start;
+    padding-block: 1.5rem;
+  }
+  .pub-item > .paper-thumb {
+    grid-area: thumb;
+  }
+  .pub-year {
+    grid-area: year;
+    color: var(--color-muted);
+  }
+  .pub-tags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .pub-title {
+    grid-area: title;
+    font-weight: 500;
+  }
+  .pub-authors {
+    grid-area: authors;
+    color: var(--color-muted);
+  }
+  .pub-venue {
+    grid-area: venue;
+    color: var(--color-muted);
+  }
+  .pub-detail {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+  }
+  .pub-rank {
+    grid-area: rank;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .pub-bars {
+    display: flex;
+    gap: 0.125rem;
+  }
+  .pub-bars > span {
+    display: inline-block;
+    width: 1.25rem;
+    height: 0.375rem;
+  }
+  .pub-q,
+  .pub-category {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+  .pub-actions {
+    grid-area: actions;
+  }
+
+  /* The card. */
+  @media (width < 40rem) {
+    .pub-item {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "year    thumb"
+        "tags    thumb"
+        "title   title"
+        "authors authors"
+        "venue   venue"
+        "rank    rank"
+        "actions actions";
+      column-gap: 1rem;
+    }
+    .pub-year {
+      font-size: 0.9375rem;
+      letter-spacing: 0.04em;
+    }
+    .pub-tags {
+      margin-top: 0.75rem;
+    }
+    .pub-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.625rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      color: var(--color-muted);
+    }
+    .pub-title {
+      margin-top: 1.125rem;
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+    .pub-authors {
+      margin-top: 1.125rem;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+    .pub-venue {
+      margin-top: 0.375rem;
+      font-size: 0.9375rem;
+    }
+    .pub-rank {
+      margin-top: 1.125rem;
+      gap: 0.5rem 0.75rem;
+      padding-block: 0.75rem;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .pub-category {
+      font-size: 0.875rem;
+    }
+    /* The caption the chip above is already carrying. */
+    .pub-q {
+      display: none;
+    }
+
+    /* Both controls on one row, without a script and without giving up
+       `<details>`: the links take the left half, and the disclosure spans the
+       full width — so its body is readable edge to edge — with its summary
+       held to the right half. The disclosure's empty left half would otherwise
+       sit over the link and swallow the tap, so it passes pointer events
+       through and its own two parts take them back. */
+    .pub-actions {
+      margin-top: 1.125rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 0.625rem;
+      align-items: start;
+    }
+    .pub-links {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .pub-fold {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      border-top: 0;
+      pointer-events: none;
+    }
+    .pub-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 3rem;
+      padding-inline: 0.75rem;
+      border-radius: 0.375rem;
+      background-color: var(--color-accent);
+      color: var(--color-bg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .pub-link:hover {
+      background-color: var(--color-accent-hover);
+    }
+    .pub-fold > summary {
+      width: calc(50% - 0.3125rem);
+      margin-left: auto;
+      justify-content: center;
+      min-height: 3rem;
+      padding-block: 0;
+      border: 1px solid var(--color-border);
+      border-radius: 0.375rem;
+      pointer-events: auto;
+    }
+    .pub-fold[open] > summary {
+      border-color: var(--color-accent);
+      background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    }
+    .pub-fold .disclose-body {
+      margin-top: 0.625rem;
+      padding: 1rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.375rem;
+      background-color: var(--color-surface);
+      pointer-events: auto;
+    }
+  }
+
+  /* The row. */
+  @media (width >= 40rem) {
+    .pub-item {
+      padding-block: 1.25rem;
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        "thumb year    title   tags"
+        "thumb .       .       links"
+        "thumb authors authors authors"
+        "thumb venue   venue   venue"
+        "thumb rank    rank    rank"
+        "thumb fold    fold    fold";
+    }
+    .pub-item > .paper-thumb {
+      margin-right: 1.25rem;
+    }
+    .pub-year {
+      align-self: baseline;
+      margin-right: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .pub-title {
+      align-self: baseline;
+      font-size: 1rem;
+    }
+    .pub-tags {
+      justify-self: end;
+      margin-left: 1.5rem;
+    }
+    /* The strip beside the bars says it already. */
+    .pub-chip {
+      display: none;
+    }
+    .pub-authors {
+      margin-top: 0.375rem;
+      font-size: 0.875rem;
+    }
+    .pub-venue {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+    }
+    .pub-rank {
+      margin-top: 0.625rem;
+      gap: 0.25rem 0.625rem;
+    }
+    /* The wrapper the card needs is in the way here: dissolving it lets the
+       links go to the right column and the disclosure to the full width. */
+    .pub-actions {
+      display: contents;
+    }
+    .pub-links {
+      grid-area: links;
+      justify-self: end;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.375rem;
+      margin-top: 0.375rem;
+      margin-left: 1.5rem;
+    }
+    .pub-link {
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .pub-link:hover {
+      color: var(--color-accent-hover);
+    }
+    .pub-fold {
+      grid-area: fold;
+      margin-top: 0.75rem;
+    }
+  }
+
   /* Publication tabs — native radio-driven CSS tabs */
   .pub-tab-panel {
     display: none;

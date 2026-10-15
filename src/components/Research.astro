@@ -221,7 +221,16 @@ const citationUnit = 6 / maxCitations;
               {group.items.map((p) => {
                 const rank = p.rank;
                 return (
-                  <li class="flex gap-4 py-5 sm:gap-5">
+                  /*
+                    One DOM, two layouts (global.css, `.pub-item`). Under 40rem
+                    the entry is a card — year and tags beside a thumbnail at
+                    the right, then title, authors, venue, the quartile strip
+                    between hairlines, and a pair of 48px controls. At 40rem and
+                    up it is the row it has always been: thumbnail left, year
+                    beside the title, tag and link top-right. Grid areas move
+                    the same elements; nothing is rendered twice.
+                  */
+                  <li class="pub-item">
                     {/*
                     First page of the paper. It is the cheapest evidence the list
                     can carry, and it gives a column of metadata something to look
@@ -249,114 +258,121 @@ const citationUnit = 6 / maxCitations;
                         />
                       </a>
                     )}
-                    <div class="min-w-0 flex-1">
-                      <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
-                        <div class="flex min-w-0 flex-1 items-baseline gap-3">
-                          <span class="data shrink-0 text-sm text-muted">{p.year}</span>
-                          <h4 class="text-base font-medium">{p.title}</h4>
-                        </div>
-                        <div class="flex shrink-0 flex-col items-start gap-1.5 sm:items-end">
-                          {p.type === "journal" ? (
-                            <span class="inline-flex items-center gap-1.5 rounded border border-accent/50 bg-accent/15 px-2.5 py-1 font-mono text-xs font-medium text-accent">
-                              <svg
-                                class="h-3.5 w-3.5 shrink-0"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                              >
-                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                              </svg>
-                              {t(typeKey(p.type))}
-                            </span>
-                          ) : (
-                            <span class="inline-flex items-center gap-1.5 rounded border border-warn/50 bg-warn/15 px-2.5 py-1 font-mono text-xs font-medium text-warn">
-                              <svg
-                                class="h-3.5 w-3.5 shrink-0"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                              >
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                              </svg>
-                              {t(typeKey(p.type))}
-                            </span>
-                          )}
-                          {/*
-                            Both links when an entry carries both. No entry
-                            does today, but making them exclusive would mean a
-                            PDF added next to an existing DOI silently stops
-                            being reachable, and nothing on the page would say
-                            so.
-                          */}
-                          {p.doi && (
-                            <a
-                              class="data t-fast text-xs text-accent underline underline-offset-2 hover:text-accent-hover"
-                              href={p.doi}
-                              target="_blank"
-                              rel="noopener"
-                            >
-                              {t("research.doi")} &rarr;
-                            </a>
-                          )}
-                          {p.pdf && (
-                            <a
-                              class="data t-fast text-xs text-accent underline underline-offset-2 hover:text-accent-hover"
-                              href={p.pdf}
-                              target="_blank"
-                              rel="noopener"
-                            >
-                              {t("research.pdf")} &rarr;
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                      <p class="mt-1.5 text-sm text-muted">{p.authors.join(", ")}</p>
-                      <p class="mt-1 text-sm text-muted">
-                        <span class="italic">{p.venue}</span>
-                        {p.detail && <span class="data ml-2 text-xs">{p.detail}</span>}
-                      </p>
 
+                    <span class="pub-year data">{p.year}</span>
+                    <h4 class="pub-title">{p.title}</h4>
+
+                    <div class="pub-tags">
+                      {p.type === "journal" ? (
+                        <span class="inline-flex items-center gap-1.5 rounded border border-accent/50 bg-accent/15 px-2.5 py-1 font-mono text-xs font-medium text-accent">
+                          <svg
+                            class="h-3.5 w-3.5 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                          </svg>
+                          {t(typeKey(p.type))}
+                        </span>
+                      ) : (
+                        <span class="inline-flex items-center gap-1.5 rounded border border-warn/50 bg-warn/15 px-2.5 py-1 font-mono text-xs font-medium text-warn">
+                          <svg
+                            class="h-3.5 w-3.5 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                          </svg>
+                          {t(typeKey(p.type))}
+                        </span>
+                      )}
                       {/*
+                        The quartile, as a chip beside the type tag. It carries
+                        the same three facts as the strip's caption below and
+                        stands in its place, never alongside it: the card has no
+                        room for a caption under the bars, the row has no room
+                        for a third chip. One of the two is always `display:
+                        none`, so a screen reader hears it once (global.css,
+                        `.pub-chip` / `.pub-q`).
+                      */}
+                      {rank && (
+                        <span class="pub-chip data">
+                          Q{rank.quartile} &middot; {rank.source} {rank.year}
+                        </span>
+                      )}
+                    </div>
+
+                    <p class="pub-authors">{p.authors.join(", ")}</p>
+                    <p class="pub-venue">
+                      <span class="italic">{p.venue}</span>
+                      {p.detail && <span class="data pub-detail">{p.detail}</span>}
+                    </p>
+
+                    {/*
                     The quartile strip. It renders only for an entry that carries
                     a `rank`, and it always prints the ranking, the edition and
                     the category beside it — a quartile with no year is a number
                     a reader cannot check, and one with no category is a number
                     that chose its own ground (types.ts, `Rank`).
                   */}
-                      {rank && (
-                        <p class="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                          <span class="flex gap-0.5" aria-hidden="true">
-                            {[1, 2, 3, 4].map((q) => (
-                              <span
-                                class={`inline-block h-1.5 w-5 ${
-                                  q <= 5 - rank.quartile ? "bg-accent" : "bg-border"
-                                }`}
-                              />
-                            ))}
-                          </span>
-                          <span class="data text-xs text-muted">
-                            Q{rank.quartile} &middot; {rank.source} {rank.year}
-                          </span>
-                          <span class="text-xs text-muted">{rank.category}</span>
-                        </p>
-                      )}
-                      {/*
-                    The abstract is the evidence, not the headline. Folded, the
-                    list reads as a list; open, nothing has been withheld
-                    (Disclosure.astro).
+                    {rank && (
+                      <p class="pub-rank">
+                        <span class="pub-bars" aria-hidden="true">
+                          {[1, 2, 3, 4].map((q) => (
+                            <span class={q <= 5 - rank.quartile ? "bg-accent" : "bg-border"} />
+                          ))}
+                        </span>
+                        <span class="pub-q data">
+                          Q{rank.quartile} &middot; {rank.source} {rank.year}
+                        </span>
+                        <span class="pub-category">{rank.category}</span>
+                      </p>
+                    )}
+
+                    {/*
+                    The two things a reader does with an entry, side by side on a
+                    phone: open the paper, or open the abstract. Both are 48px
+                    tall (DESIGN.md §6) and neither needs script — the abstract is
+                    the same `<details>` as everywhere else (Disclosure.astro),
+                    restyled as a button at card width.
+
+                    Both links when an entry carries both. No entry does today,
+                    but making them exclusive would mean a PDF added next to an
+                    existing DOI silently stops being reachable, and nothing on
+                    the page would say so.
                   */}
-                      <Disclosure label={t("research.abstract")} class="mt-3">
+                    <div class="pub-actions">
+                      <div class="pub-links">
+                        {p.doi && (
+                          <a class="pub-link data" href={p.doi} target="_blank" rel="noopener">
+                            {t("research.doi")} <span aria-hidden="true">&rarr;</span>
+                          </a>
+                        )}
+                        {p.pdf && (
+                          <a class="pub-link data" href={p.pdf} target="_blank" rel="noopener">
+                            {t("research.pdf")} <span aria-hidden="true">&rarr;</span>
+                          </a>
+                        )}
+                      </div>
+                      {/*
+                      The abstract is the evidence, not the headline. Folded, the
+                      list reads as a list; open, nothing has been withheld
+                      (Disclosure.astro).
+                    */}
+                      <Disclosure label={t("research.abstract")} class="pub-fold">
                         <p class="prose-col">{p.abstract[lang]}</p>
                       </Disclosure>
                     </div>
