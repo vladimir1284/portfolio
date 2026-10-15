@@ -352,6 +352,35 @@
     opacity: 1;
   }
 
+  /* Publication tabs — native radio-driven CSS tabs */
+  .pub-tab-panel {
+    display: none;
+  }
+  .pub-tabs:has(.pub-tab-input[value="core"]:checked) .pub-tab-panel[data-group="core"],
+  .pub-tabs:has(.pub-tab-input[value="radar"]:checked) .pub-tab-panel[data-group="radar"],
+  .pub-tabs:has(.pub-tab-input[value="teaching"]:checked) .pub-tab-panel[data-group="teaching"] {
+    display: block;
+  }
+
+  .pub-tab-label {
+    color: var(--color-muted);
+  }
+  .pub-tab-label:hover {
+    color: var(--color-text);
+  }
+  .pub-tab-label:has(.pub-tab-input:checked) {
+    border-bottom-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .pub-tab-label:has(.pub-tab-input:checked) .pub-tab-count {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .pub-tab-label:has(.pub-tab-input:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
   /* The LAMULA chain advances on its own until the reader takes over (see
      System.astro). The bar under the selected node is what makes that honest:
      it says the panel is about to change and times the change, instead of

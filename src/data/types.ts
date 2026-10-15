@@ -58,6 +58,39 @@ export interface Rank {
   category: string;
 }
 
+/**
+ * Citation counts, read off a Google Scholar profile.
+ *
+ * Unlike every other figure on the page, this one cannot be derived from the
+ * repository — the site does not know who cites it. So it ships with the
+ * source, the profile it was read from, and the date it was read, and the
+ * component prints all three. A citation count with no as-of date is a number
+ * that silently rots; one with no profile link is a number nobody can check.
+ *
+ * `total` is Scholar's own "Cited by / All", which is *not* the sum of
+ * `perYear`: the per-year chart starts at 2015 and earlier citations are
+ * counted in the total but drawn nowhere. The gap is real, so the caption
+ * says the chart starts in 2015 rather than letting a reader add the bars and
+ * come up short.
+ *
+ * Refresh by hand from the profile. Nothing automates it, so the date is the
+ * only thing standing between this and a stale claim.
+ */
+export interface Citations {
+  /** The service consulted. Rendered verbatim. */
+  source: string;
+  /** The profile the numbers were read from. Shown as the link that proves them. */
+  url: string;
+  /** ISO date the profile was read. Rendered in the caption. */
+  asOf: string;
+  /** Scholar's "Cited by / All". Not the sum of `perYear` — see above. */
+  total: number;
+  hIndex: number;
+  i10Index: number;
+  /** The per-year bars, oldest first. The last year is normally in progress. */
+  perYear: { year: number; count: number }[];
+}
+
 export interface Publication {
   group: string;
   type: string;

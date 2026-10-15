@@ -85,7 +85,7 @@
   "kind": "section",
   "title": "Research",
   "url": "/#research",
-  "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation."
+  "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation. {source}, read on {asOf}. The chart starts in {first}, so the bars total less than the figure above; {year} is still in progress."
  },
  {
   "id": "ui-hero-es",
@@ -173,7 +173,7 @@
   "kind": "section",
   "title": "Investigación",
   "url": "/es/#research",
-  "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo."
+  "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo. {source}, consultado el {asOf}. La gráfica empieza en {first}, así que las barras suman menos que la cifra de arriba; {year} está en curso."
  },
  {
   "id": "project-lamula-en",
