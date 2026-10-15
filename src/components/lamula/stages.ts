@@ -31,7 +31,7 @@ export const STAGES: readonly Stage[] = [
     id: "drx",
     name: "system.stage.drx.name",
     body: "system.stage.drx.body",
-    repo: "https://github.com/vladimir1284/DRX",
+    repo: "https://github.com/vladimir1284/lamula-drx",
     annotation: "FPGA",
     docs: ["https://lamula-drx-docs.ladetec.com/"],
   },
