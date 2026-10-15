@@ -88,6 +88,7 @@ const unit = 6 / tallest;
         </a>
         <a
           href={THESIS_URL}
+          target="_blank"
           rel="noopener"
           class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
         >
@@ -177,7 +178,14 @@ const unit = 6 / tallest;
                   link under the entry as the real target.
                 */}
                   {p.thumb && (
-                    <a class="paper-thumb" href={p.doi || p.pdf} tabindex="-1" aria-hidden="true">
+                    <a
+                      class="paper-thumb"
+                      href={p.doi || p.pdf}
+                      target="_blank"
+                      rel="noopener"
+                      tabindex="-1"
+                      aria-hidden="true"
+                    >
                       <img
                         src={p.thumb}
                         alt=""
@@ -237,6 +245,8 @@ const unit = 6 / tallest;
                           <a
                             class="data t-fast text-xs text-accent hover:text-accent-hover"
                             href={p.doi}
+                            target="_blank"
+                            rel="noopener"
                           >
                             {t("research.doi")}
                           </a>
@@ -245,6 +255,8 @@ const unit = 6 / tallest;
                           <a
                             class="data t-fast text-xs text-accent hover:text-accent-hover"
                             href={p.pdf}
+                            target="_blank"
+                            rel="noopener"
                           >
                             {t("research.pdf")}
                           </a>
@@ -263,6 +275,7 @@ const unit = 6 / tallest;
     <p class="mt-8">
       <a
         href={SCHOLAR_URL}
+        target="_blank"
         rel="noopener"
         class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
       >

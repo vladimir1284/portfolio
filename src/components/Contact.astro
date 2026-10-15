@@ -49,7 +49,12 @@ const { email: EMAIL, links } = profile;
       {
         links.map((l) => (
           <li>
-            <a href={l.url} rel="noopener" class="tag t-fast hover:border-accent hover:text-accent">
+            <a
+              href={l.url}
+              target="_blank"
+              rel="noopener"
+              class="tag t-fast hover:border-accent hover:text-accent"
+            >
               {t(l.key as UIKey)}
             </a>
           </li>

@@ -76,6 +76,7 @@ const t = useTranslations(lang);
                       <dd class="mt-1">
                         <a
                           href={stage.repo}
+                          target="_blank"
                           rel="noopener"
                           class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
                         >
@@ -91,6 +92,7 @@ const t = useTranslations(lang);
                         {stage.docs.map((url) => (
                           <a
                             href={url}
+                            target="_blank"
                             rel="noopener"
                             class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
                           >

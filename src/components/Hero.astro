@@ -92,7 +92,12 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
         <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
         {t("hero.radar.label")}
       </span>
-      <a href={VIEWER_URL} rel="noopener" class="data t-fast text-xs text-muted hover:text-accent">
+      <a
+        href={VIEWER_URL}
+        target="_blank"
+        rel="noopener"
+        class="data t-fast text-xs text-muted hover:text-accent"
+      >
         {t("hero.radar.live")} &rarr;
       </a>
     </div>
