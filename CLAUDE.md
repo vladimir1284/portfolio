@@ -84,19 +84,19 @@ Both page routes import the **same component set**; they differ only by locale. 
 
 Single-page layout, sections in order:
 
-| Section    | Component          | Content                                                                                   |
-| :--------- | :----------------- | :---------------------------------------------------------------------------------------- |
-| Hero       | `Hero.astro`       | Name, tagline, short bio, CTAs, radar still + link to the live viewer.                    |
-| Facts      | `Facts.astro`      | Six figures under the hero, each with the method that makes it defensible.                |
-| System     | `System.astro`     | Interactive walkthrough of the LAMULA radar chain. Data in `components/lamula/stages.ts`. |
-| About      | `About.astro`      | Photo, extended bio, current role/institution, research interests.                        |
-| Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                         |
-| Projects   | `Projects.astro`   | Cards from `data/projects.json`: title, stack tags, links (demo/GitHub).                  |
-| Experience | `Experience.astro` | Timeline: positions, institutions, dates.                                                 |
-| Ask        | `Ask.astro`        | Retrieval over the site's own content. Degrades to a static question list (§11).          |
-| Contact    | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
-| Header     | `Header.astro`     | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                   |
-| Footer     | `Footer.astro`     | Copyright, social icons.                                                                  |
+| Section    | Component          | Content                                                                                                                           |
+| :--------- | :----------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| Hero       | `Hero.astro`       | Name, tagline, short bio, CTAs, radar still + link to the live viewer.                                                            |
+| Facts      | `Facts.astro`      | Six figures under the hero, each with the method that makes it defensible.                                                        |
+| System     | `System.astro`     | Tabbed walkthrough of the LAMULA radar chain, autoplaying until the reader clicks a stage. Data in `components/lamula/stages.ts`. |
+| About      | `About.astro`      | Photo, extended bio, current role/institution, research interests.                                                                |
+| Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                                                                 |
+| Projects   | `Projects.astro`   | Cards from `data/projects.json`: title, stack tags, links (demo/GitHub).                                                          |
+| Experience | `Experience.astro` | Timeline: positions, institutions, dates.                                                                                         |
+| Ask        | `Ask.astro`        | Retrieval over the site's own content. Degrades to a static question list (§11).                                                  |
+| Contact    | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                                                                   |
+| Header     | `Header.astro`     | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                                                           |
+| Footer     | `Footer.astro`     | Copyright, social icons.                                                                                                          |
 
 ---
 
@@ -160,19 +160,19 @@ Components index into `title[lang]`.
 
 All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` → `t('key')`. No literal strings in markup.
 
-| Component          | Responsibility                                                                           |
-| :----------------- | :--------------------------------------------------------------------------------------- |
-| `Layout.astro`     | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script. |
-| `Header.astro`     | Fixed nav: name, section anchors, theme toggle, language switcher.                       |
-| `Hero.astro`       | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.     |
-| `Facts.astro`      | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.         |
-| `System.astro`     | LAMULA chain walkthrough. CSS-driven (radio + peer), JS only adds arrow-key navigation.  |
-| `About.astro`      | Photo, extended bio, research interests, current affiliation.                            |
-| `Research.astro`   | Research lines + key publications from `data/publications.json`.                         |
-| `Projects.astro`   | Cards from `data/projects.json` with stack tags and links.                               |
-| `Experience.astro` | Vertical timeline of roles and institutions.                                             |
-| `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                          |
-| `Footer.astro`     | Copyright, social icons.                                                                 |
+| Component          | Responsibility                                                                            |
+| :----------------- | :---------------------------------------------------------------------------------------- |
+| `Layout.astro`     | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script.  |
+| `Header.astro`     | Fixed nav: name, section anchors, theme toggle, language switcher.                        |
+| `Hero.astro`       | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.      |
+| `Facts.astro`      | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.          |
+| `System.astro`     | LAMULA chain walkthrough. CSS-driven (radio + `:has()`); JS only autoplays the selection. |
+| `About.astro`      | Photo, extended bio, research interests, current affiliation.                             |
+| `Research.astro`   | Research lines + key publications from `data/publications.json`.                          |
+| `Projects.astro`   | Cards from `data/projects.json` with stack tags and links.                                |
+| `Experience.astro` | Vertical timeline of roles and institutions.                                              |
+| `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
+| `Footer.astro`     | Copyright, social icons.                                                                  |
 
 ---
 
@@ -279,7 +279,7 @@ returns, so the CSP is not lost.
 One thing the orange cloud adds: Cloudflare injects its own inline challenge
 script (`window.__CF$cv$params`) into proxied HTML. It carries a per-request ray
 id, so no static hash can ever match it and the CSP blocks it. Nothing on the
-page depends on it — all four of the site's own inline scripts match their
+page depends on it — all five of the site's own inline scripts match their
 hashes — but it is why the console shows one CSP violation on a proxied origin
 and none on `.pages.dev`.
 

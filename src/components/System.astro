@@ -15,29 +15,40 @@ const t = useTranslations(lang);
     </h2>
     <p class="prose-col mt-5 text-muted">{t("system.lede")}</p>
 
+    <p class="sys-hint data mt-4 text-xs tracking-wide text-accent">
+      {t("system.auto")}
+    </p>
+
     <!--
-      Zero JavaScript by design. A native radio group already gives exactly the
-      behaviour this needs: one tab stop for the whole chain, arrow keys moving
-      between stages, and the selection driving which panel shows via `peer`.
-      Adding a script here would mean re-implementing — and degrading — what the
-      platform does correctly for free.
+      A native radio group already gives exactly the behaviour the chain needs:
+      one tab stop for the whole thing, arrow keys moving between stages, and
+      the selection driving which panel shows. Two things it does not survive:
+
+      Tailwind's `peer-checked:` compiles to `.peer:checked ~ *`, and with seven
+      radios as siblings that *general* combinator matches every node and panel
+      after the checked one — selecting the first stage opened all seven. The
+      selection rules therefore live in global.css, keyed on `:has()`, which
+      cannot reach past the stage it is scoped to.
+
+      And a radio hidden with `sr-only` is `position: absolute` with no insets,
+      so as a child of the stage container its static position is that
+      container's top-left corner — every stage's input sits there. Focusing one
+      scrolled the page back to the top of the chain on every tap. Nesting the
+      input inside its own label puts it at that label instead, which is already
+      on screen, so selecting a stage no longer moves the page.
+
+      Re-implementing any of this in script would only degrade what the platform
+      does correctly for free, so the script below does not touch it — it moves
+      the selection on a timer and then gets out of the way for good the moment
+      the reader touches it.
     -->
-    <fieldset class="mt-12 flex flex-wrap items-stretch gap-2">
+    <fieldset class="mt-8" data-stages>
       <legend class="sr-only">{t("system.title")}</legend>
       {
         STAGES.map((stage, i) => (
           <>
-            <input
-              type="radio"
-              name="lamula-stage"
-              id={`stage-${stage.id}`}
-              class="peer sr-only"
-              checked={i === 0}
-            />
-            <label
-              for={`stage-${stage.id}`}
-              class="panel t-fast flex min-w-28 flex-1 cursor-pointer flex-col justify-between gap-2 p-3 text-muted peer-checked:border-accent peer-checked:text-text peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent hover:border-accent/60"
-            >
+            <label class="sysnode panel t-fast flex cursor-pointer flex-col justify-between gap-2 p-3 text-muted hover:border-accent/60">
+              <input type="radio" name="lamula-stage" class="sr-only" checked={i === 0} />
               <span class="data text-[0.65rem] tracking-wider uppercase opacity-70">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -47,8 +58,8 @@ const t = useTranslations(lang);
               )}
             </label>
 
-            <div class="order-last hidden w-full peer-checked:block">
-              <div class="panel mt-6 p-6">
+            <div data-panel>
+              <div class="panel p-6">
                 <h3 class="text-lg font-medium tracking-tight">{t(stage.name)}</h3>
                 <div class="prose-col mt-3 text-sm text-muted" set:html={t(stage.body)} />
 
@@ -108,3 +119,119 @@ const t = useTranslations(lang);
     </Disclosure>
   </div>
 </section>
+
+<script>
+  /*
+    The chain plays itself until the reader takes over, and then it stays taken
+    over: a carousel that resumes after a click argues with whoever is reading.
+    So the handoff is one-way — first pointer, key or focus inside the group and
+    every listener here comes off.
+
+    Autoplay is gated on `prefers-reduced-motion: no-preference` (DESIGN.md §5:
+    any looping or auto-playing visual stops), on the section being on screen,
+    and on the tab being visible — a panel that rotated unseen would land the
+    reader somewhere other than where they left off. Hovering the open panel
+    holds it too: a pointer resting on the text is someone reading it, and the
+    stage bodies take longer to read than the dwell. That hold is not a handoff
+    — the pointer leaves, the dwell starts over from the top, so a glance costs
+    the reader nothing. Only the nodes take the handoff, because aiming at one
+    is already a decision.
+
+    Nothing here is needed to read the section: without JavaScript it is the
+    same radio-driven tab group, on the stage the markup checked.
+  */
+  const DWELL = 7000;
+
+  const section = document.getElementById("system");
+  const group = section?.querySelector<HTMLFieldSetElement>("[data-stages]");
+  const stages = group
+    ? Array.from(group.querySelectorAll<HTMLInputElement>('input[type="radio"]'))
+    : [];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (section && group && stages.length > 1) {
+    const panels = Array.from(group.querySelectorAll<HTMLElement>("[data-panel]"));
+    let timer: number | undefined;
+    let onScreen = false;
+    let reading = false;
+
+    const advance = () => {
+      const i = stages.findIndex((stage) => stage.checked);
+      stages[(i + 1) % stages.length].checked = true;
+    };
+
+    const pause = () => {
+      if (timer !== undefined) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+      // Freeze the bar where it stands rather than hiding it: a bar that
+      // vanished would read as "finished", which is the opposite of the truth.
+      section.classList.add("syshold");
+    };
+
+    const run = () => {
+      if (timer !== undefined || !onScreen || reading || document.hidden || reduced.matches) {
+        return;
+      }
+      // Restart the dwell bar with the interval, so the two agree about when
+      // the panel changes rather than the bar resuming mid-fill against a
+      // timer that starts over. A held stage gets its full dwell back.
+      section.classList.remove("sysauto", "syshold");
+      void section.offsetWidth;
+      section.classList.add("sysauto");
+      timer = window.setInterval(advance, DWELL);
+    };
+
+    const hold = () => {
+      reading = true;
+      pause();
+    };
+
+    const release = () => {
+      reading = false;
+      run();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        if (onScreen) run();
+        else pause();
+      },
+      { threshold: 0.25 }
+    );
+
+    const onVisibility = () => (document.hidden ? pause() : run());
+
+    const handoff = () => {
+      pause();
+      section.classList.remove("sysauto", "syshold");
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      reduced.removeEventListener("change", onPreference);
+      for (const event of ["pointerdown", "keydown", "focusin"] as const) {
+        group.removeEventListener(event, handoff);
+      }
+      for (const panel of panels) {
+        panel.removeEventListener("pointerenter", hold);
+        panel.removeEventListener("pointerleave", release);
+      }
+    };
+
+    function onPreference() {
+      if (reduced.matches) handoff();
+    }
+
+    for (const event of ["pointerdown", "keydown", "focusin"] as const) {
+      group.addEventListener(event, handoff);
+    }
+    for (const panel of panels) {
+      panel.addEventListener("pointerenter", hold);
+      panel.addEventListener("pointerleave", release);
+    }
+    document.addEventListener("visibilitychange", onVisibility);
+    reduced.addEventListener("change", onPreference);
+    observer.observe(group);
+  }
+</script>

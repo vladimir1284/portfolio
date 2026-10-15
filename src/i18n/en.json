@@ -46,6 +46,7 @@
   "about.interest.6": "Engineering education: virtual laboratories for automation",
   "system.title": "The system",
   "system.lede": "A commercial weather radar's processing chain, rebuilt end to end with no dependency on the original vendor. Select a stage.",
+  "system.auto": "The chain is advancing on its own — select a stage to take control.",
   "system.replaces": "Replaces",
   "system.repo": "Source",
   "system.docs": "Documentation",

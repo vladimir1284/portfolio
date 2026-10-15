@@ -345,4 +345,89 @@
   html.light .paper-thumb img {
     opacity: 1;
   }
+
+  /* The LAMULA chain advances on its own until the reader takes over (see
+     System.astro). The bar under the selected node is what makes that honest:
+     it says the panel is about to change and times the change, instead of
+     letting it move under someone mid-sentence. Both the bar and the autoplay
+     exist only while the script holds `.sysauto` on the section, so the page
+     without JavaScript — and the reader who has taken manual control — gets a
+     plain tab group with nothing claiming to move. */
+  .sys-hint {
+    display: none;
+  }
+  .sysauto .sys-hint {
+    display: block;
+  }
+  /* One stage open at a time, with its description in the row under its own
+     node rather than after the whole chain. A grid is what makes that possible:
+     the panel spans every column, so it breaks the row it lands in, and
+     `dense` lets the nodes that follow backfill the cell it left behind — the
+     open panel ends up directly under the row holding the selected node, with
+     the rest of the chain pushed down. On a phone that is two nodes per row and
+     the description one tap away; a flex-wrapped chain put it after all seven.
+
+     Selection is keyed on `:has()` rather than Tailwind's `peer-checked:` —
+     see the note in System.astro for why its `~` matched every stage after the
+     checked one. Selected state, focus ring and panel visibility all hang off
+     the radio, so the chain works with the stylesheet alone and no script. */
+  [data-stages] {
+    display: grid;
+    /* Fixed counts, not `auto-fit`: the open panel spans every column, so no
+       track is ever empty and auto-fit would have nothing to collapse — seven
+       nodes would sit in nine tracks with a hole on the right. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+    gap: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    [data-stages] {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    [data-stages] {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+  }
+  [data-stages] [data-panel] {
+    grid-column: 1 / -1;
+    display: none;
+  }
+  [data-stages] .sysnode:has(input:checked) + [data-panel] {
+    display: block;
+  }
+  [data-stages] .sysnode:has(input:checked) {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+  [data-stages] .sysnode:has(input:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .sysnode {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Pointer resting on the open panel holds the dwell (see System.astro). */
+  .sysauto.syshold [data-stages] .sysnode:has(input:checked)::after {
+    animation-play-state: paused;
+  }
+  .sysauto [data-stages] .sysnode:has(input:checked)::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    block-size: 2px;
+    background-color: var(--color-accent);
+    animation: sys-dwell var(--sys-dwell, 7s) linear forwards;
+  }
+  @keyframes sys-dwell {
+    from {
+      inline-size: 0;
+    }
+    to {
+      inline-size: 100%;
+    }
+  }
 }

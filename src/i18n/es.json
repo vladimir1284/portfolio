@@ -46,6 +46,7 @@
   "about.interest.6": "Docencia en ingeniería: laboratorios virtuales de automatización",
   "system.title": "El sistema",
   "system.lede": "La cadena de procesamiento de un radar meteorológico comercial, reconstruida de punta a punta sin dependencia del fabricante original. Elige una etapa.",
+  "system.auto": "La cadena avanza sola — elige una etapa para tomar el control.",
   "system.replaces": "Sustituye a",
   "system.repo": "Código",
   "system.docs": "Documentación",
