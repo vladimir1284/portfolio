@@ -297,6 +297,7 @@ def experience_chunks() -> list[dict]:
                     pos.get("institution", ""),
                     localized(pos.get("place", ""), lang),
                     localized(pos.get("dateLabel", ""), lang),
+                    localized(pos.get("summary", ""), lang),
                     " ".join(plain(h) for h in highlights),
                     " ".join(
                         f"{localized(f['value'], lang)}: {localized(f['method'], lang)}"

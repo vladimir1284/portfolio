@@ -96,6 +96,15 @@ export interface Position extends Span {
   /** Rendered with `set:html` — inline markup (<strong>, <em>) is allowed. */
   highlights?: Localized<string[]>;
   /**
+   * One sentence saying what the job was, printed before everything else.
+   *
+   * The highlights are a record and read as one; a reader scanning four roles
+   * needs each of them to state itself in a line first. It frames rather than
+   * summarises — anything it would repeat verbatim is deleted from the
+   * highlights instead of printed twice.
+   */
+  summary?: Localized;
+  /**
    * Measured figures for this role, printed above the highlights.
    *
    * A role gets them only where the work produced a number that can be

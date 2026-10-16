@@ -63,6 +63,7 @@ const thisYear = new Date().getFullYear();
                     <p class="mt-1 text-sm text-muted">
                       {p.institution} &middot; {p.place[lang]}
                     </p>
+                    {p.summary && <p class="prose-col mt-3 text-base">{p.summary[lang]}</p>}
                     {p.figures && (
                       <dl class="role-figures">
                         {p.figures.map((f) => (
