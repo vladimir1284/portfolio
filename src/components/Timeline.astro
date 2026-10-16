@@ -19,11 +19,12 @@ const t = useTranslations(lang);
   numbers the record below prints as prose (`types.ts`, `Span`). Nothing here
   is a second list of years that could drift from the first.
 
-  One row per item rather than bars packed onto three lanes. Packed, the
-  short bars — a one-year rank, a degree defended in a single year — are
-  narrower than their own labels at any width the page can be read at, and
-  the label either clips or runs over the bar beside it. A row each costs
-  vertical space and buys a chart with no unreadable state.
+  Bars are packed: within a lane, a bar takes the first track whose last bar
+  has already ended, so the academic ranks — which are mutually exclusive, one
+  after another — read as one line, and a lane only grows a second track when
+  two things genuinely overlapped. Every bar carries its own name, which is
+  what makes packing readable at all, and the geometry below is sized so that
+  the name fits (see "Labels" further down).
 
   No script: positions are percentages of a fixed axis, so the strip is as
   correct with JavaScript off as with it on (DESIGN.md §7).
@@ -37,20 +38,18 @@ const ranks = experience.ranks as Span[];
 /* Education states its bounds as strings; it is the one file section that
    predates the strip, and the dates there are read by the CV generator too. */
 const education = experience.education as { short: Localized; from: string; to: string }[];
-const highlights = experience.teachingHighlights as Span[];
 
 /* The teaching lane draws the academic ranks, not the chair: one bar from
    2008 would say "he taught", where four say what the eighteen years were
-   spent climbing. The chair itself is the record below. */
+   spent climbing. The chair itself is the record below, and so is the Arduino
+   elective — a course is not a position, and on the axis it only added a
+   track that said nothing the panel below does not say better. */
 const lanes: Lane[] = (
   [
     {
       id: "teaching",
       name: t("experience.timeline.lane.teaching"),
-      bars: [
-        ...ranks.map((r, i) => ({ ...r, key: `rank-${i}` })),
-        ...highlights.map((h, i) => ({ ...h, key: `course-${i}` })),
-      ],
+      bars: ranks.map((r, i) => ({ ...r, key: `rank-${i}` })),
     },
     {
       id: "engineering",
@@ -70,7 +69,7 @@ const lanes: Lane[] = (
       })),
     },
   ] as Lane[]
-).map((lane) => ({ ...lane, bars: lane.bars.sort((a, b) => a.from - b.from) }));
+).map((lane) => ({ ...lane, bars: [...lane.bars].sort((a, b) => a.from - b.from) }));
 
 const all = lanes.flatMap((l) => l.bars);
 
@@ -81,24 +80,125 @@ const START = Math.min(...all.map((b) => b.from));
 const END = new Date().getFullYear();
 const SPAN = END - START;
 
-/* A degree defended inside one year has zero length and would draw nothing.
-   1.2% of the axis is about five pixels at the narrowest width the strip is
-   ever laid out at — a tick, which is what a single-year event is. */
-const MIN_WIDTH = 1.2;
+/*
+  Labels.
 
-const left = (y: number): number => ((y - START) / SPAN) * 100;
-const width = (b: Bar): number => Math.max((((b.to ?? END) - b.from) / SPAN) * 100, MIN_WIDTH);
+  A packed chart is only worth packing if every bar can say what it is, so the
+  widths below are not decoration — they decide whether a name goes inside its
+  bar or next to it, and the strip is sized so that the narrowest bar that has
+  to hold a name can hold it.
+
+  TRACK is the width the plot gets inside the widest shell the site has (72rem
+  less its gutters), which is also the `min-width` the scroll box is given: any
+  narrower and the figure scrolls rather than shrinking the chart below the
+  width its own labels need.
+
+  CHAR is exact rather than estimated — IBM Plex Mono advances 0.6em, and the
+  labels are set at 0.625rem, so a character is 6px. The bars clip anyway, so
+  a fallback face that is wider cuts the name instead of spilling it over the
+  bar beside it.
+*/
+const LABEL_COL = 96; // 6rem, the lane-name column
+const COL_GAP = 12; // 0.75rem between the name and its tracks
+const PANEL_PAD = 32; // 1rem of card padding on each side
+const SHELL = 1088; // 72rem less the 2rem gutter on each side
+const TRACK = SHELL - PANEL_PAD - LABEL_COL - COL_GAP;
+
+const CHAR = 6; // IBM Plex Mono at 0.625rem
+const PAD_IN = 8; // breathing room for a name set inside its bar
+const GAP_OUT = 6; // bar end to a name set beside it
+const BAR_GAP = 2; // hairline between two bars that touch, taken off the width
+const MIN_BAR = 10; // a degree defended inside one year still has to be visible
+
+const name = (b: Bar): string => b.short[lang];
+const textPx = (s: string): number => s.length * CHAR;
+const years = (b: Bar): number => (b.to ?? END) - b.from;
+
+/* A bar with no end date reaches the right edge of the plot, so a name that
+   does not fit inside it has nowhere to go. The plot gives up that much width
+   as a right-hand margin — the axis still maps linearly onto what is left, it
+   is simply narrower than the track. */
+const GUTTER = Math.max(
+  0,
+  ...all
+    .filter((b) => b.to === null && textPx(name(b)) + PAD_IN > (years(b) / SPAN) * TRACK - BAR_GAP)
+    .map((b) => textPx(name(b)) + GAP_OUT)
+);
+const PLOT = TRACK - GUTTER;
+
+const pos = (y: number): number => ((y - START) / SPAN) * (PLOT / TRACK) * 100;
+const barPx = (b: Bar): number => Math.max((years(b) / SPAN) * PLOT, MIN_BAR);
+
+type Placed = {
+  key: string;
+  name: string;
+  range: string;
+  left: number;
+  width: number;
+  outside: boolean;
+  flush: boolean;
+  open: boolean;
+};
+
+const present = t("experience.timeline.present");
+
+const place = (b: Bar): Placed => {
+  const label = name(b);
+  const width = (barPx(b) / TRACK) * 100;
+  const left = pos(b.from);
+  const outside = textPx(label) + PAD_IN > barPx(b) - BAR_GAP;
+  return {
+    key: b.key,
+    name: label,
+    range: `${b.from}–${b.to ?? present}`,
+    left,
+    width,
+    outside,
+    /* No room left of the edge for a name set beside the bar: it is pinned to
+       the end of the track instead of running off it. */
+    flush: outside && left + width + ((textPx(label) + GAP_OUT) / TRACK) * 100 > 100,
+    open: b.to === null,
+  };
+};
+
+/* First-fit packing. The bars arrive sorted by start year, so a bar goes on
+   the first track that is free where it begins; a name set beside a bar holds
+   its own space, or the next bar would be drawn over it.
+
+   The tolerance is not optional. One rank ends in the year the next begins,
+   and `left + width` for the first is the same percentage as `left` for the
+   second only in arithmetic: in binary it lands a few parts in 10^14 above
+   it, which is enough to send the whole progression onto a second track. */
+const TOUCHING = 1e-9;
+const pack = (bars: Bar[]): Placed[][] => {
+  const tracks: { items: Placed[]; end: number }[] = [];
+  for (const bar of bars) {
+    const p = place(bar);
+    const end = p.left + p.width + (p.outside ? ((textPx(p.name) + GAP_OUT) / TRACK) * 100 : 0);
+    const free = tracks.find((tr) => tr.end <= p.left + TOUCHING);
+    if (free) {
+      free.items.push(p);
+      free.end = end;
+    } else {
+      tracks.push({ items: [p], end });
+    }
+  }
+  return tracks.map((tr) => tr.items);
+};
+
+const drawn = lanes.map((lane) => ({ ...lane, tracks: pack(lane.bars) }));
+const placed = drawn.flatMap((l) => l.tracks.flat());
 
 /* Four-year ticks, the coarsest grid that still puts a label near every
    transition on the chart. The end of the axis is labelled too: a bar that
-   runs to the right edge means "still running", which it can only say if the
-   edge itself carries a year.
-
-   A regular tick within three years of the end is dropped rather than drawn:
-   at the narrowest layout the axis is under 300 px wide, and two labels three
-   years apart overlap into one unreadable number. */
+   runs to the right edge of the plot means "still running", which it can only
+   say if the edge itself carries a year. A regular tick is dropped when it
+   would be drawn on top of that one. */
+const PX_PER_YEAR = PLOT / SPAN;
 const ticks: number[] = [];
-for (let y = Math.ceil(START / 4) * 4; y < END - 2; y += 4) ticks.push(y);
+for (let y = Math.ceil(START / 4) * 4; y < END; y += 4) {
+  if ((END - y) * PX_PER_YEAR >= 4 * CHAR + 8) ticks.push(y);
+}
 ticks.push(END);
 
 /*
@@ -114,18 +214,17 @@ ticks.push(END);
 const gridlines = ticks
   .map(() => "linear-gradient(var(--color-border),var(--color-border))")
   .join(",");
-const gridpos = ticks.map((y) => `${left(y).toFixed(3)}% 0`).join(",");
+const gridpos = ticks.map((y) => `${pos(y).toFixed(3)}% 0`).join(",");
 const geometry = [
-  ...all.map((b) => `.tl-${b.key}{left:${left(b.from).toFixed(3)}%;width:${width(b).toFixed(3)}%}`),
-  ...ticks.map((y) => `.tl-t${y}{left:${left(y).toFixed(3)}%}`),
+  `.tl-grid{min-width:${TRACK + LABEL_COL + COL_GAP}px}`,
+  ...placed.map(
+    (p) =>
+      `.tl-${p.key}{left:${p.left.toFixed(3)}%;width:calc(${p.width.toFixed(3)}% - ${BAR_GAP}px)}`
+  ),
+  ...ticks.map((y) => `.tl-t${y}{left:${pos(y).toFixed(3)}%}`),
   `.tl-track{background-image:${gridlines};background-position:${gridpos};` +
     `background-size:1px 100%;background-repeat:no-repeat}`,
 ].join("");
-
-const present = t("experience.timeline.present");
-/** Read out after the row's name; the bar itself carries no text. */
-const range = (b: Bar): string => `${b.from}–${b.to ?? present}`;
-const label = (value: Localized): string => value[lang];
 ---
 
 <figure class="mt-10">
@@ -136,7 +235,7 @@ const label = (value: Localized): string => value[lang];
   <div class="tl-scroll panel mt-4" tabindex="0" role="group" aria-labelledby="tl-caption">
     <div class="tl-grid">
       {
-        lanes.map((lane) => (
+        drawn.map((lane) => (
           <div class={`tl-lane tl-lane--${lane.id}`}>
             {/* A `p` and not a heading: the section already runs h2 → h3, and
                 a fourth level here for three words would break that order for
@@ -144,17 +243,27 @@ const label = (value: Localized): string => value[lang];
             <p class="label tl-lane-name" id={`tl-lane-${lane.id}`}>
               {lane.name}
             </p>
-            <ul class="tl-items" aria-labelledby={`tl-lane-${lane.id}`}>
-              {lane.bars.map((b) => (
-                <li class="tl-item">
-                  <span class="tl-name">{label(b.short)}</span>
-                  <span class="data sr-only">{range(b)}</span>
-                  <span class="tl-track">
+            <div class="tl-tracks" aria-hidden="true">
+              {lane.tracks.map((track) => (
+                <div class="tl-track">
+                  {track.map((p) => (
                     <span
-                      class={`tl-bar tl-${b.key}${b.to === null ? " tl-bar--open" : ""}`}
-                      aria-hidden="true"
-                    />
-                  </span>
+                      class={`tl-bar tl-${p.key}${p.open ? " tl-bar--open" : ""}${
+                        p.outside ? " tl-bar--out" : ""
+                      }${p.flush ? " tl-bar--flush" : ""}`}
+                    >
+                      <span class="tl-bar-label">{p.name}</span>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+            {/* The bars are geometry; this is the same content as text, in the
+                order it happened, for a reader who is not looking at it. */}
+            <ul class="sr-only" aria-labelledby={`tl-lane-${lane.id}`}>
+              {lane.tracks.flat().map((p) => (
+                <li>
+                  {p.name}, <span class="data">{p.range}</span>
                 </li>
               ))}
             </ul>

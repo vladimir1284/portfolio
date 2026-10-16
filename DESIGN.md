@@ -178,30 +178,47 @@ reaches it without anyone remembering to extend the axis in January — and the
 edge carries its own tick, because a bar that runs off the end only means
 "still running" if the end is labelled.
 
-**One row per item, not bars packed onto three lanes.** Packed is the compact
-drawing and it cannot be made to work here: a one-year rank, or a degree
-defended inside a single year, is narrower than its own label at every width
-the page is read at, so the label either clips or runs over the bar beside it.
-A row each costs vertical space and buys a chart with no unreadable state.
+**Bars are packed, and that is what makes the ranks read as a progression.**
+Within a lane a bar takes the first track whose last bar has already ended, so
+the four academic ranks — mutually exclusive, one straight after another — sit
+on a single line, and a lane only grows a second track where two things
+genuinely overlapped. Nothing is drawn twice: the chair itself is not a bar
+next to the ranks that make it up, and a course is not a position, so the
+Arduino elective stays in the panel below where it is argued properly.
+
+**Packing only works if every bar says what it is**, so each one carries its
+name, and the plot is sized backwards from that: a name goes inside its bar
+when it fits and immediately beside it when it does not, and the chart's
+`min-width` is the width at which the narrowest bar that must hold a name can
+hold it. A bar with no end date reaches the right edge, where a name set beside
+it would have nowhere to go, so the plot gives up that much width as a
+right-hand margin. Below that `min-width` the box scrolls rather than
+compressing the chart past the point where it can be read — a phone sees part
+of a readable chart instead of all of an unreadable one.
+
+The sizes behind that are constants in the component, in pixels, and they are
+only as good as what they describe: `LABEL_COL` is the lane-name column in the
+stylesheet, and `CHAR` is IBM Plex Mono's 0.6em advance at the label size.
+Change either in one place and the labels start lying about whether they fit;
+the bars clip rather than spill, so a wider fallback face cuts a name instead
+of printing it over the bar beside it.
 
 The three lanes differ in **fill, not hue** — accent, muted, outline. They have
 to separate on a monochrome print and for a reader who does not separate
 colours, and a second accent would spend the one the rest of the site saves
-(§1, §2). The accent goes to the engineering lane, where the site points.
+(§1, §2). The accent goes to the engineering lane, where the site points. A
+name set on a filled bar is the ground colour, a name beside a bar is muted
+like every other small label.
 
 Geometry is generated into an inline `<style>`, not written as `style`
 attributes: the CSP carries no `'unsafe-hashes'` and would drop them silently
 (CLAUDE.md §9). No script runs — the strip is as correct with JavaScript off as
-with it on. Under `sm` the name moves above its own track, which gives the axis
-the full width of the card; side by side at 360px, a name column wide enough to
-read leaves about 150px for twenty-three years and the chart has to be scrolled
-before it says anything. Above `sm` the two-column layout returns and the box,
-not the page, scrolls.
+with it on.
 
-Bars are `aria-hidden`; each row carries its span as visually hidden text after
-the name, so a screen reader gets "Associate, 2012–2025" and not a list of
-empty boxes. The scroll container is focusable, with the ring set inward — an
-outward offset is clipped on `y` by the `x` scroll.
+The bars are `aria-hidden`; each lane carries its items as visually hidden
+text, in order, so a screen reader gets "Associate, 2012–2025" and not a list
+of empty boxes. The scroll container is focusable, with the ring set inward —
+an outward offset is clipped on `y` by the `x` scroll.
 
 ### The publication list is clamped, not truncated
 

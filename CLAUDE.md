@@ -198,7 +198,7 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 | `Research.astro`   | Research lines + key publications from `data/publications.json`.                          |
 | `Projects.astro`   | Cards from `data/projects.json` with stack tags and links.                                |
 | `Experience.astro` | The record: roles, education, courses taught, advanced training.                          |
-| `Timeline.astro`   | The Experience strip — three lanes on one axis, drawn from the dates the record carries.  |
+| `Timeline.astro`   | The Experience strip — three packed lanes on one axis, from the dates the record carries. |
 | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
 | `Footer.astro`     | Copyright, social icons.                                                                  |
 
