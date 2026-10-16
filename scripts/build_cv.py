@@ -105,6 +105,7 @@ h2 { font-size: 8.4pt; text-transform: uppercase; letter-spacing: 0.12em;
 .when { font-family: "JetBrains Mono", "DejaVu Sans Mono", monospace;
         font-size: 7.8pt; color: #4a5560; white-space: nowrap; }
 .where { color: #4a5560; font-size: 8.6pt; margin: 1px 0 0; }
+.lede { margin: 4px 0 0; }
 ul { margin: 4px 0 0; padding-left: 13px; }
 li { margin: 0 0 2px; }
 .note { color: #4a5560; font-size: 8.6pt; margin: 2px 0 0; }
@@ -149,6 +150,8 @@ def build(lang: str) -> str:
             f"{esc(p['role'][lang])}</span><span class='when'>{esc(p['dateLabel'][lang])}</span></div>"
         )
         add(f"<p class='where'>{esc(p['institution'])} · {esc(p['place'][lang])}</p>")
+        if p.get("summary"):
+            add(f"<p class='lede'>{esc(p['summary'][lang])}</p>")
         # Figures first, then the prose, then the callout — the order the page
         # prints them in. Each of the three is optional and the list is only
         # opened if something went into it.

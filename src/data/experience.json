@@ -211,16 +211,18 @@
         "en": "2023 – present",
         "es": "2023 – actualidad"
       },
+      "summary": {
+        "en": "Industrial automation for Cuban industry, built by the weather-radar team of the 2012 contract, now a private company.",
+        "es": "Automatización industrial para la industria cubana, hecha por el equipo de radar meteorológico del contrato de 2012, ahora empresa privada."
+      },
       "highlights": {
         "en": [
-          "Founded with the weather-radar specialists I had worked alongside at the Camagüey Meteorological Centre — the same people, now a private company.",
           "I set technical direction and choose the stack; these days I write far less code than I decide what gets written.",
-          "Industrial automation built on ESP32 for Cuban industry: water pumping, sterilisation, weighing with HX711 load cells, power metering."
+          "On ESP32: water pumping, sterilisation, weighing with HX711 load cells, power metering."
         ],
         "es": [
-          "Fundada con los especialistas de radar meteorológico con los que trabajé en el Centro Meteorológico de Camagüey — la misma gente, ahora una empresa privada.",
           "Marco la dirección técnica y elijo el stack; hoy escribo bastante menos código del que decido que se escriba.",
-          "Automatización industrial sobre ESP32 para la industria cubana: bombeo de agua, esterilización, pesaje con celdas HX711, medición de energía."
+          "Sobre ESP32: bombeo de agua, esterilización, pesaje con celdas HX711, medición de energía."
         ]
       },
       "stack": ["Python", "C", "ESP32", "Modbus TCP", "Docker", "Docker Swarm", "PostgreSQL"],
@@ -255,6 +257,10 @@
       "dateLabel": {
         "en": "2022 – present",
         "es": "2022 – actualidad"
+      },
+      "summary": {
+        "en": "Back-office, VoIP and ERP for businesses in the United States — from a twenty-year-old commission engine to a platform of their own.",
+        "es": "Back-office, VoIP y ERP para empresas en Estados Unidos — de un motor de comisiones de veinte años a una plataforma propia."
       },
       "highlights": {
         "en": [
@@ -354,6 +360,10 @@
         "en": "2012 – 2014",
         "es": "2012 – 2014"
       },
+      "summary": {
+        "en": "Tools to read, process and visualise the data of the Cuban weather radars.",
+        "es": "Herramientas para leer, procesar y visualizar el dato de los radares meteorológicos cubanos."
+      },
       "highlights": {
         "en": [
           "<strong>ObsParser</strong>: a Python library for reading the raw data of the Cuban weather radars.",
@@ -393,13 +403,15 @@
         "en": "2008 – present",
         "es": "2008 – actualidad"
       },
+      "summary": {
+        "en": "The highest academic rank in Cuban higher education, teaching from classical control to FPGA design.",
+        "es": "La categoría docente más alta de la educación superior cubana, del control clásico al diseño con FPGA."
+      },
       "highlights": {
         "en": [
-          "<strong>Profesor Titular</strong> — the highest academic rank in Cuban higher education.",
           "More than 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority."
         ],
         "es": [
-          "<strong>Profesor Titular</strong> — la categoría docente más alta de la educación superior cubana.",
           "Más de 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
         ]
       },
@@ -410,8 +422,8 @@
             "es": "6"
           },
           "method": {
-            "en": "courses taught across the degree, from classical control to FPGA design: four core, two electives I proposed and wrote.",
-            "es": "asignaturas impartidas a lo largo de la carrera, del control clásico al diseño con FPGA: cuatro del currículo base, dos optativas que propuse y escribí."
+            "en": "courses taught across the degree: four core, two electives I proposed and wrote.",
+            "es": "asignaturas impartidas a lo largo de la carrera: cuatro del currículo base, dos optativas que propuse y escribí."
           }
         },
         {

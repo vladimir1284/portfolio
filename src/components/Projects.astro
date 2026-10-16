@@ -20,12 +20,12 @@ const total = String(projects.length).padStart(2, "0");
   every capture — behind disclosures. That was most of a 130 KB home document,
   downloaded by every visitor and read by almost none of them; each case now
   has its own page and the home section keeps only what it was good at, which
-  is giving a reader something to choose on. Three captures: the lead case
-  takes the large one, the next two a thumbnail each. The rest of the list is
+  is giving a reader something to choose on. Four captures: the lead case
+  takes the large one, the next three a thumbnail each. The rest of the list is
   one link away, on the index.
 */
 const [lead, ...others] = projects;
-const seconds = others.slice(0, 2);
+const seconds = others.slice(0, 3);
 
 /** First capture of a case, or nothing — the card falls back typographically. */
 const cover = (p: Project) => p.shots?.[0];
@@ -83,7 +83,7 @@ const cover = (p: Project) => p.shots?.[0];
         </a>
       </article>
 
-      <!-- The column beside it: two more cases, then the way to all of them. -->
+      <!-- The column beside it: three more cases, then the way to all of them. -->
       <div class="lg:col-span-5 lg:border-l lg:border-border lg:pl-10">
         <ul class="divide-y divide-border border-t border-b border-border">
           {
