@@ -799,6 +799,60 @@
     display: block;
   }
 
+  /* The list, clamped to its three most recent entries.
+
+     `--pub-max` is written by the script in Research.astro, which measures
+     where the fourth entry starts; the attribute it sets alongside is what
+     turns the clamp on, so a page with no JavaScript gets the whole list
+     rather than a box of an arbitrary height.
+
+     The fade is the hint: it sits over the beginning of the fourth entry,
+     which is legible enough to say the list continues and cut off enough to
+     say it is not the end. It fades out at the bottom of the scroll, because
+     a gradient promising more where there is none is a lie the reader notices
+     immediately. */
+  .pub-scroll {
+    position: relative;
+  }
+  .pub-scroll[data-clamped] .pub-list {
+    /* Three entries, or the screen, whichever is shorter. On a phone an entry
+       is a ~480px card and three of them are 1486px — a scrolling box twice as
+       tall as the viewport is not a box, it is the page again, and the fade at
+       its foot would sit off-screen while the reader scrolls. The cap is what
+       keeps the hint and the list in the same frame. */
+    max-height: min(var(--pub-max), 85vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .pub-scroll[data-clamped]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 4.5rem;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--color-bg));
+    transition: opacity 120ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .pub-scroll[data-clamped][data-end]::after {
+    opacity: 0;
+  }
+  .pub-list:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* On paper there is no scrolling, so the clamp comes off with the fade. */
+  @media print {
+    .pub-scroll[data-clamped] .pub-list {
+      max-height: none;
+      overflow: visible;
+    }
+    .pub-scroll[data-clamped]::after {
+      display: none;
+    }
+  }
+
   .pub-tab-label {
     color: var(--color-muted);
   }

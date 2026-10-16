@@ -163,6 +163,26 @@ publishes its numbers as a visually hidden `<table>` with the bars marked
 in the plot: the thin stretch while the doctorate was the priority is part of
 the measurement, and dropping those columns would make the shape decoration.
 
+### The publication list is clamped, not truncated
+
+Each tab in `Research.astro` shows its three most recent entries and scrolls
+for the rest. The hint that there is more is the fourth entry itself, half
+visible under a gradient to the page ground — not a chevron, not a "show more"
+button that hides how much more there is. The fade goes to zero at the bottom
+of the scroll: a gradient promising more where there is none reads as a bug.
+
+The height is **measured**, by the script in `Research.astro`, from where the
+fourth entry starts. A number of rem typed in would be right at one width only:
+an entry is a card on a phone and a row on a desktop, and an opened abstract
+changes it again. It is capped at `85vh` on top of that, because three cards on
+a phone are 1486 px — a scroll box twice the height of the screen is the page
+again, with its own hint off-screen. On a phone the cap wins and about one and
+a half entries show; on a desktop the measurement wins and exactly three do.
+
+Nothing is hidden from anyone who cannot run the clamp: with JavaScript off the
+list is simply long, and in the print stylesheet the clamp and the fade both
+come off.
+
 ### The projects front page
 
 `Projects.astro` is an index on the home page and nothing more: the lead case

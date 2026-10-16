@@ -238,11 +238,24 @@ const barHeights = perYear
       {
         grouped.map((group) => (
           <div class="pub-tab-panel mt-6" data-group={group.id}>
-            <ul class="divide-y divide-border border-t border-border">
-              {group.items.map((p) => {
-                const rank = p.rank;
-                return (
-                  /*
+            {/*
+              The list is clamped to its three most recent entries and scrolls
+              (global.css, `.pub-scroll`). The height is measured from the
+              fourth entry rather than typed in as a number of rem: an entry is
+              a card on a phone and a row on a desktop, and an opened abstract
+              changes it again, so any fixed height would show three entries at
+              exactly one width. Without JavaScript nothing is clamped and the
+              whole list prints — longer, never truncated.
+            */}
+            <div class="pub-scroll">
+              <ul
+                class="pub-list divide-y divide-border border-t border-border"
+                aria-label={t(group.label)}
+              >
+                {group.items.map((p) => {
+                  const rank = p.rank;
+                  return (
+                    /*
                     One DOM, two layouts (global.css, `.pub-item`). Under 40rem
                     the entry is a card — year and tags beside a thumbnail at
                     the right, then title, authors, venue, the quartile strip
@@ -251,8 +264,8 @@ const barHeights = perYear
                     beside the title, tag and link top-right. Grid areas move
                     the same elements; nothing is rendered twice.
                   */
-                  <li class="pub-item">
-                    {/*
+                    <li class="pub-item">
+                      {/*
                     First page of the paper. It is the cheapest evidence the list
                     can carry, and it gives a column of metadata something to look
                     at. Decorative to assistive tech — the title and the link
@@ -260,67 +273,67 @@ const barHeights = perYear
                     empty alt and is skipped by the keyboard, with the DOI/PDF
                     link under the entry as the real target.
                   */}
-                    {p.thumb && (
-                      <a
-                        class="paper-thumb"
-                        href={p.doi || p.pdf}
-                        target="_blank"
-                        rel="noopener"
-                        tabindex="-1"
-                        aria-hidden="true"
-                      >
-                        <img
-                          src={p.thumb}
-                          alt=""
-                          width="320"
-                          height="414"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </a>
-                    )}
-
-                    <span class="pub-year data">{p.year}</span>
-                    <h4 class="pub-title">{p.title}</h4>
-
-                    <div class="pub-tags">
-                      {p.type === "journal" ? (
-                        <span class="inline-flex items-center gap-1.5 rounded border border-accent/50 bg-accent/15 px-2.5 py-1 font-mono text-xs font-medium text-accent">
-                          <svg
-                            class="h-3.5 w-3.5 shrink-0"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            aria-hidden="true"
-                          >
-                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                          </svg>
-                          {t(typeKey(p.type))}
-                        </span>
-                      ) : (
-                        <span class="inline-flex items-center gap-1.5 rounded border border-warn/50 bg-warn/15 px-2.5 py-1 font-mono text-xs font-medium text-warn">
-                          <svg
-                            class="h-3.5 w-3.5 shrink-0"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            aria-hidden="true"
-                          >
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                          </svg>
-                          {t(typeKey(p.type))}
-                        </span>
+                      {p.thumb && (
+                        <a
+                          class="paper-thumb"
+                          href={p.doi || p.pdf}
+                          target="_blank"
+                          rel="noopener"
+                          tabindex="-1"
+                          aria-hidden="true"
+                        >
+                          <img
+                            src={p.thumb}
+                            alt=""
+                            width="320"
+                            height="414"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </a>
                       )}
-                      {/*
+
+                      <span class="pub-year data">{p.year}</span>
+                      <h4 class="pub-title">{p.title}</h4>
+
+                      <div class="pub-tags">
+                        {p.type === "journal" ? (
+                          <span class="inline-flex items-center gap-1.5 rounded border border-accent/50 bg-accent/15 px-2.5 py-1 font-mono text-xs font-medium text-accent">
+                            <svg
+                              class="h-3.5 w-3.5 shrink-0"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                            </svg>
+                            {t(typeKey(p.type))}
+                          </span>
+                        ) : (
+                          <span class="inline-flex items-center gap-1.5 rounded border border-warn/50 bg-warn/15 px-2.5 py-1 font-mono text-xs font-medium text-warn">
+                            <svg
+                              class="h-3.5 w-3.5 shrink-0"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                              <circle cx="9" cy="7" r="4" />
+                              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            {t(typeKey(p.type))}
+                          </span>
+                        )}
+                        {/*
                         The quartile, as a chip beside the type tag. It carries
                         the same three facts as the strip's caption below and
                         stands in its place, never alongside it: the card has no
@@ -329,41 +342,41 @@ const barHeights = perYear
                         none`, so a screen reader hears it once (global.css,
                         `.pub-chip` / `.pub-q`).
                       */}
-                      {rank && (
-                        <span class="pub-chip data">
-                          Q{rank.quartile} &middot; {rank.source} {rank.year}
-                        </span>
-                      )}
-                    </div>
+                        {rank && (
+                          <span class="pub-chip data">
+                            Q{rank.quartile} &middot; {rank.source} {rank.year}
+                          </span>
+                        )}
+                      </div>
 
-                    <p class="pub-authors">{p.authors.join(", ")}</p>
-                    <p class="pub-venue">
-                      <span class="italic">{p.venue}</span>
-                      {p.detail && <span class="data pub-detail">{p.detail}</span>}
-                    </p>
+                      <p class="pub-authors">{p.authors.join(", ")}</p>
+                      <p class="pub-venue">
+                        <span class="italic">{p.venue}</span>
+                        {p.detail && <span class="data pub-detail">{p.detail}</span>}
+                      </p>
 
-                    {/*
+                      {/*
                     The quartile strip. It renders only for an entry that carries
                     a `rank`, and it always prints the ranking, the edition and
                     the category beside it — a quartile with no year is a number
                     a reader cannot check, and one with no category is a number
                     that chose its own ground (types.ts, `Rank`).
                   */}
-                    {rank && (
-                      <p class="pub-rank">
-                        <span class="pub-bars" aria-hidden="true">
-                          {[1, 2, 3, 4].map((q) => (
-                            <span class={q <= 5 - rank.quartile ? "bg-accent" : "bg-border"} />
-                          ))}
-                        </span>
-                        <span class="pub-q data">
-                          Q{rank.quartile} &middot; {rank.source} {rank.year}
-                        </span>
-                        <span class="pub-category">{rank.category}</span>
-                      </p>
-                    )}
+                      {rank && (
+                        <p class="pub-rank">
+                          <span class="pub-bars" aria-hidden="true">
+                            {[1, 2, 3, 4].map((q) => (
+                              <span class={q <= 5 - rank.quartile ? "bg-accent" : "bg-border"} />
+                            ))}
+                          </span>
+                          <span class="pub-q data">
+                            Q{rank.quartile} &middot; {rank.source} {rank.year}
+                          </span>
+                          <span class="pub-category">{rank.category}</span>
+                        </p>
+                      )}
 
-                    {/*
+                      {/*
                     The two things a reader does with an entry, side by side on a
                     phone: open the paper, or open the abstract. Both are 48px
                     tall (DESIGN.md §6) and neither needs script — the abstract is
@@ -375,32 +388,33 @@ const barHeights = perYear
                     existing DOI silently stops being reachable, and nothing on
                     the page would say so.
                   */}
-                    <div class="pub-actions">
-                      <div class="pub-links">
-                        {p.doi && (
-                          <a class="pub-link data" href={p.doi} target="_blank" rel="noopener">
-                            {t("research.doi")} <span aria-hidden="true">&rarr;</span>
-                          </a>
-                        )}
-                        {p.pdf && (
-                          <a class="pub-link data" href={p.pdf} target="_blank" rel="noopener">
-                            {t("research.pdf")} <span aria-hidden="true">&rarr;</span>
-                          </a>
-                        )}
-                      </div>
-                      {/*
+                      <div class="pub-actions">
+                        <div class="pub-links">
+                          {p.doi && (
+                            <a class="pub-link data" href={p.doi} target="_blank" rel="noopener">
+                              {t("research.doi")} <span aria-hidden="true">&rarr;</span>
+                            </a>
+                          )}
+                          {p.pdf && (
+                            <a class="pub-link data" href={p.pdf} target="_blank" rel="noopener">
+                              {t("research.pdf")} <span aria-hidden="true">&rarr;</span>
+                            </a>
+                          )}
+                        </div>
+                        {/*
                       The abstract is the evidence, not the headline. Folded, the
                       list reads as a list; open, nothing has been withheld
                       (Disclosure.astro).
                     */}
-                      <Disclosure label={t("research.abstract")} class="pub-fold">
-                        <p class="prose-col">{p.abstract[lang]}</p>
-                      </Disclosure>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+                        <Disclosure label={t("research.abstract")} class="pub-fold">
+                          <p class="prose-col">{p.abstract[lang]}</p>
+                        </Disclosure>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         ))
       }
@@ -418,3 +432,63 @@ const barHeights = perYear
     </p>
   </div>
 </section>
+
+<script>
+  /*
+    Clamp each publication list to its three most recent entries.
+
+    The height comes from measuring where the fourth entry starts, plus a strip
+    of it left visible under the fade: the hint that there is more is the entry
+    itself, half-read, not an icon promising something. A hidden tab panel has
+    no geometry, so each panel is measured when its tab is first selected, and
+    again after a resize — the same list is a card stack at 360px and a row list
+    at 1280px, and three of one is not the height of three of the other.
+  */
+  const PEEK = 48;
+
+  const scrolls = Array.from(document.querySelectorAll<HTMLElement>(".pub-scroll"));
+
+  /** The fade is a promise of more; at the end of the list there is none. */
+  function sync(scroll: HTMLElement, list: HTMLElement) {
+    const atEnd = list.scrollTop + list.clientHeight >= list.scrollHeight - 2;
+    scroll.toggleAttribute("data-end", atEnd);
+  }
+
+  function measure(scroll: HTMLElement) {
+    const list = scroll.querySelector<HTMLElement>(".pub-list");
+    if (!list || list.children.length <= 3) return;
+    if (scroll.dataset.w === String(window.innerWidth)) return;
+
+    scroll.removeAttribute("data-clamped");
+    scroll.style.removeProperty("--pub-max");
+    list.scrollTop = 0;
+
+    const top = list.getBoundingClientRect().top;
+    const fourth = list.children[3].getBoundingClientRect().top;
+    if (fourth <= top) return; // panel is hidden — measured when it is shown
+
+    scroll.style.setProperty("--pub-max", `${Math.round(fourth - top + PEEK)}px`);
+    scroll.dataset.clamped = "";
+    scroll.dataset.w = String(window.innerWidth);
+    // A scrollable region has to be reachable without a pointer.
+    list.tabIndex = 0;
+    sync(scroll, list);
+  }
+
+  for (const scroll of scrolls) {
+    const list = scroll.querySelector<HTMLElement>(".pub-list");
+    list?.addEventListener("scroll", () => sync(scroll, list), { passive: true });
+  }
+
+  for (const input of document.querySelectorAll(".pub-tab-input")) {
+    input.addEventListener("change", () => scrolls.forEach(measure));
+  }
+
+  let timer = 0;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = window.setTimeout(() => scrolls.forEach(measure), 150);
+  });
+
+  scrolls.forEach(measure);
+</script>
