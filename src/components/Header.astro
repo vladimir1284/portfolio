@@ -23,12 +23,16 @@ const home = getRelativeLocaleUrl(lang, "");
 const route = getRouteFromPathname(Astro.url.pathname, lang);
 const otherHref = getRelativeLocaleUrl(other, route ? `${route}/` : "");
 
+/* The bar switches to the menu at `lg`, not at `md`: with Recommendations in
+   it the Spanish labels need about 920px to stay on one line, and a wrapped
+   list inside a 64px header is a clipped list. */
 const sections = [
   "about",
   "system",
   "research",
   "projects",
   "experience",
+  "recommendations",
   "ask",
   "contact",
 ] as const satisfies readonly string[];
@@ -57,7 +61,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
       />
     </a>
 
-    <nav aria-label={t("nav.about")} class="hidden md:block">
+    <nav aria-label={t("nav.about")} class="hidden lg:block">
       <ul class="flex items-center gap-6">
         {
           sections.map((s) => (
@@ -114,7 +118,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
       <button
         type="button"
         id="menu-toggle"
-        class="t-fast rounded p-2 text-muted hover:text-accent md:hidden"
+        class="t-fast rounded p-2 text-muted hover:text-accent lg:hidden"
         aria-label={t("nav.menu.open")}
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -135,7 +139,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
     </div>
   </div>
 
-  <nav id="mobile-nav" hidden class="border-t border-border md:hidden" aria-label={t("nav.about")}>
+  <nav id="mobile-nav" hidden class="border-t border-border lg:hidden" aria-label={t("nav.about")}>
     <ul class="shell flex flex-col py-2">
       {
         sections.map((s) => (

@@ -88,6 +88,14 @@
   "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation."
  },
  {
+  "id": "ui-recommendations-en",
+  "lang": "en",
+  "kind": "section",
+  "title": "Recommendations",
+  "url": "/#recommendations",
+  "text": "Recommendations. Written on LinkedIn by people who worked with me, transcribed here with a link to the profile of whoever signed them. Where the page language is not the one a recommendation was written in, the translation is mine and the original stays underneath it."
+ },
+ {
   "id": "ui-hero-es",
   "lang": "es",
   "kind": "section",
@@ -174,6 +182,14 @@
   "title": "Investigación",
   "url": "/es/#research",
   "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo."
+ },
+ {
+  "id": "ui-recommendations-es",
+  "lang": "es",
+  "kind": "section",
+  "title": "Recomendaciones",
+  "url": "/es/#recommendations",
+  "text": "Recomendaciones. Escritas en LinkedIn por gente que trabajó conmigo, transcritas aquí con enlace al perfil de quien las firma. Cuando el idioma de la página no es aquel en que se escribió la recomendación, la traducción es mía y el original queda debajo."
  },
  {
   "id": "project-lamula-en",
@@ -517,7 +533,7 @@
   "kind": "position",
   "title": "Development lead",
   "url": "/#experience",
-  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Back-office, VoIP and ERP for businesses in the United States — from a twenty-year-old commission engine to a platform of their own.. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and Gestor , a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, more than 10 developers led or helped into the work.. ~0.02%: residual error of the cold cutover: around $100 over roughly $500,000 paid out.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Back-office, VoIP and ERP for businesses in the United States — from a twenty-year-old commission engine to a platform of their own.. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover — written four-handed with Alejandro Cespón. Residual error ~0.02%: around $100 over roughly $500,000 paid out. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and Gestor , a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, more than 10 developers led or helped into the work.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-en",
@@ -589,7 +605,7 @@
   "kind": "position",
   "title": "Líder de desarrollo",
   "url": "/es/#experience",
-  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Back-office, VoIP y ERP para empresas en Estados Unidos — de un motor de comisiones de veinte años a una plataforma propia.. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y Gestor , un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse.. ~0,02 %: error residual del corte en frío: unos 100 USD sobre unos 500 000 USD pagados.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Back-office, VoIP y ERP para empresas en Estados Unidos — de un motor de comisiones de veinte años a una plataforma propia.. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío — escrito a cuatro manos con Alejandro Cespón. Error residual ~0,02 %: unos 100 USD sobre unos 500 000 USD pagados. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y Gestor , un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-es",
@@ -622,6 +638,38 @@
   "title": "Introducción a Arduino para Ingenieros Eléctricos",
   "url": "/es/#experience",
   "text": "Introducción a Arduino para Ingenieros Eléctricos. Universidad de Camagüey. Dpto. de Ingeniería Eléctrica, Facultad de Electromecánica. 2017 – 2020. Optativa que diseñé e impartí: problemas típicos de la carrera resueltos con un programa de Arduino en lugar de un panel de relés o un PLC. 12 h de conferencias, 12 h de laboratorio, 8 h de evaluación y un proyecto final que cada estudiante tenía que construir y demostrar.. Seis conferencias escritas desde cero: introducción, tipos de datos, toma de decisiones, ciclos, funciones, alcance. 23 estudiantes en la cohorte de 2019 — el único año en que la cursó el grupo completo y no un puñado de voluntarios — cada uno con un proyecto final funcionando: un banco de pruebas para inyectores, un soldador de puntos, una cerradura electrónica, un watímetro, un control de bomba de agua, una alarma de proximidad. Impartida también como taller abierto de tres días en Camagüey, 12–14 de octubre de 2018."
+ },
+ {
+  "id": "rec-martinez-trinidad-en",
+  "lang": "en",
+  "kind": "recommendation",
+  "title": "José Francisco Martínez-Trinidad",
+  "url": "/#recommendations",
+  "text": "Vladimir is an excellent research student who thinks deeply about his research problem, generates novel ideas, and tests them thoroughly. He is a great young researcher, but most of all, he is an excellent person. I´m honored to collaborate with him.. José Francisco Martínez-Trinidad, Professor of Computer Science and Pattern Recognition, INAOE. 2021-09-21. https://www.linkedin.com/in/j-francisco-martinez-76a28b14/"
+ },
+ {
+  "id": "rec-loyola-gonzalez-en",
+  "lang": "en",
+  "kind": "recommendation",
+  "title": "Octavio Loyola-González",
+  "url": "/#recommendations",
+  "text": "Vladimír was my PhD fellow student where I saw his performance during these years. He is a great researcher in Computer Science, which has solved several real-world problems by applying innovative techniques. He has shown abilities for leading and adapting quickly to teamwork, assimilating new knowledge and communication skills.. Octavio Loyola-González, PhD in Artificial Intelligence; advanced analytics and AI strategy. 2021-09-20. https://www.linkedin.com/in/octavioloyola/"
+ },
+ {
+  "id": "rec-martinez-trinidad-es",
+  "lang": "es",
+  "kind": "recommendation",
+  "title": "José Francisco Martínez-Trinidad",
+  "url": "/es/#recommendations",
+  "text": "Vladimir is an excellent research student who thinks deeply about his research problem, generates novel ideas, and tests them thoroughly. He is a great young researcher, but most of all, he is an excellent person. I´m honored to collaborate with him.. José Francisco Martínez-Trinidad, Profesor de Ciencias de la Computación y Reconocimiento de Patrones, INAOE. 2021-09-21. https://www.linkedin.com/in/j-francisco-martinez-76a28b14/"
+ },
+ {
+  "id": "rec-loyola-gonzalez-es",
+  "lang": "es",
+  "kind": "recommendation",
+  "title": "Octavio Loyola-González",
+  "url": "/es/#recommendations",
+  "text": "Vladimír was my PhD fellow student where I saw his performance during these years. He is a great researcher in Computer Science, which has solved several real-world problems by applying innovative techniques. He has shown abilities for leading and adapting quickly to teamwork, assimilating new knowledge and communication skills.. Octavio Loyola-González, Doctor en Inteligencia Artificial; analítica avanzada y estrategia de IA. 2021-09-20. https://www.linkedin.com/in/octavioloyola/"
  },
  {
   "id": "profile-en",

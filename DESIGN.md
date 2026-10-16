@@ -177,6 +177,21 @@ number; the count is a separate sentence and is deliberately kept out of the
 retrieval corpus, which that arithmetic would otherwise rewrite every January
 (CLAUDE.md §11).
 
+**A quote is drawn as words, not as a card.** `Recommendations.astro` is a
+hairline-divided list like the record above it: the quote at reading size, the
+attribution under it as the chronology's eyebrow — name as the link to the
+profile, then role, then the date in mono beside how the signer knows him.
+Where the page language is not the one it was written in, the original follows
+in a muted block against a 1px rule, small, labelled with its language. The
+translation never stands alone, and the original is never hidden behind a
+disclosure: evidence that has to be clicked open is evidence the page is
+asking to be taken on trust.
+
+The eyebrow comes after the words here, not before them, which is the one
+place on the site it does. In a role the date and the institution are the
+context you need before the claim; in a quote the sentence is the claim and
+the attribution is what makes it checkable.
+
 Charts obey the same rule. The output-per-year plot in `Research.astro` is
 built from the same array the list under it renders, carries **no script**, and
 publishes its numbers as a visually hidden `<table>` with the bars marked

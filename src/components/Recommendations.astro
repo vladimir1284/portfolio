@@ -1,0 +1,81 @@
+---
+import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import recommendations from "../data/recommendations.json";
+import type { Recommendation } from "../data/types";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+/*
+  Recommendations other people wrote, transcribed by hand.
+
+  LinkedIn cannot be embedded, and the section is not a workaround for that —
+  it is the only honest form available. There is no public API for
+  recommendations, and the profile badge widget shows a headline rather than
+  any recommendation and loads a third-party script the CSP rejects
+  (CLAUDE.md §9). So the text is copied, and what makes it checkable is the
+  link to the profile of whoever signed it, not a widget.
+
+  A quote is someone else's words, so the original always ships: the page
+  prints the member of `quote` for its own locale, and where that is not the
+  language it was written in, the original follows underneath, labelled.
+  Translating without showing what was translated would be asking the reader
+  to take my word for what a third party said.
+*/
+const items = recommendations as Recommendation[];
+---
+
+{
+  items.length > 0 && (
+    <section id="recommendations" class="section">
+      <div class="shell">
+        <p class="label">05</p>
+        <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
+          {t("recommendations.title")}
+        </h2>
+        <p class="prose-col mt-5 text-muted">{t("recommendations.lede")}</p>
+
+        <ul class="mt-10 divide-y divide-border border-t border-border">
+          {items.map((r) => (
+            <li class="py-8">
+              <figure>
+                <blockquote class="prose-col text-base sm:text-lg">{r.quote[lang]}</blockquote>
+
+                {/* Only where the page is not in the language it was written
+                    in — on its own page the quote above is already the
+                    original, and printing it twice would say nothing. */}
+                {r.lang !== lang && (
+                  <div class="prose-col mt-5 border-l border-border pl-4">
+                    <p class="label">{t(`recommendations.original.${r.lang}` as UIKey)}</p>
+                    <p class="mt-2 text-sm text-muted">{r.quote[r.lang]}</p>
+                  </div>
+                )}
+
+                {/* The eyebrow of the chronology, after the words rather than
+                    before them: in a quote the sentence is the claim and the
+                    attribution is what makes it checkable. */}
+                <figcaption class="mt-5">
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="t-fast text-sm font-medium text-text hover:text-accent"
+                  >
+                    {r.name}
+                  </a>
+                  <p class="mt-1 text-sm text-muted">{r.role[lang]}</p>
+                  <p class="mt-1 text-sm text-muted">
+                    <span class="data">{r.date}</span>
+                    <span aria-hidden="true"> &middot; </span>
+                    {t(`recommendations.relation.${r.relation}` as UIKey)}
+                  </p>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

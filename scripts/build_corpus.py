@@ -47,6 +47,7 @@ ANCHORS = {
     "system": "system",
     "projects": "projects",
     "experience": "experience",
+    "recommendations": "recommendations",
     "contact": "contact",
 }
 
@@ -358,6 +359,42 @@ def experience_chunks() -> list[dict]:
     return [c for c in chunks if len(c["text"]) >= MIN_CHARS]
 
 
+def recommendation_chunks() -> list[dict]:
+    """What other people said, with the link that proves they said it.
+
+    Only the original is indexed, not the translation: both say the same
+    thing, and a second row of near-identical text would compete with itself
+    for the same question. The row is tagged with the page language so a
+    Spanish question can retrieve it, and the citation sends the reader to the
+    section, where the translation is printed beside the original.
+    """
+    items = load("recommendations.json")
+    chunks = []
+    for lang in LANGS:
+        for item in items:
+            text = ". ".join(
+                p
+                for p in (
+                    localized(item["quote"], item["lang"]),
+                    f"{item['name']}, {localized(item['role'], lang)}",
+                    item["date"],
+                    item["url"],
+                )
+                if p
+            )
+            chunks.append(
+                {
+                    "id": f"rec-{item['id']}-{lang}",
+                    "lang": lang,
+                    "kind": "recommendation",
+                    "title": item["name"],
+                    "url": url_for(lang, "recommendations"),
+                    "text": text,
+                }
+            )
+    return [c for c in chunks if len(c["text"]) >= MIN_CHARS]
+
+
 def profile_chunks() -> list[dict]:
     profile = load("profile.json")
     training = load("training.json")
@@ -572,6 +609,7 @@ def main() -> int:
         ("projects", project_chunks),
         ("publications", publication_chunks),
         ("experience", experience_chunks),
+        ("recommendations", recommendation_chunks),
         ("profile", profile_chunks),
         ("papers", paper_chunks),
     ):

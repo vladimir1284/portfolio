@@ -1,0 +1,34 @@
+[
+  {
+    "id": "martinez-trinidad",
+    "lang": "en",
+    "quote": {
+      "en": "Vladimir is an excellent research student who thinks deeply about his research problem, generates novel ideas, and tests them thoroughly. He is a great young researcher, but most of all, he is an excellent person. I´m honored to collaborate with him.",
+      "es": "Vladímir es un excelente estudiante de investigación: piensa a fondo su problema de investigación, genera ideas novedosas y las pone a prueba con rigor. Es un gran joven investigador, pero sobre todo es una excelente persona. Me honra colaborar con él."
+    },
+    "name": "José Francisco Martínez-Trinidad",
+    "role": {
+      "en": "Professor of Computer Science and Pattern Recognition, INAOE",
+      "es": "Profesor de Ciencias de la Computación y Reconocimiento de Patrones, INAOE"
+    },
+    "relation": "advised",
+    "date": "2021-09-21",
+    "url": "https://www.linkedin.com/in/j-francisco-martinez-76a28b14/"
+  },
+  {
+    "id": "loyola-gonzalez",
+    "lang": "en",
+    "quote": {
+      "en": "Vladimír was my PhD fellow student where I saw his performance during these years. He is a great researcher in Computer Science, which has solved several real-world problems by applying innovative techniques. He has shown abilities for leading and adapting quickly to teamwork, assimilating new knowledge and communication skills.",
+      "es": "Vladímir fue mi compañero de doctorado y pude ver su desempeño durante esos años. Es un gran investigador en Ciencias de la Computación, que ha resuelto varios problemas del mundo real aplicando técnicas innovadoras. Ha demostrado capacidad para liderar y adaptarse rápido al trabajo en equipo, para asimilar conocimientos nuevos y para comunicarse."
+    },
+    "name": "Octavio Loyola-González",
+    "role": {
+      "en": "PhD in Artificial Intelligence; advanced analytics and AI strategy",
+      "es": "Doctor en Inteligencia Artificial; analítica avanzada y estrategia de IA"
+    },
+    "relation": "fellow",
+    "date": "2021-09-20",
+    "url": "https://www.linkedin.com/in/octavioloyola/"
+  }
+]

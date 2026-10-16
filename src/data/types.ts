@@ -200,3 +200,31 @@ export interface Publication {
    */
   thumb?: string;
 }
+
+/**
+ * A recommendation someone else wrote, transcribed.
+ *
+ * `lang` is the language it was written in, so `quote[lang]` is the original
+ * and the other member is a translation (Vladímir's call, 2026-10-16: a
+ * translated quote never ships without the words it was made from). The page
+ * prints the member for its own locale and, where that is not the original,
+ * prints the original underneath.
+ *
+ * `url` is the profile of whoever signed it. It is not decoration: a quote a
+ * reader cannot trace back is a quote the site is asking to be believed on.
+ */
+export interface Recommendation {
+  /** Stable key. Used for the retrieval chunk id, so renaming one moves a citation. */
+  id: string;
+  /** The language the text was written in — the member of `quote` that is verbatim. */
+  lang: Lang;
+  quote: Localized;
+  /** As the person signs it. */
+  name: string;
+  role: Localized;
+  /** How they know Vladímir. Resolves to `recommendations.relation.<relation>`. */
+  relation: "advised" | "fellow";
+  /** ISO date the recommendation was written. */
+  date: string;
+  url: string;
+}
