@@ -165,22 +165,29 @@ the measurement, and dropping those columns would make the shape decoration.
 
 ### The projects front page
 
-`Projects.astro` opens on an index built around the captures, not a row per
-title: the lead case takes a 16:9 cover, the next two a thumbnail each, and the
-remainder a numbered list. Covers and thumbnails are cropped (`object-fit:
-cover`, anchored to the top — a screenshot carries its subject under the title
-bar). Cropping is only acceptable because the index is a pointer: the same
-capture is printed whole, with its caption, inside the case below.
+`Projects.astro` is an index on the home page and nothing more: the lead case
+takes a 16:9 cover, the next two a thumbnail each, and a link under them leads
+to `/projects/`, where every case is listed. Covers and thumbnails are cropped
+(`object-fit: cover`, anchored to the top — a screenshot carries its subject
+under the title bar). Cropping is only acceptable because the index is a
+pointer: the same capture is printed whole, with its caption, on the case page.
+
+**The cases themselves are pages, not anchors.** Six cases at full depth on the
+home page were four to five paragraphs each plus every capture, folded into
+disclosures, inside a document every visitor downloaded whole — about 29 KB of
+the 130 KB. Each case now serves at `/projects/<id>/` in both locales, and the
+home document is 100 KB. The fold went with them: a reader who opened one case
+chose it, so the argument prints open and the captures come first.
 
 A case with no capture yet gets an etched panel carrying its index and
 `projects.shot.pending`, not a stand-in image. The empty panel is the honest
 state and it is meant to be temporary.
 
-A capture marked `coverOnly` is the card's image and nothing else, for the case
-where the same frame is already printed elsewhere on the page — one screenshot
-doing the same work twice reads as padding. No shot carries the flag today: the
-LAMULA case held it while it borrowed the hero's frame, and lost it when the
-hero moved to the loop and the case gained a velocity capture of its own.
+A capture marked `coverOnly` is the index image and nothing else, for the case
+where the same frame is already printed elsewhere — one screenshot doing the
+same work twice reads as padding. No shot carries the flag today: the LAMULA
+case held it while it borrowed the hero's frame, and lost it when the hero
+moved to the loop and the case gained a velocity capture of its own.
 
 A `plot` is the opposite problem: a chart or a block diagram is not a capture of
 a running screen, and a square one set full width is a thousand pixels of white
@@ -188,14 +195,13 @@ taller than the prose beside it. It is centred and capped at `max-w-xl` instead
 — wide enough that the axis ticks still read, which the narrower `portrait`
 treatment would not be.
 
-Under `lg` the grid is one column — cover, lead case, the two rows, then the
-numbered list — and the column rule disappears.
+Under `lg` both the home index and `/projects/` are one column, and the column
+rule disappears.
 
-The argument of each case (four to five paragraphs, plus its out-of-scope list)
-is folded into a `Disclosure`. The claim, the status and the evidence stay
-visible; the reasoning is one tap away, still in the markup and still open in
-the print stylesheet. The captures sit **above** the fold, before the prose: a
-reader who scrolled to a case has already chosen it and wants to see it.
+A case page ends with the way out of it — back to the index, then the previous
+and next case in the order `projects.json` holds, which is the order the index
+prints. Without it a case is a leaf and the only route onward is the back
+button.
 
 ---
 

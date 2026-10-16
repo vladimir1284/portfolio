@@ -73,6 +73,12 @@ def url_for(lang: str, anchor: str) -> str:
     return f"{base}#{anchor}" if anchor else base
 
 
+def page_url(lang: str, route: str) -> str:
+    """A full page rather than a section anchor — one case per page."""
+    base = "/" if lang == "en" else "/es/"
+    return f"{base}{route}"
+
+
 def localized(value, lang: str) -> str:
     """Read a `{en, es}` field, or pass a plain string through."""
     if isinstance(value, dict):
@@ -200,7 +206,7 @@ def project_chunks() -> list[dict]:
                     "lang": lang,
                     "kind": "project",
                     "title": localized(project["title"], lang),
-                    "url": url_for(lang, f"project-{project['id']}"),
+                    "url": page_url(lang, f"projects/{project['id']}/"),
                     "text": " ".join(p for p in parts if p),
                 }
             )

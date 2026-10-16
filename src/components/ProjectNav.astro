@@ -1,0 +1,51 @@
+---
+/*
+  The way out of a case: back to the index, and on to its neighbours.
+
+  A case page is a leaf — without this the only route onward is the browser's
+  back button and the header's home link, which is how a reader leaves rather
+  than how they keep reading. Order is the order of `projects.json`, which is
+  the order the index prints, so "next" means what the reader just saw.
+*/
+import { resolveLang, useTranslations } from "../i18n/utils";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { neighbours, projectRoute, projectsRoute } from "../data/projects";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { prev, next } = neighbours(id);
+const href = (pid: string) => getRelativeLocaleUrl(lang, projectRoute(pid));
+---
+
+<nav class="mt-16 border-t border-border pt-8" aria-label={t("projects.title")}>
+  <a
+    href={getRelativeLocaleUrl(lang, projectsRoute)}
+    class="data t-fast text-sm text-accent hover:text-accent-hover"
+  >
+    &larr; {t("projects.all")}
+  </a>
+
+  <div class="mt-6 grid gap-6 sm:grid-cols-2">
+    {
+      prev && (
+        <a href={href(prev.id)} class="proj-row t-fast block">
+          <span class="label">{t("projects.prev")}</span>
+          <span class="proj-title mt-1.5 block leading-snug font-medium">{prev.title[lang]}</span>
+        </a>
+      )
+    }
+    {
+      next && (
+        <a href={href(next.id)} class="proj-row t-fast block sm:col-start-2 sm:text-right">
+          <span class="label">{t("projects.next")}</span>
+          <span class="proj-title mt-1.5 block leading-snug font-medium">{next.title[lang]}</span>
+        </a>
+      )
+    }
+  </div>
+</nav>

@@ -2,36 +2,33 @@
 import { resolveLang, useTranslations } from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
 import type { Project } from "../data/types";
-import Disclosure from "./Disclosure.astro";
-import projectsData from "../data/projects.json";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { projects, projectRoute, projectsRoute } from "../data/projects";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
-const projects = projectsData as Project[];
-
 const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
 const num = (i: number) => String(i + 1).padStart(2, "0");
+const href = (id: string) => getRelativeLocaleUrl(lang, projectRoute(id));
+const total = String(projects.length).padStart(2, "0");
 
 /*
-  The index is a front page, not a contents list.
+  On the home page this section is an index and nothing else.
 
-  Six cases at full depth is a long read, and the previous index — a flat row
-  per project — gave a visitor nothing to choose on but the title. A screenshot
-  is the fastest thing to read on the page, so the index is built around the
-  ones that exist: the lead case takes the large image, the next two take a
-  thumbnail each, and the remainder stay a numbered list. Everything below is
-  unabridged, with the long argument folded (see the disclosure).
+  The six cases used to print here in full — four to five paragraphs each, plus
+  every capture — behind disclosures. That was most of a 130 KB home document,
+  downloaded by every visitor and read by almost none of them; each case now
+  has its own page and the home section keeps only what it was good at, which
+  is giving a reader something to choose on. Three captures: the lead case
+  takes the large one, the next two a thumbnail each. The rest of the list is
+  one link away, on the index.
 */
 const [lead, ...others] = projects;
 const seconds = others.slice(0, 2);
-const rest = others.slice(2);
 
 /** First capture of a case, or nothing — the card falls back typographically. */
 const cover = (p: Project) => p.shots?.[0];
-
-/** What the case itself prints: everything the index card is not carrying alone. */
-const figures = (p: Project) => p.shots?.filter((s) => !s.coverOnly) ?? [];
 ---
 
 <section id="projects" class="section">
@@ -45,7 +42,7 @@ const figures = (p: Project) => p.shots?.filter((s) => !s.coverOnly) ?? [];
     <div class="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-12">
       <!-- The lead case. Image, status, title, summary — and nothing else. -->
       <article class="lg:col-span-7">
-        <a href={`#project-${lead.id}`} class="proj-lead t-fast block">
+        <a href={href(lead.id)} class="proj-lead t-fast block">
           {
             cover(lead) ? (
               <img
@@ -86,13 +83,13 @@ const figures = (p: Project) => p.shots?.filter((s) => !s.coverOnly) ?? [];
         </a>
       </article>
 
-      <!-- The column beside it: two cases with a thumbnail, the rest numbered. -->
+      <!-- The column beside it: two more cases, then the way to all of them. -->
       <div class="lg:col-span-5 lg:border-l lg:border-border lg:pl-10">
         <ul class="divide-y divide-border border-t border-b border-border">
           {
             seconds.map((p, i) => (
               <li>
-                <a href={`#project-${p.id}`} class="proj-row t-fast flex gap-4 py-5">
+                <a href={href(p.id)} class="proj-row t-fast flex gap-4 py-5">
                   {cover(p) ? (
                     <img
                       src={cover(p)!.src}
@@ -123,177 +120,14 @@ const figures = (p: Project) => p.shots?.filter((s) => !s.coverOnly) ?? [];
           }
         </ul>
 
-        {
-          rest.length > 0 && (
-            <nav class="mt-8" aria-labelledby="projects-more-title">
-              <p class="label" id="projects-more-title">
-                {t("projects.more.title")}
-              </p>
-              <ul class="mt-2">
-                {rest.map((p, i) => (
-                  <li>
-                    <a
-                      href={`#project-${p.id}`}
-                      class="proj-row t-fast flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3"
-                    >
-                      <span class="data text-xs text-accent">{num(i + 3)}</span>
-                      <span class="proj-title min-w-0 flex-1 text-sm">{p.title[lang]}</span>
-                      <span class="data text-xs text-muted">{p.years}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )
-        }
+        <a
+          href={getRelativeLocaleUrl(lang, projectsRoute)}
+          class="data t-fast mt-8 inline-flex items-baseline gap-3 text-sm text-accent hover:text-accent-hover"
+        >
+          {t("projects.all")}
+          <span class="text-xs text-muted">{total}</span>
+        </a>
       </div>
-    </div>
-
-    <div class="mt-16 space-y-16 lg:mt-20">
-      {
-        projects.map((p, i) => (
-          <article id={`project-${p.id}`} class="scroll-mt-24 border-t border-border pt-8">
-            {/* Years and status on their own line, title under them. Held on
-                one row, the title was squeezed into whatever the badge left —
-                four words a line on a phone. */}
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <span class="data text-sm text-muted">{p.years}</span>
-              <span class={["scaffolding", "poc"].includes(p.status) ? "badge-warn" : "tag"}>
-                {t(statusKey(p.status))}
-              </span>
-            </div>
-            <h3
-              class:list={[
-                "mt-3 font-semibold tracking-tight",
-                i === 0 ? "text-[clamp(1.375rem,2.2vw,1.75rem)]" : "text-xl",
-              ]}
-            >
-              {p.title[lang]}
-            </h3>
-
-            {/* The lead project carries the argument of the section, so its
-                summary is set at reading size rather than body size. */}
-            <p class:list={["prose-col mt-4 text-muted", i === 0 && "text-lg leading-relaxed"]}>
-              {p.summary[lang]}
-            </p>
-
-            {/* The captures come before the argument: a reader who scrolls
-                here has already chosen the case and wants to see it, not read
-                four more paragraphs first. */}
-            {figures(p).length > 0 && (
-              <div class="mt-8 space-y-6">
-                {figures(p).map((s) => (
-                  <figure
-                    class:list={[
-                      "overflow-hidden rounded border border-border",
-                      s.portrait && "mx-auto max-w-sm",
-                      s.plot && "mx-auto max-w-xl",
-                    ]}
-                  >
-                    <img
-                      src={s.src}
-                      alt={s.alt[lang]}
-                      width={s.width}
-                      height={s.height}
-                      loading="lazy"
-                      decoding="async"
-                      class="block w-full bg-bg"
-                    />
-                    <figcaption class="border-t border-border px-4 py-2.5 text-xs text-muted">
-                      {s.caption[lang]}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            )}
-
-            {/* Four paragraphs of argument per case is the section's substance
-                and also what made it a wall. Folded, it stays in the markup,
-                in the print stylesheet and in the page's own index — one tap
-                from anyone who wants it, out of the way of anyone who does
-                not. */}
-            <Disclosure label={t("projects.fold")} class="mt-6">
-              <div class="prose-col space-y-4" set:html={p.body[lang]} />
-
-              {p.outOfScope && (
-                <div class="mt-6">
-                  <p class="label">{t("projects.scope.title")}</p>
-                  <ul class="mt-3 grid gap-1.5 sm:grid-cols-2">
-                    {p.outOfScope[lang].map((s) => (
-                      <li class="flex gap-2">
-                        <span aria-hidden="true">&#215;</span>
-                        <span>{s}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </Disclosure>
-
-            {p.note && (
-              <p class="panel prose-col mt-6 border-l-2 border-l-warn p-4 text-sm text-muted">
-                {p.note[lang]}
-              </p>
-            )}
-
-            <ul class="mt-6 flex flex-wrap gap-2">
-              {p.stack.map((s) => (
-                <li class="tag">{s}</li>
-              ))}
-            </ul>
-
-            <div class="mt-6 flex flex-wrap gap-5">
-              {p.links.demo && (
-                <a
-                  class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
-                  href={p.links.demo}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {t("projects.demo")} &rarr;
-                </a>
-              )}
-              {p.links.code && (
-                <a
-                  class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
-                  href={p.links.code}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {t("projects.code")} &rarr;
-                </a>
-              )}
-              {p.links.docs && (
-                <a
-                  class="data t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
-                  href={p.links.docs}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {t("projects.docs")} &rarr;
-                </a>
-              )}
-            </div>
-
-            {p.repos && (
-              <ul class="mt-5 flex flex-wrap gap-2">
-                {p.repos.map((r) => (
-                  <li>
-                    <a
-                      class="tag t-fast hover:border-accent hover:text-accent"
-                      href={r.url}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      {r.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        ))
-      }
     </div>
   </div>
 </section>

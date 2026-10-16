@@ -24,10 +24,27 @@ import interWght from "@fontsource-variable/inter/files/inter-latin-wght-normal.
 import plexMono400 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
 import plexMono500 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url";
 
+interface Props {
+  /** Page title. Defaults to the site title — only sub-pages override it. */
+  title?: string;
+  description?: string;
+  /**
+   * The locale-agnostic route this page serves: no leading slash, no locale
+   * prefix. "" is the home page, "projects/" the project index. Canonical,
+   * hreflang and og:url are all built from it, so a sub-page that forgets to
+   * pass it would claim to be the home page in three places at once.
+   */
+  route?: string;
+}
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
-const canonicalURL = getAbsoluteLocaleUrl(lang, "");
+const { title, description, route = "" } = Astro.props;
+const pageTitle = title ?? t("site.title");
+const pageDescription = description ?? t("site.description");
+
+const canonicalURL = getAbsoluteLocaleUrl(lang, route);
 const ogImageURL = new URL("/og-image.png", Astro.site).toString();
 ---
 
@@ -38,8 +55,8 @@ const ogImageURL = new URL("/og-image.png", Astro.site).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{t("site.title")}</title>
-    <meta name="description" content={t("site.description")} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
 
     <!-- Theme flash prevention — must run before paint -->
     <script is:inline>
@@ -53,22 +70,22 @@ const ogImageURL = new URL("/og-image.png", Astro.site).toString();
 
     <!-- Canonical + hreflang -->
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="en" href={getAbsoluteLocaleUrl("en", "")} />
-    <link rel="alternate" hreflang="es" href={getAbsoluteLocaleUrl("es", "")} />
-    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl("en", "")} />
+    <link rel="alternate" hreflang="en" href={getAbsoluteLocaleUrl("en", route)} />
+    <link rel="alternate" hreflang="es" href={getAbsoluteLocaleUrl("es", route)} />
+    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl("en", route)} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={t("site.title")} />
-    <meta property="og:description" content={t("site.description")} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:locale" content={ogLocale[lang]} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={t("site.title")} />
-    <meta name="twitter:description" content={t("site.description")} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImageURL} />
 
     <!--

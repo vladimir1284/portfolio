@@ -1,0 +1,23 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ProjectsIndex from "../../components/ProjectsIndex.astro";
+import { resolveLang, useTranslations } from "../../i18n/utils";
+import { projectsRoute } from "../../data/projects";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<Layout
+  title={`${t("projects.title")} — ${t("hero.name")}`}
+  description={t("projects.lede")}
+  route={projectsRoute}
+>
+  <Header />
+  <main id="main">
+    <ProjectsIndex />
+  </main>
+  <Footer />
+</Layout>

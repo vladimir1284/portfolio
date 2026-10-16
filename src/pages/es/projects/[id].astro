@@ -1,0 +1,31 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import ProjectCase from "../../../components/ProjectCase.astro";
+import ProjectNav from "../../../components/ProjectNav.astro";
+import { resolveLang, useTranslations } from "../../../i18n/utils";
+import { projects, projectRoute } from "../../../data/projects";
+import type { Project } from "../../../data/types";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props as { project: Project };
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<Layout
+  title={`${project.title[lang]} — ${t("hero.name")}`}
+  description={project.summary[lang]}
+  route={projectRoute(project.id)}
+>
+  <Header />
+  <main id="main" class="shell pt-28 pb-24 lg:pt-32">
+    <ProjectCase project={project} />
+    <ProjectNav id={project.id} />
+  </main>
+  <Footer />
+</Layout>

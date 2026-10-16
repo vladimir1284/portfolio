@@ -1,0 +1,83 @@
+---
+/*
+  The project index — the page every case links back to.
+
+  It prints one row per case, numbered, with the first capture as its image.
+  Unlike the home section (Projects.astro), nothing is left out here: this is
+  the complete list, and a case with no capture yet says so rather than
+  borrowing one.
+*/
+import { resolveLang, useTranslations } from "../i18n/utils";
+import type { UIKey } from "../i18n/ui";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { projects, projectRoute } from "../data/projects";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+const statusKey = (s: string): UIKey => `projects.status.${s}` as UIKey;
+const num = (i: number) => String(i + 1).padStart(2, "0");
+const href = (id: string) => getRelativeLocaleUrl(lang, projectRoute(id));
+---
+
+<div class="shell pt-28 pb-24 lg:pt-32">
+  <h1 class="mt-2 text-[clamp(2rem,4vw,3rem)] leading-tight font-semibold tracking-tight">
+    {t("projects.title")}
+  </h1>
+  <p class="prose-col mt-5 text-lg text-muted">{t("projects.lede")}</p>
+
+  <ul class="mt-12 border-t border-border lg:mt-16">
+    {
+      projects.map((p, i) => (
+        <li class="border-b border-border">
+          <a href={href(p.id)} class="proj-lead t-fast grid gap-6 py-8 lg:grid-cols-12 lg:gap-10">
+            <span class="lg:col-span-5">
+              {p.shots?.[0] ? (
+                <img
+                  src={p.shots[0].src}
+                  alt=""
+                  width={p.shots[0].width}
+                  height={p.shots[0].height}
+                  loading="lazy"
+                  decoding="async"
+                  class="proj-cover"
+                />
+              ) : (
+                <span class="proj-cover proj-ph">
+                  <span class="data proj-ph-n" aria-hidden="true">
+                    {num(i)}
+                  </span>
+                  <span class="label">{t("projects.shot.pending")}</span>
+                </span>
+              )}
+            </span>
+
+            <span class="lg:col-span-7">
+              <span class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span class="data text-xs text-accent">{num(i)}</span>
+                <span class="label">{t(statusKey(p.status))}</span>
+                <span class="data text-xs text-muted">{p.years}</span>
+              </span>
+
+              <span class="proj-title mt-3 block text-[clamp(1.25rem,2.2vw,1.625rem)] leading-tight font-semibold tracking-tight">
+                {p.title[lang]}
+              </span>
+
+              <span class="prose-col mt-3 block text-muted">{p.summary[lang]}</span>
+
+              <span class="mt-4 flex flex-wrap gap-2">
+                {p.stack.slice(0, 5).map((s) => (
+                  <span class="tag">{s}</span>
+                ))}
+              </span>
+
+              <span class="data mt-4 inline-block text-sm text-accent">
+                {t("projects.read")} &rarr;
+              </span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

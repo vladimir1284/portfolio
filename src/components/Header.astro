@@ -1,5 +1,5 @@
 ---
-import { resolveLang, useTranslations, otherLang } from "../i18n/utils";
+import { resolveLang, useTranslations, otherLang, getRouteFromPathname } from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
 import { localeCode } from "../i18n/ui";
 import { getRelativeLocaleUrl } from "astro:i18n";
@@ -7,7 +7,21 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 const other = otherLang(lang);
-const otherHref = getRelativeLocaleUrl(other, "");
+
+/*
+  The nav is a set of home-page section anchors, and the header is now also on
+  pages that have none of those sections. So every anchor carries the home
+  path: on the home page `/#about` is still a same-document scroll, and from a
+  case page it navigates home and then scrolls, instead of pointing at an id
+  that is not there.
+
+  The switcher keeps the reader where they are. Both locales serve a case at
+  the same route under their own prefix, so translating the current pathname is
+  enough — it does not need a table of per-locale slugs.
+*/
+const home = getRelativeLocaleUrl(lang, "");
+const route = getRouteFromPathname(Astro.url.pathname, lang);
+const otherHref = getRelativeLocaleUrl(other, route ? `${route}/` : "");
 
 const sections = [
   "about",
@@ -32,7 +46,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
 
 <header class="fixed inset-x-0 top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
   <div class="shell flex h-16 items-center justify-between gap-4">
-    <a href="#top" class="group flex items-center" aria-label={t("nav.home")}>
+    <a href={`${home}#top`} class="group flex items-center" aria-label={t("nav.home")}>
       <img
         src="/img/avatar/vladimir-3d.webp"
         alt=""
@@ -48,7 +62,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
         {
           sections.map((s) => (
             <li>
-              <a href={`#${s}`} class="t-fast text-sm text-muted hover:text-text">
+              <a href={`${home}#${s}`} class="t-fast text-sm text-muted hover:text-text">
                 {t(navKey(s))}
               </a>
             </li>
@@ -126,7 +140,7 @@ const navKey = (s: (typeof sections)[number]): UIKey => `nav.${s}` as UIKey;
       {
         sections.map((s) => (
           <li>
-            <a href={`#${s}`} class="t-fast block py-2.5 text-sm text-muted hover:text-text">
+            <a href={`${home}#${s}`} class="t-fast block py-2.5 text-sm text-muted hover:text-text">
               {t(navKey(s))}
             </a>
           </li>
