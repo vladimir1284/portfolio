@@ -27,10 +27,21 @@ DIST = Path(__file__).resolve().parent.parent / "dist"
 SCRIPT_RE = re.compile(r"<script(?![^>]*\bsrc=)([^>]*)>(.*?)</script>", re.S | re.I)
 STYLE_RE = re.compile(r"<style([^>]*)>(.*?)</style>", re.S | re.I)
 
-# Hosts the built pages actually reach. Keep in sync with Layout.astro; the
-# assertion below fails the build if a page starts loading from somewhere else.
-FONT_CSS = "https://fonts.googleapis.com"
-FONT_FILES = "https://fonts.gstatic.com"
+# The built pages fetch nothing third-party: fonts are self-hosted (see the
+# note in Layout.astro), so every directive below is 'self' plus hashes.
+#
+# `offsite_hosts` is what keeps that honest. The policy is generated, so adding
+# a Google Fonts link back would not fail the build — it would quietly ship a
+# page whose stylesheet the CSP blocks, and nothing on the page would say so.
+# Only elements CSP actually governs are checked. Anchors are left alone — the
+# site links out on purpose — and so is a <link> that declares a relationship
+# rather than fetching: `canonical` and `alternate` name this site's own
+# absolute URLs and are never requested by the browser.
+LINK_RE = re.compile(r"<link\b([^>]*)>", re.I)
+ATTR_RE = re.compile(r"""\b([a-z-]+)\s*=\s*["']([^"']*)["']""", re.I)
+SRC_RE = re.compile(r"""<(?:script|img|source)\b[^>]*\bsrc(?:set)?\s*=\s*["']([^"']+)""", re.I)
+FETCHING_RELS = {"stylesheet", "preload", "modulepreload", "prefetch", "icon", "manifest"}
+HOST_RE = re.compile(r"(?:https?:)?//([^/\s]+)")
 
 
 def sha256_source(body: str) -> str:
@@ -46,6 +57,29 @@ def collect(pattern: re.Pattern[str], pages: list[Path]) -> list[str]:
             if body.strip():
                 hashes.add(sha256_source(body))
     return sorted(hashes)
+
+
+def offsite_hosts(pages: list[Path]) -> set[str]:
+    """Hosts the built pages fetch from, other than their own origin."""
+    hosts: set[str] = set()
+    for page in pages:
+        html = page.read_text(encoding="utf-8")
+
+        urls = list(SRC_RE.findall(html))
+        for attrs in LINK_RE.findall(html):
+            attr = {k.lower(): v for k, v in ATTR_RE.findall(attrs)}
+            rels = set(attr.get("rel", "").lower().split())
+            if rels & FETCHING_RELS:
+                urls.append(attr.get("href", ""))
+
+        for url in urls:
+            # A srcset is a comma-separated candidate list; a plain src splits
+            # to one item, so the same path handles both.
+            for candidate in url.split(","):
+                match = HOST_RE.match(candidate.strip())
+                if match:
+                    hosts.add(match.group(1))
+    return hosts
 
 
 def main() -> int:
@@ -65,12 +99,22 @@ def main() -> int:
         print("no inline scripts found — did Layout.astro change?", file=sys.stderr)
         return 1
 
+    offsite = offsite_hosts(pages)
+    if offsite:
+        print(
+            "built pages fetch from " + ", ".join(sorted(offsite)) + " — the CSP "
+            "below allows 'self' only, so these would be blocked at runtime. "
+            "Either keep the asset local or add the host to the policy.",
+            file=sys.stderr,
+        )
+        return 1
+
     csp = "; ".join(
         [
             "default-src 'self'",
             "script-src 'self' " + " ".join(script_hashes),
-            " ".join(["style-src 'self'", FONT_CSS, *style_hashes]),
-            f"font-src 'self' {FONT_FILES}",
+            " ".join(["style-src 'self'", *style_hashes]),
+            "font-src 'self'",
             "img-src 'self' data:",
             "connect-src 'self'",
             "frame-ancestors 'none'",

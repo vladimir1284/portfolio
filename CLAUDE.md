@@ -196,19 +196,24 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 - **The image toolchain is installed by hand, and does not survive the
   container.** `pnpm optimize:images` needs Pillow, and the hero loop needed
   `gif2webp`; neither is in `ghcr.io/vladimir1284/vscode-swarm-env`, and pip
-  refuses to install into the system Python (PEP 668). Both come from apt —
-  but plain `apt-get` fails first with `Malformed entry 1 in list file
-/etc/apt/sources.list.d/cloudflared.list`, which is a broken source unrelated
-  to any of this. Install around it rather than editing `/etc`:
+  refuses to install into the system Python (PEP 668). Both come from apt:
 
   ```bash
-  mkdir -p /tmp/aptsrc && cp /etc/apt/sources.list.d/debian.sources /tmp/aptsrc/
-  sudo apt-get -o Dir::Etc::SourceParts=/tmp/aptsrc update
-  sudo apt-get -o Dir::Etc::SourceParts=/tmp/aptsrc install -y webp python3-pil
+  sudo apt-get update && sudo apt-get install -y webp python3-pil
   ```
 
-  The real fix is `python3-pil` and `webp` in the image, and a `cloudflared.list`
-  that parses. Until then this has to be redone in every fresh container.
+  The real fix is `python3-pil` and `webp` in the image. Until then this has to
+  be redone in every fresh container.
+
+  `apt-get` used to fail before it got that far, with `Malformed entry 1 in
+list file /etc/apt/sources.list.d/cloudflared.list`. The cause was a
+  one-line `deb` entry missing its suite — `…/cloudflared  main`, where `main`
+  was read as the suite and nothing was left to read as a component. The line
+  is now `…/cloudflared bookworm main` and `apt-get update` is clean. **That
+  edit is in `/etc` and dies with the container**; it belongs in the image
+  alongside the two packages. `cloudflared` itself is installed in
+  `/usr/local/bin`, not from that repo, so deleting the file would work equally
+  well.
 
 - **The loop is lossy, and that was a decision.** `public/img/radar-loop.webp`
   is `gif2webp -lossy -q 70` over the original GIF: 816 KB against 2.0 MB, with
@@ -336,9 +341,19 @@ recomputed from `dist/` on every build, which is exactly why the file is not
 hand-written in `public/`: a stale hash blocks the script that prevents the
 flash, and nothing on the page would say so.
 
-The policy allows `fonts.googleapis.com` (stylesheet) and `fonts.gstatic.com`
-(font files), and nothing else off-origin. **`connect-src` is `'self'`** — the
-Phase 5 RAG endpoint will need its origin added there before any fetch works.
+**The policy names no third-party host at all.** Every directive is `'self'`
+plus hashes, which it can be because the fonts are served from `dist/` rather
+than from Google (DESIGN.md §3). `connect-src` is `'self'` too — `/api/ask` is a Pages
+Function on the same origin, which is most of why it is one.
+
+`build_headers.py` refuses to generate a policy the pages would violate: it
+collects the hosts the built HTML actually fetches from — `<link>` with a
+fetching `rel`, `<script src>`, `<img src>`, `<source srcset>` — and fails the
+build if any of them is off-origin. Anchors are ignored, since the site links
+out on purpose, and so are `rel="canonical"` and `rel="alternate"`, which name
+absolute URLs the browser never requests. Without that check, adding a CDN link
+back would not break the build; it would ship a page whose own asset the CSP
+blocks, and nothing on the page would say so.
 
 Verified against the live origin: `vladimir-portfolio.pages.dev` serves the
 policy, and the sha256 hashes in it match the inline scripts in the HTML Pages

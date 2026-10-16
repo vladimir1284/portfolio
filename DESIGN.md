@@ -77,7 +77,43 @@ No other exception exists.
 
 ## 3. Typography
 
-Both families are already loaded in `src/layouts/Layout.astro`.
+### Self-hosted, and only the `latin` slice
+
+Both families ship from `dist/`. They come from the `@fontsource-variable/inter`
+and `@fontsource/ibm-plex-mono` packages, which pin the version and are the
+source of the files; `src/styles/global.css` writes the three `@font-face`
+rules by hand and `Layout.astro` preloads the three woff2.
+
+Three decisions worth not relitigating:
+
+- **Not from Google.** The `<link rel="stylesheet">` to `fonts.googleapis.com`
+  is render-blocking on a second origin, and the woff2 it names can only be
+  discovered once it parses, on a third. Served locally and preloaded, the
+  faces start in parallel with the site's own stylesheet — measured in the
+  browser, all three begin at 118–124 ms alongside the CSS at 124 ms. It also
+  takes the only two third-party hosts out of the CSP (CLAUDE.md §9) and means
+  no visitor request reaches Google.
+- **`@font-face` written out rather than imported.** The fontsource entry
+  points declare every subset the family ships and Vite emits a file for each,
+  which put 170 KB of Cyrillic, Greek and Vietnamese in `dist/` that no visitor
+  would ever fetch. Three rules, three files.
+- **The `wght` axis of Inter, not `standard`.** 48 KB against 71 KB, and
+  nothing on the page varies optical size.
+
+Self-hosting costs about 9 KB more than Google's build — Google subsets IBM
+Plex Mono harder — and **no end-to-end speed-up has been measured.** Over six
+and four Lighthouse runs per build under applied 4G throttling, median FCP/LCP
+came out 3219 ms against 3230 ms: indistinguishable, with run-to-run spread of
+2.7–7.1 s dominated by CPU contention in the dev container. Lighthouse here
+cannot resolve a 250 ms effect. The change rests on the structural argument and
+on the CSP, not on a number.
+
+**`→` (U+2192) is in neither `latin` subset** — not fontsource's and not
+Google's, so this is not a regression. The three arrows in the fact band
+(`2008 →`) therefore render in the fallback, beside digits that are IBM Plex
+Mono. Either swap them for a character the subset has (`›`, U+203A, already
+used in the hero list) or accept the mismatch; do not add a second font file
+for three glyphs.
 
 | Role                                                              | Family            | Weights               |
 | :---------------------------------------------------------------- | :---------------- | :-------------------- |

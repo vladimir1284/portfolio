@@ -4,6 +4,26 @@ import { ogLocale } from "../i18n/ui";
 import { getAbsoluteLocaleUrl } from "astro:i18n";
 import "../styles/global.css";
 
+/*
+  Fonts are self-hosted, and that is a measured decision rather than a
+  preference. Loaded from Google, the `<link rel=stylesheet>` to
+  fonts.googleapis.com is render-blocking on a second origin — 251 ms of DNS,
+  TLS and request for 1.4 KB — and the woff2 files it names can only be
+  discovered after it parses, on a *third* origin. The h1 therefore painted
+  twice: once in the fallback at FCP, again in Inter at 6.9 s, and that repaint
+  was the LCP.
+
+  Served from `dist/`, the faces are preloaded below on the connection the
+  document already holds, so they are in flight before the stylesheet is
+  parsed. `wght` rather than `standard`: the weight-only axis of Inter is
+  48 KB against the full variable file's 71 KB, and nothing here varies optical
+  size. Only the `latin` slice ships — the site's two locales need nothing
+  past U+00FF (checked against every string in src/).
+*/
+import interWght from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import plexMono400 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import plexMono500 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url";
+
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
@@ -51,13 +71,15 @@ const ogImageURL = new URL("/og-image.png", Astro.site).toString();
     <meta name="twitter:description" content={t("site.description")} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <!--
+      Fonts. Same origin, so no preconnect buys anything — the connection is
+      already open. `crossorigin` is still required on a font preload even
+      then: fonts are fetched in CORS mode, and a preload whose mode does not
+      match the later request is discarded and fetched again.
+    -->
+    <link rel="preload" href={interWght} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMono500} as="font" type="font/woff2" crossorigin />
 
     <link rel="icon" type="image/webp" href="/img/avatar/vladimir-3d-favicon.webp" />
   </head>
