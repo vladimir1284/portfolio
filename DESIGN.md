@@ -184,6 +184,31 @@ publishes its numbers as a visually hidden `<table>` with the bars marked
 in the plot: the thin stretch while the doctorate was the priority is part of
 the measurement, and dropping those columns would make the shape decoration.
 
+### The profile chronology
+
+`About.astro` is five dated nodes on a hairline spine, not four paragraphs. The
+copy is the same copy — what changed is that the years are set above the prose
+instead of buried in it, so the shape of the career is read rather than
+assembled.
+
+**The dates are not written in the component.** Every eyebrow is the `from`/`to`
+of an entry in `experience.json` — the same numbers the strip below draws its
+bars from — and the doctorate node, which spans three entries, takes the outer
+bound of the three. A node whose span is still open prints the strip's own word
+for "present" and therefore ages by itself. Entries are looked up by the name
+they carry, not by index, so renaming one stops the build instead of printing a
+blank eyebrow.
+
+Nitza Develop and LADETEC are **two nodes, not one**: they start a year apart
+and both are still running, and a single node labelled with one company and
+dated from the other's start year is simply wrong. The dot says which: filled
+where the span is open, outlined where it closed — three of five are filled,
+which is the parallel careers the strip draws, said in an 8px mark.
+
+The eyebrow splits on §3 rather than setting the whole line in one face: the
+years are `.data`, the institution is not. A date is a measurement; the name of
+a university is prose.
+
 ### The Experience strip
 
 `Timeline.astro` draws the lede of that section rather than restating it. Three

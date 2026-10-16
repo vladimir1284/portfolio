@@ -1,11 +1,107 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
 import type { UIKey } from "../i18n/ui";
+import experience from "../data/experience.json";
+import type { Position } from "../data/types";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
 
 const interestKeys = [1, 2, 3, 4, 5, 6].map((n) => `about.interest.${n}` as UIKey);
+
+/*
+  The profile, drawn as a chronology rather than as four paragraphs.
+
+  The copy is the same copy; what changed is that the reader no longer has to
+  mine the dates out of the prose. Each node carries the years it covers in an
+  eyebrow above its paragraph, and the hairline spine is what says the five
+  are one sequence.
+
+  The dates are NOT written here. They are read from `experience.json` — the
+  same `from`/`to` the Experience strip draws its bars from and the record
+  below it prints as prose (DESIGN.md §4: there is no second list of years to
+  drift). A node whose span is still open reaches "present" without anyone
+  bumping a number in January.
+
+  Entries are looked up by the name they carry rather than by position in the
+  array, so reordering or renaming one stops the build here instead of
+  printing a blank eyebrow.
+*/
+
+type Education = { institution: string; from: string; to: string };
+
+const positions = experience.positions as Position[];
+const education = experience.education as Education[];
+
+function position(institution: string): Position {
+  const found = positions.find((p) => p.institution === institution);
+  if (!found) throw new Error(`About.astro: no position in experience.json at "${institution}"`);
+  return found;
+}
+
+function educationAt(institution: string): Education {
+  const found = education.find((e) => e.institution === institution);
+  if (!found)
+    throw new Error(`About.astro: no education entry in experience.json at "${institution}"`);
+  return found;
+}
+
+const chair = position("Universidad de Camagüey");
+const radar = position("Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba");
+const nitza = position("Nitza Develop");
+const ladetec = position("LADETEC");
+
+/* One node over three entries: the research at INAOE and the two defences.
+   Its span is the outer bound of the three, which is why it is computed here
+   instead of being read off any single one of them. */
+const doctorate = [
+  educationAt("Instituto Nacional de Astrofísica, Óptica y Electrónica (INAOE)"),
+  educationAt('Universidad Central "Marta Abreu" de Las Villas'),
+  educationAt("Benemérita Universidad Autónoma de Puebla"),
+];
+const doctorateFrom = Math.min(...doctorate.map((e) => Number(e.from)));
+const doctorateTo = Math.max(...doctorate.map((e) => Number(e.to)));
+
+/* Reuses the strip's word for an open span — the same label for the same
+   thing, rather than a second string that could be translated differently. */
+const present = t("experience.timeline.present");
+const span = (from: number, to: number | null) =>
+  to === null ? `${from} – ${present}` : from === to ? `${from}` : `${from} – ${to}`;
+
+const nodes = [
+  {
+    id: "chair",
+    when: span(chair.from, chair.to),
+    label: chair.institution,
+    open: chair.to === null,
+  },
+  {
+    id: "radar",
+    when: span(radar.from, radar.to),
+    /* The record names the centre and the institute it belongs to; the
+       eyebrow has room for the first, and the record prints both. */
+    label: radar.institution.split(" · ")[0],
+    open: radar.to === null,
+  },
+  {
+    id: "doctorate",
+    when: span(doctorateFrom, doctorateTo),
+    label: t("about.node.doctorate.label"),
+    open: false,
+  },
+  {
+    id: "nitza",
+    when: span(nitza.from, nitza.to),
+    label: nitza.institution,
+    open: nitza.to === null,
+  },
+  {
+    id: "ladetec",
+    when: span(ladetec.from, ladetec.to),
+    label: ladetec.institution,
+    open: ladetec.to === null,
+  },
+];
 ---
 
 <section id="about" class="section">
@@ -16,7 +112,46 @@ const interestKeys = [1, 2, 3, 4, 5, 6].map((n) => `about.interest.${n}` as UIKe
     </h2>
 
     <div class="mt-10 grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-14">
-      <div class="prose-col text-muted" set:html={t("about.body")} />
+      <ol>
+        {
+          nodes.map((n, i) => (
+            <li
+              class:list={[
+                "relative grid grid-cols-[0.5rem_minmax(0,1fr)] gap-x-5",
+                i < nodes.length - 1 && "pb-9",
+              ]}
+            >
+              {i < nodes.length - 1 && (
+                <span
+                  class="absolute top-5 bottom-0 left-[0.1875rem] w-px bg-border"
+                  aria-hidden="true"
+                />
+              )}
+              {/* Filled where the span is still running, outlined where it
+                  closed. Three of the five are open, which is the parallel
+                  careers the strip below draws — said here in a 8px dot. */}
+              <span
+                class:list={[
+                  "mt-[0.4rem] h-2 w-2 rounded-full border border-accent",
+                  n.open && "bg-accent",
+                ]}
+                aria-hidden="true"
+              />
+              <div>
+                <p class="text-sm text-muted">
+                  <span class="data">{n.when}</span>
+                  <span aria-hidden="true"> &middot; </span>
+                  {n.label}
+                </p>
+                <div
+                  class="prose-col mt-2 text-muted"
+                  set:html={t(`about.node.${n.id}.body` as UIKey)}
+                />
+              </div>
+            </li>
+          ))
+        }
+      </ol>
 
       <aside>
         <img
