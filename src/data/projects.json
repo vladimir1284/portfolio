@@ -21,7 +21,6 @@
         "src": "/img/radar-still.webp",
         "width": 1600,
         "height": 760,
-        "coverOnly": true,
         "alt": {
           "en": "LAMULA WebViewer showing base reflectivity from the KEOX radar: a large precipitation system over the Gulf coast of Alabama, Georgia and Florida, with a dBZ colour scale and surface wind barbs.",
           "es": "LAMULA WebViewer mostrando reflectividad base del radar KEOX: un gran sistema de precipitación sobre la costa del Golfo de Alabama, Georgia y Florida, con escala de color en dBZ y barbas de viento en superficie."
@@ -29,6 +28,19 @@
         "caption": {
           "en": "The last stage of the chain, the WebViewer. KEOX, base reflectivity (N0B), VCP 212, elevation 0.5° — 9 October 2026, 21:53 GMT−4. NEXRAD Level III decoded, regridded and rendered by the stages described above. Basemap © OpenStreetMap contributors.",
           "es": "La última etapa de la cadena, el WebViewer. KEOX, reflectividad base (N0B), VCP 212, elevación 0,5° — 9 de octubre de 2026, 21:53 GMT−4. NEXRAD Level III decodificado, regrillado y renderizado por las etapas descritas arriba. Mapa base © colaboradores de OpenStreetMap."
+        }
+      },
+      {
+        "src": "/img/projects/lamula-velocity.webp",
+        "width": 1600,
+        "height": 745,
+        "alt": {
+          "en": "The same viewer showing radial velocity: a red lobe north-west of the radar and a green one south-east of it, on a colour scale running from −111 to 111 km/h, ringed by a purple arc labelled range folded. Storm cell identifiers, wind barbs and a volume timeline run along the bottom of the window.",
+          "es": "El mismo visor mostrando velocidad radial: un lóbulo rojo al noroeste del radar y uno verde al sureste, sobre una escala de color de −111 a 111 km/h, rodeados por un arco morado etiquetado como range folded. Identificadores de células, barbas de viento y una línea de tiempo de volúmenes recorren la parte baja de la ventana."
+        },
+        "caption": {
+          "en": "The same storm nineteen minutes earlier, in radial velocity: EOX, 21:34:43 GMT−4 on 9 October 2026, VCP 212, elevation 0.5°. Green is motion toward the radar, red away from it. The purple arc is data the radar could not place unambiguously in range — the viewer labels it RF rather than drawing it as weather, which is the whole reason the decoder is ours. Reflectivity says where the precipitation is; velocity says what it is doing.",
+          "es": "La misma tormenta diecinueve minutos antes, en velocidad radial: EOX, 21:34:43 GMT−4 del 9 de octubre de 2026, VCP 212, elevación 0,5°. El verde es movimiento hacia el radar, el rojo alejándose. El arco morado es dato que el radar no pudo ubicar sin ambigüedad en distancia — el visor lo etiqueta RF en vez de dibujarlo como meteoro, que es justo la razón por la que el decodificador es nuestro. La reflectividad dice dónde está la precipitación; la velocidad dice qué está haciendo."
         }
       }
     ],

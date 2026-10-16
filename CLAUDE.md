@@ -193,20 +193,32 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 
 ### Pending
 
-- **`pnpm optimize:images` does not run in the dev container.** Pillow is not
-  installed and pip refuses to install it (PEP 668, externally managed). The
-  WebP conversions shipped so far were done with ImageMagick
-  (`convert <in> -resize 1600x1600\> -quality 80 <out>`), which is equivalent
-  for static images. Fix by adding Pillow to `ghcr.io/vladimir1284/vscode-swarm-env`
-  rather than by rewriting the script.
-- **`public/img/radar-loop.gif` is unoptimised** — 2.0 MB, 960×484, 12 frames,
-  and it is the hero's eager image, so it is the LCP (DESIGN.md §7 budget:
-  < 1.5 s on simulated 4G). Two things to do when the toolchain is back:
-  re-export the loop at ~1600 px wide, and convert it to animated WebP
-  (`cwebp`/`img2webp`, not ImageMagick, which rebuilds the animation badly).
-  The reduced-motion fallback `radar-loop-still.webp` is the GIF's last frame
-  and already carries the right dimensions; update `Hero.astro` when the path
-  changes.
+- **The image toolchain is installed by hand, and does not survive the
+  container.** `pnpm optimize:images` needs Pillow, and the hero loop needed
+  `gif2webp`; neither is in `ghcr.io/vladimir1284/vscode-swarm-env`, and pip
+  refuses to install into the system Python (PEP 668). Both come from apt —
+  but plain `apt-get` fails first with `Malformed entry 1 in list file
+/etc/apt/sources.list.d/cloudflared.list`, which is a broken source unrelated
+  to any of this. Install around it rather than editing `/etc`:
+
+  ```bash
+  mkdir -p /tmp/aptsrc && cp /etc/apt/sources.list.d/debian.sources /tmp/aptsrc/
+  sudo apt-get -o Dir::Etc::SourceParts=/tmp/aptsrc update
+  sudo apt-get -o Dir::Etc::SourceParts=/tmp/aptsrc install -y webp python3-pil
+  ```
+
+  The real fix is `python3-pil` and `webp` in the image, and a `cloudflared.list`
+  that parses. Until then this has to be redone in every fresh container.
+
+- **The loop is lossy, and that was a decision.** `public/img/radar-loop.webp`
+  is `gif2webp -lossy -q 70` over the original GIF: 816 KB against 2.0 MB, with
+  an RMSE of about 5% on the frames that could be compared whole. Lossless from
+  the same GIF only reached 1.6 MB, which does not buy a request. It is still
+  the hero's eager image and so still the LCP, and 816 KB does not meet the
+  DESIGN.md §7 budget of < 1.5 s on simulated 4G — measure before assuming the
+  next step is more compression. Re-exporting the loop from the source volumes
+  at ~1600 px, which would let the still and the loop share dimensions, is the
+  cleaner fix and needs the radar data, not this repo.
 - **The legend of the runtime-vs-density plot is wrong, and stays wrong.** The
   figure is `public/img/projects/reducts-runtime-density.webp` (Figure 5.1 of the
   thesis, chapter 5, page 61). Its legend spells `CGreduct`; the correct name is

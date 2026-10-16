@@ -140,10 +140,17 @@ A case with no capture yet gets an etched panel carrying its index and
 `projects.shot.pending`, not a stand-in image. The empty panel is the honest
 state and it is meant to be temporary.
 
-A capture marked `coverOnly` is the card's image and nothing else: the LAMULA
-case borrows the frame the hero already prints, and printing it a third time
-inside the case would be one screenshot doing the same work three times on one
-page. Drop the flag the moment that case has a capture of its own.
+A capture marked `coverOnly` is the card's image and nothing else, for the case
+where the same frame is already printed elsewhere on the page — one screenshot
+doing the same work twice reads as padding. No shot carries the flag today: the
+LAMULA case held it while it borrowed the hero's frame, and lost it when the
+hero moved to the loop and the case gained a velocity capture of its own.
+
+A `plot` is the opposite problem: a chart or a block diagram is not a capture of
+a running screen, and a square one set full width is a thousand pixels of white
+taller than the prose beside it. It is centred and capped at `max-w-xl` instead
+— wide enough that the axis ticks still read, which the narrower `portrait`
+treatment would not be.
 
 Under `lg` the grid is one column — cover, lead case, the two rows, then the
 numbered list — and the column rule disappears.

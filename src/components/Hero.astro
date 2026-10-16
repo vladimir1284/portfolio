@@ -106,18 +106,27 @@ const layerKeys = [1, 2, 3].map((n) => `hero.layer.${n}` as UIKey);
       The loop is the product of the chain, so it animates — but animation is
       not negotiable against DESIGN.md §5: under `prefers-reduced-motion` the
       `<source>` wins and the browser fetches the last frame instead, never the
-      GIF. `<picture>` is what makes that a fetch decision rather than a hidden
+      loop. `<picture>` is what makes that a fetch decision rather than a hidden
       element, and it needs no script.
+
+      Animated WebP, not GIF: the same twelve frames are 816 KB against the
+      GIF's 2.0 MB. `gif2webp -lossy -q 70` — lossless from a GIF only reached
+      1.6 MB, which was not worth the request.
+
+      Lazy, and deliberately not `fetchpriority="high"`: measured, the panel
+      starts at y=1435 on a 390px phone and y=914 on a 1440x900 desktop, so it
+      is below the fold either way. Eager, it was the LCP at 6.9 s on simulated
+      slow 4G — the page's largest element was one nobody had scrolled to yet.
+      The `width`/`height` pair holds the space, so deferring it costs no CLS.
     -->
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="/img/radar-loop-still.webp" />
       <img
-        src="/img/radar-loop.gif"
+        src="/img/radar-loop.webp"
         alt={t("hero.radar.alt")}
         width="960"
         height="484"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
         decoding="async"
         class="block w-full bg-bg"
       />
