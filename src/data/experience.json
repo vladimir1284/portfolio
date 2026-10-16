@@ -265,7 +265,7 @@
       "highlights": {
         "en": [
           "Led the team behind <strong>PzHub</strong>, the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill.",
-          "Replaced PinkZebra's 20-year-old commission engine on a cold cutover — written four-handed with Alejandro Cespón.",
+          "Replaced PinkZebra's 20-year-old commission engine on a cold cutover — written four-handed with Alejandro Cespón. Residual error ~0.02%: around $100 over roughly $500,000 paid out.",
           "Built <strong>TowitLinks</strong>, a VoIP platform from scratch with web, Android and iOS clients; and <strong>Gestor</strong>, a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team.",
           "Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend.",
           "A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing.",
@@ -273,25 +273,13 @@
         ],
         "es": [
           "Lideré el equipo detrás de <strong>PzHub</strong>, la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill.",
-          "Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío — escrito a cuatro manos con Alejandro Cespón.",
+          "Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío — escrito a cuatro manos con Alejandro Cespón. Error residual ~0,02 %: unos 100 USD sobre unos 500 000 USD pagados.",
           "Construí <strong>TowitLinks</strong>, una plataforma VoIP desde cero con clientes web, Android e iOS; y <strong>Gestor</strong>, un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo.",
           "Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3.",
           "Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D.",
           "Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse."
         ]
       },
-      "figures": [
-        {
-          "value": {
-            "en": "~0.02%",
-            "es": "~0,02 %"
-          },
-          "method": {
-            "en": "residual error of the cold cutover: around $100 over roughly $500,000 paid out.",
-            "es": "error residual del corte en frío: unos 100 USD sobre unos 500 000 USD pagados."
-          }
-        }
-      ],
       "stack": [
         "Python",
         "Django",

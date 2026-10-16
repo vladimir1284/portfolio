@@ -63,6 +63,7 @@ src/
 │   ├── projects.ts           # the typed list + where a case lives (`/projects/<id>/`)
 │   ├── publications.json     # academic publications (grouped: core | radar | teaching)
 │   ├── experience.json       # education, courses, professional positions
+│   ├── recommendations.json  # transcribed LinkedIn recommendations (see §3.2)
 │   ├── training.json         # ICTP workshops and advanced training
 │   ├── profile.json          # name, headline, location, email, social links
 │   └── types.ts              # shapes for the JSON files
@@ -96,19 +97,20 @@ in three places at once.
 
 Single-page layout, sections in order:
 
-| Section    | Component          | Content                                                                                                                           |
-| :--------- | :----------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| Hero       | `Hero.astro`       | Name, tagline, short bio, CTAs, radar still + link to the live viewer.                                                            |
-| Facts      | `Facts.astro`      | Six figures under the hero, each with the method that makes it defensible.                                                        |
-| System     | `System.astro`     | Tabbed walkthrough of the LAMULA radar chain, autoplaying until the reader clicks a stage. Data in `components/lamula/stages.ts`. |
-| About      | `About.astro`      | Photo, extended bio, current role/institution, research interests.                                                                |
-| Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                                                                 |
-| Projects   | `Projects.astro`   | Index only — three captures and a link to `/projects/`. The cases are pages (§3.1).                                               |
-| Experience | `Experience.astro` | Three-lane strip (`Timeline.astro`), then the record: positions, education, courses, training.                                    |
-| Ask        | `Ask.astro`        | Retrieval over the site's own content. Degrades to a static question list (§11).                                                  |
-| Contact    | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                                                                   |
-| Header     | `Header.astro`     | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                                                           |
-| Footer     | `Footer.astro`     | Copyright, social icons.                                                                                                          |
+| Section         | Component               | Content                                                                                                                           |
+| :-------------- | :---------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| Hero            | `Hero.astro`            | Name, tagline, short bio, CTAs, radar still + link to the live viewer.                                                            |
+| Facts           | `Facts.astro`           | Six figures under the hero, each with the method that makes it defensible.                                                        |
+| System          | `System.astro`          | Tabbed walkthrough of the LAMULA radar chain, autoplaying until the reader clicks a stage. Data in `components/lamula/stages.ts`. |
+| About           | `About.astro`           | Photo, extended bio, current role/institution, research interests.                                                                |
+| Research        | `Research.astro`        | Research lines, key publications (from `data/publications.json`).                                                                 |
+| Projects        | `Projects.astro`        | Index only — three captures and a link to `/projects/`. The cases are pages (§3.1).                                               |
+| Experience      | `Experience.astro`      | Three-lane strip (`Timeline.astro`), then the record: positions, education, courses, training.                                    |
+| Recommendations | `Recommendations.astro` | What other people wrote, transcribed from LinkedIn with a link to each signer's profile (§3.2).                                   |
+| Ask             | `Ask.astro`             | Retrieval over the site's own content. Degrades to a static question list (§11).                                                  |
+| Contact         | `Contact.astro`         | Email + social links from `data/profile.json`. No form backend.                                                                   |
+| Header          | `Header.astro`          | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                                                           |
+| Footer          | `Footer.astro`          | Copyright, social icons.                                                                                                          |
 
 ### 3.1 Projects are pages
 
@@ -124,6 +126,29 @@ case page, which prints them open rather than folded (DESIGN.md §4).
 | `ProjectCase.astro`   | One case in full: figures, argument, out-of-scope, stack, links, repos. |
 | `ProjectNav.astro`    | Back to the index, previous and next case in `projects.json` order.     |
 | `data/projects.ts`    | The typed list, `projectRoute(id)`, and `neighbours(id)`.               |
+
+### 3.2 Recommendations are transcribed, never embedded
+
+`data/recommendations.json` holds what other people wrote. Each entry carries
+`lang` — the language it was written in — so `quote[lang]` is verbatim and the
+other member is a translation. The page prints the member for its own locale
+and, where that is not the original, prints the original underneath it,
+labelled. **A translated quote never ships alone**: they are someone else's
+words, and a reader has to be able to see what was translated (Vladímir's
+call, 2026-10-16).
+
+`url` is the profile of whoever signed it, and it is what makes the quote
+checkable — the same burden a screenshot or a figure carries (§7). An entry
+without one does not belong in the file.
+
+Embedding LinkedIn was ruled out rather than skipped: there is no public API
+for recommendations, and the profile badge widget shows a headline rather than
+any recommendation and loads a third-party script that the CSP and
+`scripts/build_headers.py` both reject (§9).
+
+Only the original is indexed for retrieval, not the translation — two rows of
+the same sentence would compete for the same question. The citation points at
+`#recommendations`, where both are printed.
 
 ---
 
@@ -187,20 +212,21 @@ Components index into `title[lang]`.
 
 All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` → `t('key')`. No literal strings in markup.
 
-| Component          | Responsibility                                                                            |
-| :----------------- | :---------------------------------------------------------------------------------------- |
-| `Layout.astro`     | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script.  |
-| `Header.astro`     | Fixed nav: name, section anchors, theme toggle, language switcher.                        |
-| `Hero.astro`       | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.      |
-| `Facts.astro`      | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.          |
-| `System.astro`     | LAMULA chain walkthrough. CSS-driven (radio + `:has()`); JS only autoplays the selection. |
-| `About.astro`      | Photo, extended bio, research interests, current affiliation.                             |
-| `Research.astro`   | Research lines + key publications from `data/publications.json`.                          |
-| `Projects.astro`   | Cards from `data/projects.json` with stack tags and links.                                |
-| `Experience.astro` | The record: roles, education, courses taught, advanced training.                          |
-| `Timeline.astro`   | The Experience strip — three packed lanes on one axis, from the dates the record carries. |
-| `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
-| `Footer.astro`     | Copyright, social icons.                                                                  |
+| Component               | Responsibility                                                                            |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| `Layout.astro`          | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script.  |
+| `Header.astro`          | Fixed nav: name, section anchors, theme toggle, language switcher.                        |
+| `Hero.astro`            | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.      |
+| `Facts.astro`           | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.          |
+| `System.astro`          | LAMULA chain walkthrough. CSS-driven (radio + `:has()`); JS only autoplays the selection. |
+| `About.astro`           | Photo, extended bio, research interests, current affiliation.                             |
+| `Research.astro`        | Research lines + key publications from `data/publications.json`.                          |
+| `Projects.astro`        | Cards from `data/projects.json` with stack tags and links.                                |
+| `Experience.astro`      | The record: roles, education, courses taught, advanced training.                          |
+| `Timeline.astro`        | The Experience strip — three packed lanes on one axis, from the dates the record carries. |
+| `Recommendations.astro` | Transcribed recommendations; translation plus the original where the locale differs.      |
+| `Contact.astro`         | Email + social links from `data/profile.json`. No form backend.                           |
+| `Footer.astro`          | Copyright, social icons.                                                                  |
 
 ---
 
@@ -212,8 +238,11 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 - **A figure's scale is part of the figure.** The PinkZebra cutover is
   published as `~0.02%`, not as `$100`: an absolute residual says nothing
   without what it is a residual of. It is around $100 over roughly $500,000
-  paid out, Vladímir's figures, and both numbers stay in the method line so
-  the arithmetic is checkable.
+  paid out, Vladímir's figures, and both numbers stay beside the percentage so
+  the arithmetic is checkable. It reads as a sentence in the Nitza highlights
+  rather than as a `.role-figures` number: a near-zero residual set in display
+  type reads as a magnitude claim, which is the opposite of what it says
+  (Vladímir's call, 2026-10-16).
 - **`public/cv.pdf` and `public/cv.es.pdf` are build artefacts**, not documents. `pnpm build:cv` regenerates both from `src/data/*.json`, so the download can never contradict the page. Never edit them by hand; never hand-maintain a parallel CV.
 - **Contact details live in `src/data/profile.json`** — one source for `Contact.astro` and the CV generator.
 - **Contact section has no form** — just links. No backend needed.
