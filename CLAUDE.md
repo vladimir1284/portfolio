@@ -150,6 +150,14 @@ Only the original is indexed for retrieval, not the translation — two rows of
 the same sentence would compete for the same question. The citation points at
 `#recommendations`, where both are printed.
 
+Adding one is `/add-recommendation` (`.claude/commands/add-recommendation.md`),
+which carries the whole procedure: the entry, the corpus rebuild, the reindex
+that needs a deploy, and the two commits. `.claude/` is gitignored except for
+that directory — a command that lives in one container is a command the other
+dev does not have. A `relation` with no `recommendations.relation.<kind>` key
+behind it fails the build in `Recommendations.astro` rather than rendering a
+blank line.
+
 ---
 
 ## 4. Internationalization (EN / ES)

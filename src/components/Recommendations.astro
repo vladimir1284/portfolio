@@ -1,11 +1,22 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
-import type { UIKey } from "../i18n/ui";
+import { ui, defaultLang, type UIKey } from "../i18n/ui";
 import recommendations from "../data/recommendations.json";
 import type { Recommendation } from "../data/types";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+/* A relation with no string behind it would render as nothing at all —
+   `t()` falls back to the default locale and then to undefined. Adding a kind
+   means editing the union in `types.ts` and both dictionaries; stopping the
+   build here is how the third edit gets remembered. */
+function relationKey(relation: string): UIKey {
+  const key = `recommendations.relation.${relation}`;
+  if (!(key in ui[defaultLang]))
+    throw new Error(`Recommendations.astro: no i18n key "${key}" for relation "${relation}"`);
+  return key as UIKey;
+}
 
 /*
   Recommendations other people wrote, transcribed by hand.
@@ -68,7 +79,7 @@ const items = recommendations as Recommendation[];
                   <p class="mt-1 text-sm text-muted">
                     <span class="data">{r.date}</span>
                     <span aria-hidden="true"> &middot; </span>
-                    {t(`recommendations.relation.${r.relation}` as UIKey)}
+                    {t(relationKey(r.relation))}
                   </p>
                 </figcaption>
               </figure>

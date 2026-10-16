@@ -29,8 +29,11 @@ pnpm-debug.log*
 .wrangler/
 
 # Agent tooling. It checks git worktrees out under .claude/worktrees/, which are
-# copies of this repo and must never be committed into it.
-.claude/
+# copies of this repo and must never be committed into it. The commands under
+# .claude/commands/ are the exception: they are project procedure, they are
+# short, and ignoring them means they live in one container and nowhere else.
+.claude/*
+!.claude/commands/
 
 # Material auxiliar de trabajo (insumo, no contenido publicable)
 _material/
