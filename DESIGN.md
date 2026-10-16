@@ -156,6 +156,27 @@ a border-coloured ground, cells painted in the page ground — not six floating
 cards (§1). Half of its figures are counted from `publications.json` at build
 time instead of typed in, so the band cannot drift from the sections below it.
 
+**A role carries figures only where the work produced one.** The band under
+the hero is the case for the whole page; `.role-figures` is the case for one
+job, set smaller and printed above the prose. Two rules keep it from turning
+into a stat row. A figure never restates a sentence left standing under it —
+the chair's `6` and `~20` exist because the two highlights that said them in
+words were deleted, and the figure is now the only place they are said. And a
+role whose output was direction rather than measurement carries none at all:
+an empty row there is the honest reading, not a gap to fill. The group is a
+hairline and nothing else, because inside a list already divided by hairlines
+a box would be a box inside a box (§1).
+
+**"Still in use" gets the accent.** Software still running years after the
+contract ended is the strongest thing an engineering role can claim, so it is
+drawn as a callout against a 2px accent rule rather than as one more line of
+muted prose — the one place in the record where the colour the rest of the
+site saves is spent on a claim instead of on a control. It counts its own
+years from the end date in the record, so it ages without anyone bumping a
+number; the count is a separate sentence and is deliberately kept out of the
+retrieval corpus, which that arithmetic would otherwise rewrite every January
+(CLAUDE.md §11).
+
 Charts obey the same rule. The output-per-year plot in `Research.astro` is
 built from the same array the list under it renders, carries **no script**, and
 publishes its numbers as a visually hidden `<table>` with the bars marked

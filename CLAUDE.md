@@ -209,6 +209,11 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 ### Standing rules
 
 - **Every figure needs a method.** No metric ships unless it can be defended in an interview. `~/Documents/cv.md` is LLM-generated and is **not** a content source.
+- **A figure's scale is part of the figure.** The PinkZebra cutover is
+  published as `~0.02%`, not as `$100`: an absolute residual says nothing
+  without what it is a residual of. It is around $100 over roughly $500,000
+  paid out, Vladímir's figures, and both numbers stay in the method line so
+  the arithmetic is checkable.
 - **`public/cv.pdf` and `public/cv.es.pdf` are build artefacts**, not documents. `pnpm build:cv` regenerates both from `src/data/*.json`, so the download can never contradict the page. Never edit them by hand; never hand-maintain a parallel CV.
 - **Contact details live in `src/data/profile.json`** — one source for `Contact.astro` and the CV generator.
 - **Contact section has no form** — just links. No backend needed.

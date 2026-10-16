@@ -118,6 +118,8 @@
   "experience.timeline.present": "present",
   "experience.timeline.method": "Drawn from the dates in the record below, not a second list.",
   "experience.roles.title": "Roles",
+  "experience.stillRunning": "Still running in the Cuban radar network today.",
+  "experience.stillRunning.since": "{years} years after the work ended.",
   "experience.education.title": "Education",
   "experience.teaching.title": "Teaching",
   "experience.highlight.title": "Course in depth",

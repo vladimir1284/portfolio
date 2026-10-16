@@ -118,6 +118,8 @@
   "experience.timeline.present": "actualidad",
   "experience.timeline.method": "Dibujado con las fechas del registro de abajo, no una segunda lista.",
   "experience.roles.title": "Puestos",
+  "experience.stillRunning": "Sigue en uso hoy en la red de radares de Cuba.",
+  "experience.stillRunning.since": "{years} años después de terminado el trabajo.",
   "experience.education.title": "Formación",
   "experience.teaching.title": "Docencia",
   "experience.highlight.title": "Un curso en detalle",

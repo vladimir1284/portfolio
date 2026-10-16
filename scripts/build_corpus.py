@@ -155,6 +155,12 @@ def i18n_chunks() -> list[dict]:
             prefix = key.split(".")[0]
             if prefix not in ANCHORS:
                 continue
+            # A string with a `{param}` is only a sentence once the page fills
+            # the number in. Indexed from here it would carry the placeholder
+            # and be cited with it; the chunk built from the data that
+            # resolves it carries the finished sentence instead.
+            if re.search(r"\{\w+\}", value):
+                continue
             # Stages are substantial enough to retrieve one by one.
             group = ".".join(key.split(".")[:3]) if key.startswith("system.stage.") else prefix
             groups.setdefault(group, {})[key] = plain(value)
@@ -242,6 +248,19 @@ def publication_chunks() -> list[dict]:
     return chunks
 
 
+def still_running(pos: dict, lang: str) -> str:
+    """The "still in use" claim, without the count the page prints beside it.
+
+    The count is years-since, so indexing it would rewrite this chunk every
+    January and fail `corpus:check` over an arithmetic the reader can do from
+    the dates in the same passage. The claim itself does not age.
+    """
+    if not pos.get("stillRunning"):
+        return ""
+    strings = json.loads((I18N / f"{lang}.json").read_text(encoding="utf-8"))
+    return strings["experience.stillRunning"]
+
+
 def experience_chunks() -> list[dict]:
     experience = load("experience.json")
     chunks = []
@@ -279,6 +298,11 @@ def experience_chunks() -> list[dict]:
                     localized(pos.get("place", ""), lang),
                     localized(pos.get("dateLabel", ""), lang),
                     " ".join(plain(h) for h in highlights),
+                    " ".join(
+                        f"{localized(f['value'], lang)}: {localized(f['method'], lang)}"
+                        for f in pos.get("figures", [])
+                    ),
+                    still_running(pos, lang),
                     "Stack: " + ", ".join(pos["stack"]) if pos.get("stack") else "",
                 )
                 if p

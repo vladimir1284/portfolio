@@ -85,7 +85,7 @@
   "kind": "section",
   "title": "Research",
   "url": "/#research",
-  "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation. {source}, read on {asOf}. The chart starts in {first}, so the bars total less than the figure above; {year} is still in progress."
+  "text": "Research. Doctoral work on algorithms for an NP-hard combinatorial problem, and the hardware to run them faster — alongside earlier published work on weather-radar data processing and on engineering teaching. Benemérita Universidad Autónoma de Puebla, 2022. Language and Knowledge Engineering. Contributes two new algorithms — GCreduct (all reducts) and MinReduct (all shortest reducts) — alongside a study of hardware architectures for accelerating the computation."
  },
  {
   "id": "ui-hero-es",
@@ -173,7 +173,7 @@
   "kind": "section",
   "title": "Investigación",
   "url": "/es/#research",
-  "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo. {source}, consultado el {asOf}. La gráfica empieza en {first}, así que las barras suman menos que la cifra de arriba; {year} está en curso."
+  "text": "Investigación. Trabajo doctoral sobre algoritmos para un problema combinatorio NP-duro y el hardware para correrlos más rápido — junto a trabajo anterior publicado sobre procesamiento de datos de radar y sobre docencia en ingeniería. Benemérita Universidad Autónoma de Puebla, 2022. Ingeniería del Lenguaje y del Conocimiento. Aporta dos algoritmos nuevos — GCreduct (todos los reductos) y MinReduct (todos los reductos más cortos) — junto con un estudio de arquitecturas hardware para acelerar el cómputo."
  },
  {
   "id": "project-lamula-en",
@@ -517,7 +517,7 @@
   "kind": "position",
   "title": "Development lead",
   "url": "/#experience",
-  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover, down to a residual error of around $100 across payments in the hundreds of thousands — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and Gestor , a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, more than 10 developers led or helped into the work.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Development lead. Nitza Develop. Remote · United States clients. 2022 – present. Led the team behind PzHub , the back-office platform PinkZebra runs its daily operations on, and a subscription system for its store built on Kill Bill. Replaced PinkZebra's 20-year-old commission engine on a cold cutover — written four-handed with Alejandro Cespón. Built TowitLinks , a VoIP platform from scratch with web, Android and iOS clients; and Gestor , a custom ERP for a hotshot-trailer rental and repair business, which grew from a solo job into my first time leading a team. Gestor is plain Django, and it is where I started with the framework, in 2022; PzHub came later, with Django REST Framework behind a Vue 3 frontend. A GPS tracker for trailers, designed remotely: I did the firmware and backend, the client did the soldering and 3D printing. Teams of up to 5 part-time developers per project; at the peak, across PinkZebra and Towit Houston, more than 10 developers led or helped into the work.. ~0.02%: residual error of the cold cutover: around $100 over roughly $500,000 paid out.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-en",
@@ -525,7 +525,7 @@
   "kind": "position",
   "title": "Software developer",
   "url": "/#experience",
-  "text": "Software developer. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : a Python library for reading the raw data of the Cuban weather radars. Vesta PostGIS : processing of ORPG Level III products into a database and an FTP raster feed. RdaBackend : ingest from the Cuban radars into ORPG. Vesta WebView : web visualisation of radar data with GWT and OpenLayers — the direct ancestor of what I build today. Clear-air observation processing to generate ground-clutter templates; TITAN customised into the national processing suite; GEMPAK configured to build mosaics from ORPG products. Support and operations for all of it throughout. It is still running in the Cuban radar network today."
+  "text": "Software developer. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : a Python library for reading the raw data of the Cuban weather radars. Vesta PostGIS : processing of ORPG Level III products into a database and an FTP raster feed. RdaBackend : ingest from the Cuban radars into ORPG. Vesta WebView : web visualisation of radar data with GWT and OpenLayers — the direct ancestor of what I build today. Clear-air observation processing to generate ground-clutter templates; TITAN customised into the national processing suite; GEMPAK configured to build mosaics from ORPG products. Support and operations for all of it throughout.. Still running in the Cuban radar network today."
  },
  {
   "id": "pos-3-en",
@@ -533,7 +533,7 @@
   "kind": "position",
   "title": "Full professor of Electrical Engineering",
   "url": "/#experience",
-  "text": "Full professor of Electrical Engineering. Universidad de Camagüey. Camagüey, Cuba · Faculty of Electromechanics. 2008 – present. Profesor Titular — the highest academic rank in Cuban higher education. Six courses taught across the degree, from classical control to FPGA design; four core, two electives I proposed and wrote myself. Currently: Automated Electric Drives one semester, Industrial Automation the next, around 20 students per group. More than 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority."
+  "text": "Full professor of Electrical Engineering. Universidad de Camagüey. Camagüey, Cuba · Faculty of Electromechanics. 2008 – present. Profesor Titular — the highest academic rank in Cuban higher education. More than 300 students since 2008 — about 20 a year, with a thinner stretch from 2015 to 2019 while the doctorate was the priority.. 6: courses taught across the degree, from classical control to FPGA design: four core, two electives I proposed and wrote. ~20: students per group, currently Automated Electric Drives one semester and Industrial Automation the next."
  },
  {
   "id": "courses-en",
@@ -589,7 +589,7 @@
   "kind": "position",
   "title": "Líder de desarrollo",
   "url": "/es/#experience",
-  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío, hasta un error residual del orden de 100 USD sobre pagos de cientos de miles — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y Gestor , un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
+  "text": "Líder de desarrollo. Nitza Develop. Remoto · clientes en Estados Unidos. 2022 – actualidad. Lideré el equipo detrás de PzHub , la plataforma de back-office sobre la que PinkZebra sostiene su trabajo diario, y un sistema de suscripciones para su tienda basado en Kill Bill. Sustituí el motor de comisiones de PinkZebra, con veinte años encima, en un corte en frío — escrito a cuatro manos con Alejandro Cespón. Construí TowitLinks , una plataforma VoIP desde cero con clientes web, Android e iOS; y Gestor , un ERP a medida para un negocio de renta y reparación de trailers hotshot, que empezó como encargo individual y fue la primera vez que estuve al frente de un equipo. Gestor es Django puro, y es donde empecé con el framework, en 2022; PzHub vino después, con Django REST Framework detrás de un frontend en Vue 3. Un rastreador GPS para trailers, diseñado en remoto: yo el firmware y el backend, el cliente la soldadura y la impresión 3D. Equipos de hasta 5 desarrolladores a tiempo parcial por proyecto; en el pico, entre PinkZebra y Towit Houston, más de 10 desarrolladores dirigidos o ayudados a formarse.. ~0,02 %: error residual del corte en frío: unos 100 USD sobre unos 500 000 USD pagados.. Stack: Python, Django, Django REST Framework, Vue 3, PostgreSQL, Docker, Docker Swarm, Kill Bill, BigCommerce"
  },
  {
   "id": "pos-2-es",
@@ -597,7 +597,7 @@
   "kind": "position",
   "title": "Desarrollador de software",
   "url": "/es/#experience",
-  "text": "Desarrollador de software. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : biblioteca en Python para leer el dato crudo de los radares meteorológicos cubanos. Vesta PostGIS : procesamiento de los productos Level III de ORPG con carga a base de datos y salida de rásters por FTP. RdaBackend : ingesta de los radares cubanos en ORPG. Vesta WebView : visualización web del dato de radar con GWT y OpenLayers — el antecesor directo de lo que construyo hoy. Procesamiento de observaciones de aire claro para generar plantillas de eco fijo; TITAN personalizado e integrado en la suite nacional; GEMPAK configurado para generar mosaicos a partir de los productos de ORPG. Soporte y operación de todo ello durante el periodo. Sigue en uso hoy en la red de radares de Cuba."
+  "text": "Desarrollador de software. Centro Meteorológico de Camagüey · Instituto de Meteorología de Cuba. Camagüey, Cuba. 2012 – 2014. ObsParser : biblioteca en Python para leer el dato crudo de los radares meteorológicos cubanos. Vesta PostGIS : procesamiento de los productos Level III de ORPG con carga a base de datos y salida de rásters por FTP. RdaBackend : ingesta de los radares cubanos en ORPG. Vesta WebView : visualización web del dato de radar con GWT y OpenLayers — el antecesor directo de lo que construyo hoy. Procesamiento de observaciones de aire claro para generar plantillas de eco fijo; TITAN personalizado e integrado en la suite nacional; GEMPAK configurado para generar mosaicos a partir de los productos de ORPG. Soporte y operación de todo ello durante el periodo.. Sigue en uso hoy en la red de radares de Cuba."
  },
  {
   "id": "pos-3-es",
@@ -605,7 +605,7 @@
   "kind": "position",
   "title": "Profesor Titular de Ingeniería Eléctrica",
   "url": "/es/#experience",
-  "text": "Profesor Titular de Ingeniería Eléctrica. Universidad de Camagüey. Camagüey, Cuba · Facultad de Electromecánica. 2008 – actualidad. Profesor Titular — la categoría docente más alta de la educación superior cubana. Seis asignaturas impartidas a lo largo de la carrera, del control clásico al diseño con FPGA; cuatro del currículo base y dos optativas que propuse y escribí yo. Ahora mismo: Accionamiento Eléctrico Automatizado un semestre, Automatización Industrial el otro, con grupos de unos 20 estudiantes. Más de 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
+  "text": "Profesor Titular de Ingeniería Eléctrica. Universidad de Camagüey. Camagüey, Cuba · Facultad de Electromecánica. 2008 – actualidad. Profesor Titular — la categoría docente más alta de la educación superior cubana. Más de 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad.. 6: asignaturas impartidas a lo largo de la carrera, del control clásico al diseño con FPGA: cuatro del currículo base, dos optativas que propuse y escribí. ~20: estudiantes por grupo, ahora mismo Accionamiento Eléctrico Automatizado un semestre y Automatización Industrial el otro."
  },
  {
   "id": "courses-es",

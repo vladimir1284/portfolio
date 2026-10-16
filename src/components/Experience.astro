@@ -14,6 +14,15 @@ const { education, courses, teachingHighlights } = experience;
 // renders only when there is something to render.
 const positions = experience.positions as Position[];
 
+/* A role's figures are printed above its highlights, and only where the work
+   produced something measurable: a number that restates a sentence already
+   under it would be a number for the sake of having one (CLAUDE.md §7). The
+   method line is not optional (DESIGN.md §4).
+
+   `stillRunning` counts its own years, so the claim ages without anyone
+   remembering to bump it. */
+const thisYear = new Date().getFullYear();
+
 /*
   Two columns. The roles and the course taught in depth are the argument and
   keep the wide measure; education, the course list and the workshops are a
@@ -54,6 +63,16 @@ const positions = experience.positions as Position[];
                     <p class="mt-1 text-sm text-muted">
                       {p.institution} &middot; {p.place[lang]}
                     </p>
+                    {p.figures && (
+                      <dl class="role-figures">
+                        {p.figures.map((f) => (
+                          <div>
+                            <dt class="figure-n">{f.value[lang]}</dt>
+                            <dd class="figure-method">{f.method[lang]}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
                     {p.highlights && (
                       <ul class="prose-col mt-3 space-y-1.5 text-sm text-muted">
                         {p.highlights[lang].map((h) => (
@@ -65,6 +84,16 @@ const positions = experience.positions as Position[];
                           </li>
                         ))}
                       </ul>
+                    )}
+                    {p.stillRunning && (
+                      <p class="still">
+                        {t("experience.stillRunning")}{" "}
+                        <span class="text-muted">
+                          {t("experience.stillRunning.since", {
+                            years: thisYear - (p.to ?? thisYear),
+                          })}
+                        </span>
+                      </p>
                     )}
                     {p.stack && (
                       <ul class="mt-4 flex flex-wrap gap-2">

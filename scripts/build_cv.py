@@ -19,10 +19,12 @@ import json
 import re
 import subprocess
 import sys
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "src" / "data"
+I18N = ROOT / "src" / "i18n"
 
 
 def site_origin() -> str:
@@ -39,6 +41,20 @@ def site_origin() -> str:
 
 
 SITE = site_origin()
+
+
+def ui_string(lang: str, key: str) -> str:
+    """One UI string out of the site's own dictionary.
+
+    The CV keeps its section headings in LABELS below, but a sentence the page
+    also prints belongs in `src/i18n/` and nowhere else — two copies of it
+    would drift the day one of them is edited.
+    """
+    strings = json.loads((I18N / f"{lang}.json").read_text(encoding="utf-8"))
+    if key not in strings:
+        sys.exit(f"src/i18n/{lang}.json: missing key {key!r}")
+    return strings[key]
+
 
 LABELS = {
     "en": {
@@ -133,8 +149,21 @@ def build(lang: str) -> str:
             f"{esc(p['role'][lang])}</span><span class='when'>{esc(p['dateLabel'][lang])}</span></div>"
         )
         add(f"<p class='where'>{esc(p['institution'])} · {esc(p['place'][lang])}</p>")
-        if p.get("highlights"):
-            add("<ul>" + "".join(f"<li>{h}</li>" for h in p["highlights"][lang]) + "</ul>")
+        # Figures first, then the prose, then the callout — the order the page
+        # prints them in. Each of the three is optional and the list is only
+        # opened if something went into it.
+        bullets = [
+            f"<li><strong>{esc(f['value'][lang])}</strong> — {esc(f['method'][lang])}</li>"
+            for f in p.get("figures", [])
+        ]
+        bullets += [f"<li>{h}</li>" for h in p.get("highlights", {}).get(lang, [])]
+        if p.get("stillRunning"):
+            years = date.today().year - (p.get("to") or date.today().year)
+            since = ui_string(lang, "experience.stillRunning.since").replace("{years}", str(years))
+            claim = ui_string(lang, "experience.stillRunning")
+            bullets.append(f"<li><strong>{esc(claim)}</strong> {esc(since)}</li>")
+        if bullets:
+            add("<ul>" + "".join(bullets) + "</ul>")
         add("</div>")
 
     add(f"<h2>{L['education']}</h2>")

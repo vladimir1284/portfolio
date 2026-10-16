@@ -325,6 +325,37 @@
     color: var(--color-muted);
   }
 
+  /* A role's own figures, printed above its highlights. The band under the
+     hero is an etched grid of cells; this is a hairline and nothing else —
+     inside a list already divided by hairlines, a box would be a box inside a
+     box (DESIGN.md §1). `auto-fit` so a role with one figure gives it the
+     full measure instead of half an empty row. */
+  .role-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem 2.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+  /* Smaller than the band under the hero: this is a figure about one role,
+     not the case for the whole page. */
+  .role-figures .figure-n {
+    font-size: 1.375rem;
+  }
+
+  /* "Still in use", years after the work ended — the strongest thing an
+     engineering role can say, and the reason it gets the one accent instead
+     of another line of muted prose. */
+  .still {
+    margin-top: 1.25rem;
+    border-inline-start: 2px solid var(--color-accent);
+    padding-inline-start: 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
   /* Folded method / caveat / provenance note. Component: Disclosure.astro.
      Summary is a hairline row with a tick that turns; the body animates on
      `::details-content` and simply snaps where that is unsupported. */

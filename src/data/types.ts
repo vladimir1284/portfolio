@@ -95,6 +95,22 @@ export interface Position extends Span {
   lane: "engineering" | "teaching";
   /** Rendered with `set:html` — inline markup (<strong>, <em>) is allowed. */
   highlights?: Localized<string[]>;
+  /**
+   * Measured figures for this role, printed above the highlights.
+   *
+   * A role gets them only where the work produced a number that can be
+   * defended (CLAUDE.md §7); the ones that produced direction rather than a
+   * measurement carry none, and that is the honest reading. `method` is the
+   * line under the figure, never optional — DESIGN.md §4.
+   */
+  figures?: { value: Localized; method: Localized }[];
+  /**
+   * Draws the "still in use" callout under the highlights.
+   *
+   * The years in it are counted from `to` at build time, so the claim ages by
+   * itself instead of being a number somebody has to remember to bump.
+   */
+  stillRunning?: boolean;
   /** What the job actually ran on. Not a skills list — omit it when the
    *  highlights already name the tools. */
   stack?: string[];
