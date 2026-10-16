@@ -104,7 +104,7 @@ Single-page layout, sections in order:
 | About      | `About.astro`      | Photo, extended bio, current role/institution, research interests.                                                                |
 | Research   | `Research.astro`   | Research lines, key publications (from `data/publications.json`).                                                                 |
 | Projects   | `Projects.astro`   | Index only — three captures and a link to `/projects/`. The cases are pages (§3.1).                                               |
-| Experience | `Experience.astro` | Timeline: positions, institutions, dates.                                                                                         |
+| Experience | `Experience.astro` | Three-lane strip (`Timeline.astro`), then the record: positions, education, courses, training.                                    |
 | Ask        | `Ask.astro`        | Retrieval over the site's own content. Degrades to a static question list (§11).                                                  |
 | Contact    | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                                                                   |
 | Header     | `Header.astro`     | Fixed nav: name/logo, section anchors, theme toggle, language switcher.                                                           |
@@ -197,7 +197,8 @@ All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` �
 | `About.astro`      | Photo, extended bio, research interests, current affiliation.                             |
 | `Research.astro`   | Research lines + key publications from `data/publications.json`.                          |
 | `Projects.astro`   | Cards from `data/projects.json` with stack tags and links.                                |
-| `Experience.astro` | Vertical timeline of roles and institutions.                                              |
+| `Experience.astro` | The record: roles, education, courses taught, advanced training.                          |
+| `Timeline.astro`   | The Experience strip — three lanes on one axis, drawn from the dates the record carries.  |
 | `Contact.astro`    | Email + social links from `data/profile.json`. No form backend.                           |
 | `Footer.astro`     | Copyright, social icons.                                                                  |
 

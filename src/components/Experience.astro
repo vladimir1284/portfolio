@@ -1,5 +1,6 @@
 ---
 import { resolveLang, useTranslations } from "../i18n/utils";
+import Timeline from "./Timeline.astro";
 import experience from "../data/experience.json";
 import training from "../data/training.json";
 import type { Position } from "../data/types";
@@ -34,7 +35,10 @@ const positions = experience.positions as Position[];
     </h2>
     <p class="prose-col mt-5 text-muted">{t("experience.lede")}</p>
 
-    <div class="mt-12 grid gap-14 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
+    {/* The lede's claim, drawn. See the note at the top of Timeline.astro. */}
+    <Timeline />
+
+    <div class="mt-16 grid gap-14 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
       <div>
         {
           positions.length > 0 && (

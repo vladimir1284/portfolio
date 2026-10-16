@@ -1,0 +1,179 @@
+---
+import { resolveLang, useTranslations } from "../i18n/utils";
+import experience from "../data/experience.json";
+import type { Localized, Position, Span } from "../data/types";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+/*
+  The Experience strip.
+
+  The lede of this section claims two careers running in parallel since 2008.
+  Printed as three lists one under the other, that claim is something the
+  reader has to assemble from dates; drawn as three lanes on one axis, it is
+  the first thing they see. That is the whole reason this exists — it is the
+  section's argument, not an ornament on it.
+
+  Every bar is drawn from the `from`/`to` the entry already carries, the same
+  numbers the record below prints as prose (`types.ts`, `Span`). Nothing here
+  is a second list of years that could drift from the first.
+
+  One row per item rather than bars packed onto three lanes. Packed, the
+  short bars — a one-year rank, a degree defended in a single year — are
+  narrower than their own labels at any width the page can be read at, and
+  the label either clips or runs over the bar beside it. A row each costs
+  vertical space and buys a chart with no unreadable state.
+
+  No script: positions are percentages of a fixed axis, so the strip is as
+  correct with JavaScript off as with it on (DESIGN.md §7).
+*/
+
+type Bar = Span & { key: string };
+type Lane = { id: "teaching" | "engineering" | "education"; name: string; bars: Bar[] };
+
+const positions = experience.positions as Position[];
+const ranks = experience.ranks as Span[];
+/* Education states its bounds as strings; it is the one file section that
+   predates the strip, and the dates there are read by the CV generator too. */
+const education = experience.education as { short: Localized; from: string; to: string }[];
+const highlights = experience.teachingHighlights as Span[];
+
+/* The teaching lane draws the academic ranks, not the chair: one bar from
+   2008 would say "he taught", where four say what the eighteen years were
+   spent climbing. The chair itself is the record below. */
+const lanes: Lane[] = (
+  [
+    {
+      id: "teaching",
+      name: t("experience.timeline.lane.teaching"),
+      bars: [
+        ...ranks.map((r, i) => ({ ...r, key: `rank-${i}` })),
+        ...highlights.map((h, i) => ({ ...h, key: `course-${i}` })),
+      ],
+    },
+    {
+      id: "engineering",
+      name: t("experience.timeline.lane.engineering"),
+      bars: positions
+        .filter((p) => p.lane === "engineering")
+        .map((p, i) => ({ short: p.short, from: p.from, to: p.to, key: `pos-${i}` })),
+    },
+    {
+      id: "education",
+      name: t("experience.timeline.lane.education"),
+      bars: education.map((e, i) => ({
+        short: e.short,
+        from: Number(e.from),
+        to: Number(e.to),
+        key: `edu-${i}`,
+      })),
+    },
+  ] as Lane[]
+).map((lane) => ({ ...lane, bars: lane.bars.sort((a, b) => a.from - b.from) }));
+
+const all = lanes.flatMap((l) => l.bars);
+
+/* The axis runs from the first year on it to this one. The right edge is
+   "now" by construction, so a bar with no end date reaches it without anyone
+   having to remember to extend the axis in January. */
+const START = Math.min(...all.map((b) => b.from));
+const END = new Date().getFullYear();
+const SPAN = END - START;
+
+/* A degree defended inside one year has zero length and would draw nothing.
+   1.2% of the axis is about five pixels at the narrowest width the strip is
+   ever laid out at — a tick, which is what a single-year event is. */
+const MIN_WIDTH = 1.2;
+
+const left = (y: number): number => ((y - START) / SPAN) * 100;
+const width = (b: Bar): number => Math.max((((b.to ?? END) - b.from) / SPAN) * 100, MIN_WIDTH);
+
+/* Four-year ticks, the coarsest grid that still puts a label near every
+   transition on the chart. The end of the axis is labelled too: a bar that
+   runs to the right edge means "still running", which it can only say if the
+   edge itself carries a year.
+
+   A regular tick within three years of the end is dropped rather than drawn:
+   at the narrowest layout the axis is under 300 px wide, and two labels three
+   years apart overlap into one unreadable number. */
+const ticks: number[] = [];
+for (let y = Math.ceil(START / 4) * 4; y < END - 2; y += 4) ticks.push(y);
+ticks.push(END);
+
+/*
+  Geometry has to come from a stylesheet, not from `style` attributes: the CSP
+  in scripts/build_headers.py carries no 'unsafe-hashes', which bars style
+  attributes outright (the same reason the citation bars in Research.astro are
+  written this way). An inline <style> *element* is hashed like any other and
+  the policy stays strict.
+
+  The gridlines are one background per tick on the track, positioned by the
+  same percentages as the ticks under it, so a bar edge and its year line up.
+*/
+const gridlines = ticks
+  .map(() => "linear-gradient(var(--color-border),var(--color-border))")
+  .join(",");
+const gridpos = ticks.map((y) => `${left(y).toFixed(3)}% 0`).join(",");
+const geometry = [
+  ...all.map((b) => `.tl-${b.key}{left:${left(b.from).toFixed(3)}%;width:${width(b).toFixed(3)}%}`),
+  ...ticks.map((y) => `.tl-t${y}{left:${left(y).toFixed(3)}%}`),
+  `.tl-track{background-image:${gridlines};background-position:${gridpos};` +
+    `background-size:1px 100%;background-repeat:no-repeat}`,
+].join("");
+
+const present = t("experience.timeline.present");
+/** Read out after the row's name; the bar itself carries no text. */
+const range = (b: Bar): string => `${b.from}–${b.to ?? present}`;
+const label = (value: Localized): string => value[lang];
+---
+
+<figure class="mt-10">
+  <figcaption class="label" id="tl-caption">{t("experience.timeline.title")}</figcaption>
+
+  <style is:inline set:html={geometry}></style>
+
+  <div class="tl-scroll panel mt-4" tabindex="0" role="group" aria-labelledby="tl-caption">
+    <div class="tl-grid">
+      {
+        lanes.map((lane) => (
+          <div class={`tl-lane tl-lane--${lane.id}`}>
+            {/* A `p` and not a heading: the section already runs h2 → h3, and
+                a fourth level here for three words would break that order for
+                one group label. The list takes its name from it instead. */}
+            <p class="label tl-lane-name" id={`tl-lane-${lane.id}`}>
+              {lane.name}
+            </p>
+            <ul class="tl-items" aria-labelledby={`tl-lane-${lane.id}`}>
+              {lane.bars.map((b) => (
+                <li class="tl-item">
+                  <span class="tl-name">{label(b.short)}</span>
+                  <span class="data sr-only">{range(b)}</span>
+                  <span class="tl-track">
+                    <span
+                      class={`tl-bar tl-${b.key}${b.to === null ? " tl-bar--open" : ""}`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="tl-axis" aria-hidden="true">
+        <span></span>
+        <span class="tl-ticks">
+          {
+            ticks.map((y) => (
+              <span class={`data tl-tick tl-t${y}${y === END ? " tl-tick--end" : ""}`}>{y}</span>
+            ))
+          }
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="mt-3 text-xs text-muted">{t("experience.timeline.method")}</p>
+</figure>

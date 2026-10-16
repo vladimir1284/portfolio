@@ -163,6 +163,46 @@ publishes its numbers as a visually hidden `<table>` with the bars marked
 in the plot: the thin stretch while the doctorate was the priority is part of
 the measurement, and dropping those columns would make the shape decoration.
 
+### The Experience strip
+
+`Timeline.astro` draws the lede of that section rather than restating it. Three
+lanes — teaching, engineering, education — on one axis from 2003 to the current
+year, so "two careers in parallel since 2008" is something the reader sees
+instead of something they assemble from dates.
+
+It obeys the same rule the citation chart does: **every bar comes from the
+`from`/`to` the entry already carries**, the same numbers the record below
+prints as prose. There is no second list of years to drift. The right edge of
+the axis is the current year, computed at build, so a role with no end date
+reaches it without anyone remembering to extend the axis in January — and the
+edge carries its own tick, because a bar that runs off the end only means
+"still running" if the end is labelled.
+
+**One row per item, not bars packed onto three lanes.** Packed is the compact
+drawing and it cannot be made to work here: a one-year rank, or a degree
+defended inside a single year, is narrower than its own label at every width
+the page is read at, so the label either clips or runs over the bar beside it.
+A row each costs vertical space and buys a chart with no unreadable state.
+
+The three lanes differ in **fill, not hue** — accent, muted, outline. They have
+to separate on a monochrome print and for a reader who does not separate
+colours, and a second accent would spend the one the rest of the site saves
+(§1, §2). The accent goes to the engineering lane, where the site points.
+
+Geometry is generated into an inline `<style>`, not written as `style`
+attributes: the CSP carries no `'unsafe-hashes'` and would drop them silently
+(CLAUDE.md §9). No script runs — the strip is as correct with JavaScript off as
+with it on. Under `sm` the name moves above its own track, which gives the axis
+the full width of the card; side by side at 360px, a name column wide enough to
+read leaves about 150px for twenty-three years and the chart has to be scrolled
+before it says anything. Above `sm` the two-column layout returns and the box,
+not the page, scrolls.
+
+Bars are `aria-hidden`; each row carries its span as visually hidden text after
+the name, so a screen reader gets "Associate, 2012–2025" and not a list of
+empty boxes. The scroll container is focusable, with the ring set inward — an
+outward offset is clipped on `y` by the `x` scroll.
+
 ### The publication list is clamped, not truncated
 
 Each tab in `Research.astro` shows its three most recent entries and scrolls

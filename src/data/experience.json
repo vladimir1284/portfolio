@@ -23,6 +23,10 @@
       "note": {
         "en": "Thesis: <em>Development of fast algorithms for reduct computation</em>. Coursework completed remotely while teaching in Cuba.",
         "es": "Tesis: <em>Development of fast algorithms for reduct computation</em>. Créditos cursados de forma remota mientras impartía clases en Cuba."
+      },
+      "short": {
+        "en": "PhD · BUAP",
+        "es": "Doctorado · BUAP"
       }
     },
     {
@@ -48,6 +52,10 @@
       "note": {
         "en": "Same body of research, defended in Spanish as <em>Desarrollo de estrategias para el cálculo de reductos en sistemas de decisión</em>. Advisor: Dra. Yailé Caballero Mota. <strong>Two doctoral degrees, one investigation</strong> — the Cuban route ran in parallel with the Mexican one.",
         "es": "La misma investigación, defendida en español como <em>Desarrollo de estrategias para el cálculo de reductos en sistemas de decisión</em>. Tutora: Dra. Yailé Caballero Mota. <strong>Dos grados doctorales, una sola investigación</strong>: la vía cubana corrió en paralelo con la mexicana."
+      },
+      "short": {
+        "en": "PhD · UCLV",
+        "es": "Doctorado · UCLV"
       }
     },
     {
@@ -73,6 +81,10 @@
       "note": {
         "en": "CONACYT fellowship 399547. Where the work behind all three journal papers was done — I arrived in late 2013 on a research visit, invited for prior FPGA experience, which became the 2015 <em>Expert Systems with Applications</em> platform.",
         "es": "Beca CONACYT 399547. Allí se hizo el trabajo que sostiene los tres artículos de revista — llegué a finales de 2013 en estancia de investigación, invitado por mi experiencia previa con FPGA, que se convirtió en la plataforma de <em>Expert Systems with Applications</em> de 2015."
+      },
+      "short": {
+        "en": "INAOE",
+        "es": "INAOE"
       }
     },
     {
@@ -98,6 +110,10 @@
       "note": {
         "en": "",
         "es": ""
+      },
+      "short": {
+        "en": "MSc",
+        "es": "Maestría"
       }
     },
     {
@@ -123,6 +139,10 @@
       "note": {
         "en": "Graduated <strong>summa cum laude</strong>.",
         "es": "Graduado <strong>summa cum laude</strong>."
+      },
+      "short": {
+        "en": "BSc · Electrical",
+        "es": "Ing. Eléctrica"
       }
     }
   ],
@@ -213,7 +233,14 @@
           "label": "GitHub",
           "url": "https://github.com/orgs/LADETEC-CU/repositories"
         }
-      ]
+      ],
+      "lane": "engineering",
+      "from": 2023,
+      "to": null,
+      "short": {
+        "en": "LADETEC",
+        "es": "LADETEC"
+      }
     },
     {
       "role": {
@@ -292,7 +319,14 @@
             "es": "TowitLinks, administración en el cliente móvil. El número de mi propia cuenta va difuminado."
           }
         }
-      ]
+      ],
+      "lane": "engineering",
+      "from": 2022,
+      "to": null,
+      "short": {
+        "en": "Nitza Develop",
+        "es": "Nitza Develop"
+      }
     },
     {
       "role": {
@@ -323,6 +357,13 @@
           "Procesamiento de observaciones de aire claro para generar plantillas de eco fijo; TITAN personalizado e integrado en la suite nacional; GEMPAK configurado para generar mosaicos a partir de los productos de ORPG.",
           "Soporte y operación de todo ello durante el periodo. <strong>Sigue en uso hoy en la red de radares de Cuba.</strong>"
         ]
+      },
+      "lane": "engineering",
+      "from": 2012,
+      "to": 2014,
+      "short": {
+        "en": "Radar · INSMET",
+        "es": "Radar · INSMET"
       }
     },
     {
@@ -352,6 +393,13 @@
           "Ahora mismo: Accionamiento Eléctrico Automatizado un semestre, Automatización Industrial el otro, con grupos de unos 20 estudiantes.",
           "Más de 300 estudiantes desde 2008 — alrededor de 20 por año, con un tramo más flojo de 2015 a 2019 mientras el doctorado fue la prioridad."
         ]
+      },
+      "lane": "teaching",
+      "from": 2008,
+      "to": null,
+      "short": {
+        "en": "Chair",
+        "es": "Cátedra"
       }
     }
   ],
@@ -387,7 +435,47 @@
           "en": "Also taught as a three-day open workshop in Camagüey, 12–14 October 2018.",
           "es": "Impartida también como taller abierto de tres días en Camagüey, 12–14 de octubre de 2018."
         }
-      ]
+      ],
+      "from": 2017,
+      "to": 2020,
+      "short": {
+        "en": "Arduino elective",
+        "es": "Optativa Arduino"
+      }
+    }
+  ],
+  "ranks": [
+    {
+      "short": {
+        "en": "Instructor",
+        "es": "Instructor"
+      },
+      "from": 2008,
+      "to": 2010
+    },
+    {
+      "short": {
+        "en": "Assistant",
+        "es": "Asistente"
+      },
+      "from": 2010,
+      "to": 2012
+    },
+    {
+      "short": {
+        "en": "Associate",
+        "es": "Auxiliar"
+      },
+      "from": 2012,
+      "to": 2025
+    },
+    {
+      "short": {
+        "en": "Full professor",
+        "es": "Titular"
+      },
+      "from": 2025,
+      "to": null
     }
   ]
 }

@@ -67,11 +67,32 @@ export interface Project {
   outOfScope?: Localized<string[]>;
 }
 
-export interface Position {
+/**
+ * One bar on the Experience strip (`Timeline.astro`).
+ *
+ * `from`/`to` are the same dates the entry already states in prose — the
+ * strip is drawn from them rather than from a second list of years, so a
+ * corrected date cannot leave the chart behind. `to: null` means the span is
+ * still running and the bar is drawn to the right edge of the axis.
+ *
+ * `short` is the name that fits in a chart row: the record below the strip
+ * carries the full title, so the bar does not have to.
+ */
+export interface Span {
+  short: Localized;
+  from: number;
+  to: number | null;
+}
+
+export interface Position extends Span {
   role: Localized;
   institution: string;
   place: Localized;
   dateLabel: Localized;
+  /** Which lane of the Experience strip this role is drawn in. The teaching
+   *  lane draws `ranks` instead of the chair itself, which would be one bar
+   *  under all four of them. */
+  lane: "engineering" | "teaching";
   /** Rendered with `set:html` — inline markup (<strong>, <em>) is allowed. */
   highlights?: Localized<string[]>;
   /** What the job actually ran on. Not a skills list — omit it when the
