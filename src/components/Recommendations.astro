@@ -33,6 +33,14 @@ function relationKey(relation: string): UIKey {
   language it was written in, the original follows underneath, labelled.
   Translating without showing what was translated would be asking the reader
   to take my word for what a third party said.
+
+  The carousel is a scroll container, not a slideshow. Every quote is in the
+  DOM, visible, and reachable by scrolling the track — with JavaScript off the
+  section is a row of quotes you swipe, which is the whole content. The script
+  only adds the two buttons and the dots, which are hidden until it runs
+  rather than sitting there inert. Nothing autoplays: text that moves while it
+  is being read is a quote the reader cannot finish, and DESIGN.md §5 would
+  make me stop it under `prefers-reduced-motion` anyway.
 */
 const items = recommendations as Recommendation[];
 ---
@@ -47,46 +55,202 @@ const items = recommendations as Recommendation[];
         </h2>
         <p class="prose-col mt-5 text-muted">{t("recommendations.lede")}</p>
 
-        <ul class="mt-10 divide-y divide-border border-t border-border">
-          {items.map((r) => (
-            <li class="py-8">
-              <figure>
-                <blockquote class="prose-col text-base sm:text-lg">{r.quote[lang]}</blockquote>
+        <div class="rec" data-rec>
+          <ul class="rec-track" tabindex="0" aria-label={t("recommendations.track")}>
+            {items.map((r, i) => (
+              <li
+                class="rec-slide"
+                id={`rec-${r.id}`}
+                role="group"
+                aria-roledescription={t("recommendations.slide")}
+                aria-label={t("recommendations.position", { n: i + 1, of: items.length })}
+              >
+                <figure class="rec-card">
+                  <blockquote class="prose-col text-base sm:text-lg">{r.quote[lang]}</blockquote>
 
-                {/* Only where the page is not in the language it was written
-                    in — on its own page the quote above is already the
-                    original, and printing it twice would say nothing. */}
-                {r.lang !== lang && (
-                  <div class="prose-col mt-5 border-l border-border pl-4">
-                    <p class="label">{t(`recommendations.original.${r.lang}` as UIKey)}</p>
-                    <p class="mt-2 text-sm text-muted">{r.quote[r.lang]}</p>
-                  </div>
-                )}
+                  {/* Only where the page is not in the language it was written
+                      in — on its own page the quote above is already the
+                      original, and printing it twice would say nothing. */}
+                  {r.lang !== lang && (
+                    <div class="prose-col mt-5 border-l border-border pl-4">
+                      <p class="label">{t(`recommendations.original.${r.lang}` as UIKey)}</p>
+                      <p class="mt-2 text-sm text-muted">{r.quote[r.lang]}</p>
+                    </div>
+                  )}
 
-                {/* The eyebrow of the chronology, after the words rather than
-                    before them: in a quote the sentence is the claim and the
-                    attribution is what makes it checkable. */}
-                <figcaption class="mt-5">
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    rel="noopener"
-                    class="t-fast text-sm font-medium text-text hover:text-accent"
+                  {/* The eyebrow of the chronology, after the words rather than
+                      before them: in a quote the sentence is the claim and the
+                      attribution is what makes it checkable. */}
+                  <figcaption class="mt-6 flex items-start gap-4">
+                    {r.photo && (
+                      <img
+                        src={r.photo}
+                        alt=""
+                        width="100"
+                        height="100"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-12 w-12 flex-none rounded-full border border-border object-cover"
+                      />
+                    )}
+                    <div class="min-w-0">
+                      <a
+                        href={r.url}
+                        target="_blank"
+                        rel="noopener"
+                        class="t-fast text-sm font-medium text-text hover:text-accent"
+                      >
+                        {r.name}
+                      </a>
+                      <p class="mt-1 text-sm text-muted">{r.role[lang]}</p>
+                      <p class="mt-1 text-sm text-muted">
+                        <span class="data">{r.date}</span>
+                        <span aria-hidden="true"> &middot; </span>
+                        {t(relationKey(r.relation))}
+                      </p>
+                    </div>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+
+          {items.length > 1 && (
+            <div class="rec-controls" hidden data-rec-controls>
+              <ul class="rec-dots" data-rec-dots>
+                {items.map((r, i) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="rec-dot"
+                      data-to={i}
+                      aria-current={i === 0 ? "true" : "false"}
+                      aria-label={t("recommendations.goto", { n: i + 1, name: r.name })}
+                    >
+                      <span class="rec-dot-mark" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              <div class="flex gap-1">
+                <button
+                  type="button"
+                  class="rec-arrow"
+                  data-rec-prev
+                  aria-label={t("recommendations.prev")}
+                >
+                  <svg
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    aria-hidden="true"
                   >
-                    {r.name}
-                  </a>
-                  <p class="mt-1 text-sm text-muted">{r.role[lang]}</p>
-                  <p class="mt-1 text-sm text-muted">
-                    <span class="data">{r.date}</span>
-                    <span aria-hidden="true"> &middot; </span>
-                    {t(relationKey(r.relation))}
-                  </p>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
+                    <path d="M15 5l-7 7 7 7" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="rec-arrow"
+                  data-rec-next
+                  aria-label={t("recommendations.next")}
+                >
+                  <svg
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )
 }
+
+<script>
+  /*
+    Buttons and dots over a scroll-snap track.
+
+    The track scrolls on its own; this only drives it and reads back where it
+    stopped, so a swipe, a keyboard scroll and a button press all end in the
+    same state. The controls start `hidden` in the markup and are revealed
+    here — a previous/next pair that does nothing without JavaScript is worse
+    than no pair at all.
+
+    Position is read from `scrollLeft`, not tracked in a variable: the reader
+    can scroll the track directly, and a counter would drift the first time
+    they did.
+  */
+  const root = document.querySelector<HTMLElement>("[data-rec]");
+  const track = root?.querySelector<HTMLElement>(".rec-track");
+  const controls = root?.querySelector<HTMLElement>("[data-rec-controls]");
+
+  if (root && track && controls && track.children.length > 1) {
+    const slides = Array.from(track.children) as HTMLElement[];
+    const dots = Array.from(controls.querySelectorAll<HTMLButtonElement>(".rec-dot"));
+    const prev = controls.querySelector<HTMLButtonElement>("[data-rec-prev]");
+    const next = controls.querySelector<HTMLButtonElement>("[data-rec-next]");
+
+    controls.hidden = false;
+
+    /** Whichever slide's left edge is nearest the track's — what snap landed on. */
+    function current(): number {
+      const left = track!.scrollLeft;
+      let best = 0;
+      let bestGap = Infinity;
+      slides.forEach((slide, i) => {
+        const gap = Math.abs(slide.offsetLeft - track!.offsetLeft - left);
+        if (gap < bestGap) {
+          bestGap = gap;
+          best = i;
+        }
+      });
+      return best;
+    }
+
+    /* The stylesheet's reduced-motion block cannot reach a programmatic
+       scroll, so the preference is read here and the jump is instant
+       (DESIGN.md §5). Read per call, not once: the setting can change
+       mid-visit. */
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function go(i: number) {
+      const n = Math.max(0, Math.min(slides.length - 1, i));
+      track!.scrollTo({
+        left: slides[n].offsetLeft - track!.offsetLeft,
+        behavior: still.matches ? "auto" : "smooth",
+      });
+    }
+
+    function sync() {
+      const n = current();
+      dots.forEach((dot, i) => dot.setAttribute("aria-current", String(i === n)));
+      // At either end the arrow has nowhere to go; say so rather than
+      // leaving a control that silently does nothing.
+      if (prev) prev.disabled = n === 0;
+      if (next) next.disabled = n === slides.length - 1;
+    }
+
+    prev?.addEventListener("click", () => go(current() - 1));
+    next?.addEventListener("click", () => go(current() + 1));
+    dots.forEach((dot) => dot.addEventListener("click", () => go(Number(dot.dataset.to))));
+
+    let frame = 0;
+    track.addEventListener("scroll", () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(sync);
+    });
+    window.addEventListener("resize", sync);
+    sync();
+  }
+</script>

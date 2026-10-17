@@ -141,6 +141,21 @@ call, 2026-10-16).
 checkable — the same burden a screenshot or a figure carries (§7). An entry
 without one does not belong in the file.
 
+`photo` is optional and points under `public/img/recommendations/`. The source
+is their LinkedIn avatar, which LinkedIn serves at 100x100, so the page draws
+it at 48px and must not be asked to draw it larger. Convert it like any other
+raster asset — `pnpm optimize:images public/img/recommendations --max 100
+--delete` (§10) — and name the file after the entry's `id`, so a missing
+portrait is one `ls` away from being obvious.
+
+The section is a `scroll-snap` carousel, and every slide stays in the DOM:
+with JavaScript off it is a row of quotes you swipe, controls and all the text
+intact. Nothing autoplays. The reasoning is in DESIGN.md §4; the rule that
+matters here is that no slide may ever be mounted on demand or hidden with
+`display: none`. These are someone else's words with a profile link behind
+them, and a quote the page can fail to render is a quote the page cannot
+prove.
+
 Embedding LinkedIn was ruled out rather than skipped: there is no public API
 for recommendations, and the profile badge widget shows a headline rather than
 any recommendation and loads a third-party script that the CSP and
@@ -220,21 +235,21 @@ Components index into `title[lang]`.
 
 All components: `resolveLang(Astro.currentLocale)` → `useTranslations(lang)` → `t('key')`. No literal strings in markup.
 
-| Component               | Responsibility                                                                            |
-| :---------------------- | :---------------------------------------------------------------------------------------- |
-| `Layout.astro`          | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script.  |
-| `Header.astro`          | Fixed nav: name, section anchors, theme toggle, language switcher.                        |
-| `Hero.astro`            | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.      |
-| `Facts.astro`           | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.          |
-| `System.astro`          | LAMULA chain walkthrough. CSS-driven (radio + `:has()`); JS only autoplays the selection. |
-| `About.astro`           | Photo, extended bio, research interests, current affiliation.                             |
-| `Research.astro`        | Research lines + key publications from `data/publications.json`.                          |
-| `Projects.astro`        | Cards from `data/projects.json` with stack tags and links.                                |
-| `Experience.astro`      | The record: roles, education, courses taught, advanced training.                          |
-| `Timeline.astro`        | The Experience strip — three packed lanes on one axis, from the dates the record carries. |
-| `Recommendations.astro` | Transcribed recommendations; translation plus the original where the locale differs.      |
-| `Contact.astro`         | Email + social links from `data/profile.json`. No form backend.                           |
-| `Footer.astro`          | Copyright, social icons.                                                                  |
+| Component               | Responsibility                                                                                                 |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `Layout.astro`          | `<head>`: title/description, canonical + hreflang, OG/Twitter tags, fonts, theme script.                       |
+| `Header.astro`          | Fixed nav: name, section anchors, theme toggle, language switcher.                                             |
+| `Hero.astro`            | Name, tagline, bio summary, CV download, radar still linking out to the live viewer.                           |
+| `Facts.astro`           | Etched fact band. Counts what it can from `publications.json`; see DESIGN.md §4.                               |
+| `System.astro`          | LAMULA chain walkthrough. CSS-driven (radio + `:has()`); JS only autoplays the selection.                      |
+| `About.astro`           | Photo, extended bio, research interests, current affiliation.                                                  |
+| `Research.astro`        | Research lines + key publications from `data/publications.json`.                                               |
+| `Projects.astro`        | Cards from `data/projects.json` with stack tags and links.                                                     |
+| `Experience.astro`      | The record: roles, education, courses taught, advanced training.                                               |
+| `Timeline.astro`        | The Experience strip — three packed lanes on one axis, from the dates the record carries.                      |
+| `Recommendations.astro` | Transcribed recommendations in a scroll-snap carousel; translation plus the original where the locale differs. |
+| `Contact.astro`         | Email + social links from `data/profile.json`. No form backend.                                                |
+| `Footer.astro`          | Copyright, social icons.                                                                                       |
 
 ---
 

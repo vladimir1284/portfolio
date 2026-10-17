@@ -13,7 +13,8 @@
     },
     "relation": "advised",
     "date": "2021-09-21",
-    "url": "https://www.linkedin.com/in/j-francisco-martinez-76a28b14/"
+    "url": "https://www.linkedin.com/in/j-francisco-martinez-76a28b14/",
+    "photo": "/img/recommendations/martinez-trinidad.webp"
   },
   {
     "id": "loyola-gonzalez",
@@ -29,6 +30,7 @@
     },
     "relation": "fellow",
     "date": "2021-09-20",
-    "url": "https://www.linkedin.com/in/octavioloyola/"
+    "url": "https://www.linkedin.com/in/octavioloyola/",
+    "photo": "/img/recommendations/loyola-gonzalez.webp"
   }
 ]

@@ -223,8 +223,16 @@ export interface Recommendation {
   name: string;
   role: Localized;
   /** How they know Vladímir. Resolves to `recommendations.relation.<relation>`. */
-  relation: "advised" | "fellow";
+  relation: "advised" | "fellow" | "supervised";
   /** ISO date the recommendation was written. */
   date: string;
   url: string;
+  /**
+   * Their photo, under `public/img/recommendations/`. LinkedIn serves these at
+   * 100x100, so it is drawn at 48px and never larger — an upscaled face is a
+   * worse portrait than none. Optional: an entry without one keeps the name.
+   * It is rendered with an empty `alt` on purpose, since the name it sits
+   * beside is the same information as text.
+   */
+  photo?: string;
 }

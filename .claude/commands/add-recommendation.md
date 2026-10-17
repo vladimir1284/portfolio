@@ -42,18 +42,39 @@ Read CLAUDE.md §3.2 first — it owns the rules this command carries out.
      rendering a blank line.
    - `date` — ISO, from the line LinkedIn prints above the text.
    - `url` — the profile.
+   - `photo` — optional, `/img/recommendations/<id>.webp`. Omit the key if
+     there is no photo; the entry renders without one.
 
-3. **Rebuild the corpus**: `pnpm corpus`. Then `pnpm verify`.
+3. **Add the photo, if there is one.** Save their LinkedIn avatar to the repo
+   root, then:
+
+   ```bash
+   mv <downloaded file> public/img/recommendations/<id>.jpeg
+   pnpm optimize:images public/img/recommendations --max 100 --delete
+   ```
+
+   LinkedIn serves avatars at 100x100 and the page draws them at 48px, so
+   `--max 100` costs nothing and the original never ships. The file is named
+   after the entry's `id`. Do not enlarge it anywhere: an upscaled face reads
+   worse than no face.
+
+   If you cannot tell which photo belongs to which person, say so and ask —
+   the wrong face over someone's words is a worse error than a missing one.
+
+4. **Rebuild the corpus**: `pnpm corpus`. Then `pnpm verify`.
 
    `corpus:check` will fail with "the index is stale". That is expected and is
-   step 4 — every other step of the gate must pass.
+   step 5 — every other step of the gate must pass. A change that touches only
+   `photo` leaves the corpus byte-identical, since the portrait is not indexed;
+   in that case the gate is green in one pass and steps 5 and the `chore(rag)`
+   commit do not apply.
 
-4. **Reindex the vectors**, which requires a deploy: `python3
+5. **Reindex the vectors**, which requires a deploy: `python3
    scripts/reindex_vectors.py` (read its docstring; CLAUDE.md §11 explains why
    it cannot run locally). **Ask before running it** — it deploys the current
    working tree to the live site. Afterwards `pnpm verify` must be fully green.
 
-5. **Commit and push only if asked.** Two commits, as the section was built:
+6. **Commit and push only if asked.** Two commits, as the section was built:
    `feat(recommendations): …` for the content, `chore(rag): reindex vectors …`
    for `rag/vectors.json`. CI deploys from `master`.
 
@@ -67,5 +88,7 @@ Read CLAUDE.md §3.2 first — it owns the rules this command carries out.
 
 - Both locales render: the page in the original's language shows the quote
   once, the other shows the translation with the original underneath it.
+- The carousel still shows one quote per view at 360px with no page scroll,
+  the new dot appears, and the arrows disable at the ends.
 - The quote is not a figure and carries no number you added.
 - Nothing in the entry is something the signer did not actually say or claim.

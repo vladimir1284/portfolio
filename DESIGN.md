@@ -177,20 +177,52 @@ number; the count is a separate sentence and is deliberately kept out of the
 retrieval corpus, which that arithmetic would otherwise rewrite every January
 (CLAUDE.md §11).
 
-**A quote is drawn as words, not as a card.** `Recommendations.astro` is a
-hairline-divided list like the record above it: the quote at reading size, the
-attribution under it as the chronology's eyebrow — name as the link to the
-profile, then role, then the date in mono beside how the signer knows him.
-Where the page language is not the one it was written in, the original follows
-in a muted block against a 1px rule, small, labelled with its language. The
-translation never stands alone, and the original is never hidden behind a
-disclosure: evidence that has to be clicked open is evidence the page is
-asking to be taken on trust.
+**A quote is drawn as words.** `Recommendations.astro` prints the quote at
+reading size with the attribution under it as the chronology's eyebrow — a
+48px portrait, name as the link to the profile, then role, then the date in
+mono beside how the signer knows him. Where the page language is not the one
+it was written in, the original follows in a muted block against a 1px rule,
+small, labelled with its language. The translation never stands alone, and the
+original is never hidden behind a disclosure: evidence that has to be clicked
+open is evidence the page is asking to be taken on trust.
 
 The eyebrow comes after the words here, not before them, which is the one
 place on the site it does. In a role the date and the institution are the
 context you need before the claim; in a quote the sentence is the claim and
 the attribution is what makes it checkable.
+
+The photos are LinkedIn's, and LinkedIn serves them at 100x100. So the
+portrait is drawn at 48px and the data file's comment says why: an upscaled
+face is a worse portrait than no portrait, and the entry renders without one.
+Its `alt` is empty on purpose — the name sits beside it as text, and a screen
+reader reading "photo of X" straight into "X" says the same thing twice.
+
+### The carousel is a scroll container, not a slideshow
+
+One quote per view, in a `scroll-snap` track. Every slide is laid out and in
+the DOM at all times; with the script blocked the section is a row of quotes
+you swipe, which is the whole content. A carousel that mounts its slides, or
+hides them with `display: none`, would take the quotes off the page the same
+way the LinkedIn widget would — and these are the one section whose content is
+someone else's words, which makes that worse here than anywhere else.
+
+The two arrows and the dots are the only part that needs the script, so they
+carry `hidden` in the markup and the script removes it: a previous/next pair
+that does nothing is worse than no pair. The dots are the chronology's two
+states — filled for the slide on screen, outlined for the rest — each inside a
+44px target around an 8px mark. At either end the arrow is disabled rather
+than removed; a control that vanishes as you use it is a moving target.
+
+**Nothing autoplays.** Text that slides away while it is being read is a quote
+the reader cannot finish — and §5 would stop the motion under
+`prefers-reduced-motion` anyway, which would leave the feature existing only
+for readers who did not ask not to have it. The same preference is read in the
+script, because the stylesheet cannot reach a programmatic `scrollTo`: the
+jump is instant where motion is refused and smooth where it is not.
+
+The card keeps its 68ch prose column, so on a wide screen the text does not
+fill the box. That is the measure doing its job, the same as every lede on the
+site; a quote set to 1084px would be a quote nobody finishes a line of.
 
 Charts obey the same rule. The output-per-year plot in `Research.astro` is
 built from the same array the list under it renders, carries **no script**, and
