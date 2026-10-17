@@ -37,10 +37,17 @@ function relationKey(relation: string): UIKey {
   The carousel is a scroll container, not a slideshow. Every quote is in the
   DOM, visible, and reachable by scrolling the track — with JavaScript off the
   section is a row of quotes you swipe, which is the whole content. The script
-  only adds the two buttons and the dots, which are hidden until it runs
-  rather than sitting there inert. Nothing autoplays: text that moves while it
-  is being read is a quote the reader cannot finish, and DESIGN.md §5 would
-  make me stop it under `prefers-reduced-motion` anyway.
+  only adds the two buttons and the dots: they are drawn by `.rec[data-live]`,
+  the attribute the script sets, so without it they are not rendered rather
+  than sitting there inert. Nothing autoplays: text that moves while it is
+  being read is a quote the reader cannot finish, and DESIGN.md §5 would make
+  me stop it under `prefers-reduced-motion` anyway.
+
+  The dots, the two arrows and the track are siblings because the grid in
+  `global.css` places each of them by name: the dots sit above the quote at
+  every width, and the arrows move from that same row to the sides of the card
+  once there is room for them (640px). The arrows are adjacent in the source so
+  that they stay one pair in the tab order at both layouts.
 */
 const items = recommendations as Recommendation[];
 ---
@@ -56,6 +63,61 @@ const items = recommendations as Recommendation[];
         <p class="prose-col mt-5 text-muted">{t("recommendations.lede")}</p>
 
         <div class="rec" data-rec>
+          {items.length > 1 && (
+            <Fragment>
+              <ul class="rec-dots" data-rec-dots>
+                {items.map((r, i) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="rec-dot"
+                      data-to={i}
+                      aria-current={i === 0 ? "true" : "false"}
+                      aria-label={t("recommendations.goto", { n: i + 1, name: r.name })}
+                    >
+                      <span class="rec-dot-mark" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                type="button"
+                class="rec-arrow rec-prev"
+                data-rec-prev
+                aria-label={t("recommendations.prev")}
+              >
+                <svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  aria-hidden="true"
+                >
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="rec-arrow rec-next"
+                data-rec-next
+                aria-label={t("recommendations.next")}
+              >
+                <svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  aria-hidden="true"
+                >
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </Fragment>
+          )}
+
           <ul class="rec-track" tabindex="0" aria-label={t("recommendations.track")}>
             {items.map((r, i) => (
               <li
@@ -114,63 +176,6 @@ const items = recommendations as Recommendation[];
               </li>
             ))}
           </ul>
-
-          {items.length > 1 && (
-            <div class="rec-controls" hidden data-rec-controls>
-              <ul class="rec-dots" data-rec-dots>
-                {items.map((r, i) => (
-                  <li>
-                    <button
-                      type="button"
-                      class="rec-dot"
-                      data-to={i}
-                      aria-current={i === 0 ? "true" : "false"}
-                      aria-label={t("recommendations.goto", { n: i + 1, name: r.name })}
-                    >
-                      <span class="rec-dot-mark" aria-hidden="true" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-
-              <div class="flex gap-1">
-                <button
-                  type="button"
-                  class="rec-arrow"
-                  data-rec-prev
-                  aria-label={t("recommendations.prev")}
-                >
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    aria-hidden="true"
-                  >
-                    <path d="M15 5l-7 7 7 7" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  class="rec-arrow"
-                  data-rec-next
-                  aria-label={t("recommendations.next")}
-                >
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    aria-hidden="true"
-                  >
-                    <path d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </section>
@@ -183,9 +188,8 @@ const items = recommendations as Recommendation[];
 
     The track scrolls on its own; this only drives it and reads back where it
     stopped, so a swipe, a keyboard scroll and a button press all end in the
-    same state. The controls start `hidden` in the markup and are revealed
-    here — a previous/next pair that does nothing without JavaScript is worse
-    than no pair at all.
+    same state. The controls are not drawn until this runs — a previous/next
+    pair that does nothing without JavaScript is worse than no pair at all.
 
     Position is read from `scrollLeft`, not tracked in a variable: the reader
     can scroll the track directly, and a counter would drift the first time
@@ -193,15 +197,18 @@ const items = recommendations as Recommendation[];
   */
   const root = document.querySelector<HTMLElement>("[data-rec]");
   const track = root?.querySelector<HTMLElement>(".rec-track");
-  const controls = root?.querySelector<HTMLElement>("[data-rec-controls]");
 
-  if (root && track && controls && track.children.length > 1) {
+  if (root && track && track.children.length > 1) {
     const slides = Array.from(track.children) as HTMLElement[];
-    const dots = Array.from(controls.querySelectorAll<HTMLButtonElement>(".rec-dot"));
-    const prev = controls.querySelector<HTMLButtonElement>("[data-rec-prev]");
-    const next = controls.querySelector<HTMLButtonElement>("[data-rec-next]");
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>(".rec-dot"));
+    const prev = root.querySelector<HTMLButtonElement>("[data-rec-prev]");
+    const next = root.querySelector<HTMLButtonElement>("[data-rec-next]");
 
-    controls.hidden = false;
+    /* One switch for the whole control layer: it draws the dots and the
+       arrows and turns `.rec` into the grid that places them. The `hidden`
+       attribute cannot do this job here — `.rec-arrow` sets `display`, which
+       beats the user-agent rule behind the attribute. */
+    root.dataset.live = "";
 
     /** Whichever slide's left edge is nearest the track's — what snap landed on. */
     function current(): number {

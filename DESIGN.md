@@ -207,11 +207,24 @@ way the LinkedIn widget would — and these are the one section whose content is
 someone else's words, which makes that worse here than anywhere else.
 
 The two arrows and the dots are the only part that needs the script, so they
-carry `hidden` in the markup and the script removes it: a previous/next pair
-that does nothing is worse than no pair. The dots are the chronology's two
-states — filled for the slide on screen, outlined for the rest — each inside a
-44px target around an 8px mark. At either end the arrow is disabled rather
-than removed; a control that vanishes as you use it is a moving target.
+are drawn by `.rec[data-live]`, the attribute the script sets: a previous/next
+pair that does nothing is worse than no pair. One switch rather than three
+`hidden` attributes, because `.rec-arrow` sets `display` and would beat the
+user-agent rule behind `hidden`. The dots are the chronology's two states —
+filled for the slide on screen, outlined for the rest — each inside a 44px
+target around an 8px mark. At either end the arrow is disabled rather than
+removed; a control that vanishes as you use it is a moving target.
+
+**The controls sit above the quote, and the arrows beside it where there is
+room.** The dots are a row under the lede at every width, so what the reader
+meets before the first quote is how many there are and which one they are on.
+The arrows ride that row below 640px and move to the sides of the card above
+it: two 44px targets flanking a 360px screen would leave a 216px card and
+about 37ch of prose, and §4 owns the measure. Beside the card they are set
+level with the first line of the quote, not the middle of the track — the
+track is as tall as the tallest card and the four cards measure 274px to
+582px, so a centred arrow would float level with the bottom edge of the short
+ones.
 
 **Nothing autoplays.** Text that slides away while it is being read is a quote
 the reader cannot finish — and §5 would stop the motion under

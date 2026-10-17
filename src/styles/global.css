@@ -1137,7 +1137,63 @@
   .rec {
     margin-top: 2.5rem;
   }
+  /* The control layer exists only once the script has said so, through the
+     attribute it sets on the root. One switch, not three `hidden` attributes:
+     `.rec-arrow` sets `display`, which would beat the user-agent rule behind
+     `hidden` and leave two dead buttons on a page with no JavaScript. Without
+     it `.rec` is a plain block and the track is the full-width scroll
+     container it was. */
+  .rec:not([data-live]) .rec-dots,
+  .rec:not([data-live]) .rec-arrow {
+    display: none;
+  }
+  /* The dots sit above the quote at every width; the arrows ride that same
+     row until there is room to put them beside the card.
+
+     Under 640px there is not. The shell leaves 328px at 360px, and two 44px
+     targets plus their gaps would take 112px of it — a 216px card, about 37ch
+     of prose once the padding is paid. A quote is prose and §4 owns the
+     measure, so the arrows wait for the breakpoint instead of the text paying
+     for them. */
+  .rec[data-live] {
+    display: grid;
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 1.25rem;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "dots prev next"
+      "track track track";
+  }
+  @media (min-width: 640px) {
+    .rec[data-live] {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        "dots dots dots"
+        "prev track next";
+    }
+    /* Beside the first lines of the quote, not at the middle of the track.
+       The track is as tall as the tallest card and the cards are not the same
+       height — measured 274px to 582px for the four quotes — so a centred
+       arrow floats level with the bottom edge of the short ones. The offset
+       is the track padding plus the card's own, which puts the button on the
+       first line of the text and keeps it still while the reader scrolls. */
+    .rec-arrow {
+      align-self: start;
+      margin-top: calc(2px + clamp(1.25rem, 4vw, 2rem));
+    }
+  }
+  .rec-dots {
+    grid-area: dots;
+  }
+  .rec-prev {
+    grid-area: prev;
+  }
+  .rec-next {
+    grid-area: next;
+  }
   .rec-track {
+    grid-area: track;
     display: flex;
     /* Each card is its own height. Stretched, the shortest quote in the set
        is drawn in the tallest quote's box — measured at 341px of nothing
@@ -1181,21 +1237,14 @@
     padding: clamp(1.25rem, 4vw, 2rem);
   }
 
-  .rec-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* Each dot is a 44px target, so the row grows 44px per recommendation.
-       Four fit beside the arrows at 360px with 35px to spare; six would not.
-       Wrapping to a second row is the honest failure — shrinking the targets
-       to keep one line would trade §6 for tidiness. */
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
   .rec-dots {
     display: flex;
     align-items: center;
+    /* Each dot is a 44px target, so the row grows 44px per recommendation.
+       Four fit beside the arrows at 360px; six would not. Wrapping to a
+       second row is the honest failure — shrinking the targets to keep one
+       line would trade §6 for tidiness. */
+    flex-wrap: wrap;
     gap: 0.25rem;
   }
   /* 44px hit target around a 8px mark (DESIGN.md §6) — the dot a finger hits
