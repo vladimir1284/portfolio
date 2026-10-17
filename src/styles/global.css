@@ -1139,6 +1139,13 @@
   }
   .rec-track {
     display: flex;
+    /* Each card is its own height. Stretched, the shortest quote in the set
+       is drawn in the tallest quote's box — measured at 341px of nothing
+       under Juan Pablo's four lines once Armín's paragraph joined the track.
+       The hole goes outside the border instead of inside it: the box is
+       supposed to say where someone's words end. The track still reserves the
+       tallest card's height, so scrolling does not make the page jump. */
+    align-items: start;
     gap: 1.5rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -1178,6 +1185,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* Each dot is a 44px target, so the row grows 44px per recommendation.
+       Four fit beside the arrows at 360px with 35px to spare; six would not.
+       Wrapping to a second row is the honest failure — shrinking the targets
+       to keep one line would trade §6 for tidiness. */
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1.5rem;
   }

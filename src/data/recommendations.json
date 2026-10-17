@@ -32,5 +32,39 @@
     "date": "2021-09-20",
     "url": "https://www.linkedin.com/in/octavioloyola/",
     "photo": "/img/recommendations/loyola-gonzalez.webp"
+  },
+  {
+    "id": "rodriguez-diaz",
+    "lang": "es",
+    "quote": {
+      "en": "I had the privilege of being tutored by the professor during the development of my thesis. His guidance combined academic rigour, methodological clarity and a genuine interest in my professional growth. I warmly recommend his work as a mentor and as an academic.",
+      "es": "Tuve el privilegio de contar con la tutoría del profesor durante el desarrollo de mi tesis. Su guía se caracterizó por una combinación de rigor académico, claridad metodológica y un genuino interés en mi crecimiento profesional. Recomiendo ampliamente su labor como mentor y académico."
+    },
+    "name": "Juan Pablo Rodríguez Díaz",
+    "role": {
+      "en": "MSc in Energy Efficiency",
+      "es": "Máster en Eficiencia Energética"
+    },
+    "relation": "supervised",
+    "date": "2026-10-16",
+    "url": "https://www.linkedin.com/in/juan-pablo-rodr%C3%ADguez-d%C3%ADaz-2a9848284/",
+    "photo": "/img/recommendations/rodriguez-diaz.webp"
+  },
+  {
+    "id": "sifontes",
+    "lang": "es",
+    "quote": {
+      "en": "It is a pleasure to warmly recommend Vladimir, with whom I had the chance to work closely on software development projects. Over our time collaborating as a team, he proved to be an extremely proactive and resourceful person. What most distinguishes his work is that he designs with an eye not only on technical function, but on the long-term maintainability and scalability of the system and on the real impact for the end user and the business. As a team lead, he has a natural ability to keep us focused on what truly matters. He knows how to delegate tasks according to each member's experience and capacity, striking an excellent balance between quality and delivery speed without neglecting either. On a personal level, Vladimir has been a fundamental mentor to me. His guidance helped me grow not only in engineering and software development, but in how to analyse and break down complex problems in order to tackle them precisely and contribute real, effective solutions. For his technical ability, strategic vision and human quality, I consider Vladimir a very high-value addition to any technology team.",
+      "es": "Es un placer recomendar ampliamente a Vladimir, con quien tuve la oportunidad de trabajar de cerca en proyectos de desarrollo de software. A lo largo tiempo de colaboración como equipo, demostró ser una persona sumamente proactiva y resolutiva. Lo que más distingue su trabajo es que diseña pensando no solo en el funcionamiento técnico, sino en la mantenibilidad y escalabilidad a largo plazo del sistema y el impacto real de cara al usuario final y al negocio. Como líder de equipo, tiene una habilidad natural para mantenernos enfocados en lo verdaderamente importante. Sabe delegar tareas de acuerdo con la experiencia y capacidad de cada integrante, logrando un equilibrio excelente entre calidad y velocidad de entrega, sin descuidar ninguna de las dos. En lo personal, Vladimir ha sido un mentor fundamental para mí. Su guía me ayudó a evolucionar no solo en la ingeniería y el desarrollo de software, sino en la forma de analizar y descomponer problemas complejos para abordarlos de manera precisa y aportar soluciones reales y efectivas. Por su capacidad técnica, visión estratégica y calidad humana, considero que Vladimir es una incorporación de altísimo valor para cualquier equipo de tecnología."
+    },
+    "name": "Armín Sifontes Viamontes",
+    "role": {
+      "en": "Developer at LADETEC",
+      "es": "Desarrollador en LADETEC"
+    },
+    "relation": "supervised",
+    "date": "2026-10-16",
+    "url": "https://www.linkedin.com/in/armin-sifontes-b581a7368/",
+    "photo": "/img/recommendations/sifontes.webp"
   }
 ]
