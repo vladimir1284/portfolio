@@ -1,19 +1,34 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveLang, useTranslations } from "../i18n/utils";
 import Disclosure from "./Disclosure.astro";
 import { STAGES } from "./lamula/stages";
+import { projectRoute } from "../data/projects";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = useTranslations(lang);
+
+/* The chain is one of the six cases, so the section hands the reader the case
+   page rather than repeating the argument here. */
+const caseHref = getRelativeLocaleUrl(lang, projectRoute("lamula"));
 ---
 
 <section id="system" class="section">
   <div class="shell">
-    <p class="label">00</p>
+    <p class="label">00 · {t("system.kicker")}</p>
     <h2 class="mt-2 text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight">
       {t("system.title")}
     </h2>
     <p class="prose-col mt-5 text-muted">{t("system.lede")}</p>
+
+    <p class="mt-4">
+      <a
+        href={caseHref}
+        class="t-fast text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+      >
+        {t("system.case")} &rarr;
+      </a>
+    </p>
 
     <p class="sys-hint data mt-4 text-xs tracking-wide text-accent">
       {t("system.auto")}
