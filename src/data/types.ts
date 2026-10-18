@@ -223,7 +223,7 @@ export interface Recommendation {
   name: string;
   role: Localized;
   /** How they know Vladímir. Resolves to `recommendations.relation.<relation>`. */
-  relation: "advised" | "fellow" | "supervised";
+  relation: "advised" | "fellow" | "supervised" | "teammate";
   /** ISO date the recommendation was written. */
   date: string;
   url: string;

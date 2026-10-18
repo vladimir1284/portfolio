@@ -66,5 +66,56 @@
     "date": "2026-10-16",
     "url": "https://www.linkedin.com/in/armin-sifontes-b581a7368/",
     "photo": "/img/recommendations/sifontes.webp"
+  },
+  {
+    "id": "regalon-anias",
+    "lang": "es",
+    "quote": {
+      "en": "Working with Vladimir has been a school for me, one where I am constantly learning new tools and technologies. An Electrical Engineer and Computer Scientist, he has given me a great deal of knowledge and brought me up to date in the field of automation, the field I trained in and work in. Vladimir is an excellent professional, with great communication skills and a command of teamwork. He has a strongly developed analytical mind that lets him approach engineering problems from several angles at once. For me, he is possibly the most competent engineer I have ever met. On the human side he is a great person, always ready to help his colleagues and friends, and I can also attest that he is an excellent son, husband and father.",
+      "es": "Trabajar con Vladimir para mi ha sido una escuela en la que constantemente aprendo herramientas y tecnologías nuevas. Ingeniero Electricista y Cientifico de la Computación, él me ha aportado mucho conocimiento y actualización en el área de la automática, en la cual me formé y trabajo. Vladimir es un excelente profesional, con grandes  habilidades comunicativas y dominio del trabajo en equipo. Posee un fuertemente desarrollado pensamiento analítico que le permite abordar soluciones desde distintos ángulos a problemas de ingeniería. Para mí, es posiblemente el ingeniero más competente que he conocido. En en ámbito humano es una gran persona, siempre dispuesto a ayudar a sus colegas y amigos y me consta además que es un excelente hijo, esposo y padre de familia."
+    },
+    "name": "Orlando Regalón Anias",
+    "role": {
+      "en": "Works in automation; studied at Universidad Central «Marta Abreu» de Las Villas",
+      "es": "Trabaja en automática; estudió en la Universidad Central «Marta Abreu» de Las Villas"
+    },
+    "relation": "teammate",
+    "date": "2026-10-18",
+    "url": "https://www.linkedin.com/in/orlando-regalon-541097262/",
+    "photo": "/img/recommendations/regalon-anias.webp"
+  },
+  {
+    "id": "mansfarroll-gonzalez",
+    "lang": "es",
+    "quote": {
+      "en": "I had the pleasure of working with Vladimir a few years ago at Ladetec, where he was my project manager. I always liked the way he led: he gave you room to propose ideas, to be creative and to look for solutions, while still being there to back you up when you needed it. He has very good judgement about setting priorities and knows how to guide a team without limiting its autonomy. Working with him was a very good experience and I would not hesitate to do it again.",
+      "es": "Tuve el gusto de trabajar con Vladimir hace unos años en Ladetec, donde fue mi project manager. Siempre me gustó su forma de liderar, dando espacio para proponer ideas, ser creativo y buscar soluciones, pero contando también con su apoyo cuando lo necesitabas. Tiene muy buen criterio para establecer prioridades y sabe cómo guiar al equipo sin limitar su autonomía. Fue una muy buena experiencia trabajar con él y sin duda volvería a hacerlo."
+    },
+    "name": "Yaquier Mansfarroll González",
+    "role": {
+      "en": "Co-founder and CEO, EnRouta",
+      "es": "Cofundador y CEO de EnRouta"
+    },
+    "relation": "supervised",
+    "date": "2026-10-17",
+    "url": "https://www.linkedin.com/in/ymansfarroll/",
+    "photo": "/img/recommendations/mansfarroll-gonzalez.webp"
+  },
+  {
+    "id": "cespon",
+    "lang": "en",
+    "quote": {
+      "en": "An excellent professional and manager of projects and staff",
+      "es": "Un excelente profesional y gestor de proyectos y de personal"
+    },
+    "name": "Alejandro Cespón",
+    "role": {
+      "en": "Researcher, professor and software developer",
+      "es": "Investigador, profesor y desarrollador de software"
+    },
+    "relation": "supervised",
+    "date": "2026-10-17",
+    "url": "https://www.linkedin.com/in/alejandro-cespon-b36771209/",
+    "photo": "/img/recommendations/cespon.webp"
   }
 ]
